@@ -15,4 +15,5 @@ jobs:
         username: ${{ secrets.DOCKER_USERNAME }}
         password: ${{ secrets.DOCKER_PASSWORD }}
         workdir: WebApp
+        context: WebApp
         tags: "latest"
