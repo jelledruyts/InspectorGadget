@@ -11,15 +11,14 @@ jobs:
     - uses: actions/checkout@v2
     - name: Docker Registry
       env:
-        DOCKER_REGISTRY_URL: jelledruyts
         DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
         DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
-      run: docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD $DOCKER_REGISTRY_URL
+      run: docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
     - name: Building Docker Image
       env:
         DOCKER_REGISTRY_URL: jelledruyts
         CONTAINER_IMAGE_NAME: inspectorgadget
-      run: docker build --no-cache -t $DOCKER_REGISTRY_URL/$CONTAINER_IMAGE_NAME:latest .
+      run: docker build --no-cache -t $DOCKER_REGISTRY_URL/$CONTAINER_IMAGE_NAME:latest ./WebApp
     - name: Push Docker Container to Registry
       env:
         DOCKER_REGISTRY_URL: jelledruyts
