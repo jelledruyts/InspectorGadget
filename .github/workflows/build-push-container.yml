@@ -9,11 +9,19 @@ jobs:
     
     steps:
     - uses: actions/checkout@v2
-    - name: Publish to Registry
-      uses: elgohr/Publish-Docker-Github-Action@2.12
-      with:
-        name: jelledruyts/inspectorgadget
-        username: ${{ secrets.DOCKER_USERNAME }}
-        password: ${{ secrets.DOCKER_PASSWORD }}
-        context: WebApp
-        tags: latest
+    - name: Docker Registry
+      env:
+        DOCKER_REGISTRY_URL: jelledruyts
+        DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+        DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+      run: docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD $DOCKER_REGISTRY_URL
+    - name: Building Docker Image
+      env:
+        DOCKER_REGISTRY_URL: jelledruyts
+        CONTAINER_IMAGE_NAME: inspectorgadget
+      run: docker build --no-cache -t $DOCKER_REGISTRY_URL/$CONTAINER_IMAGE_NAME:latest .
+    - name: Push Docker Container to Registry
+      env:
+        DOCKER_REGISTRY_URL: jelledruyts
+        CONTAINER_IMAGE_NAME: inspectorgadget
+      run: docker push $DOCKER_REGISTRY_URL/$CONTAINER_IMAGE_NAME:latest
