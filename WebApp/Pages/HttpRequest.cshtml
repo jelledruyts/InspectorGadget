@@ -1,0 +1,36 @@
+@page
+@model HttpRequestModel
+@{
+    ViewData["Title"] = "HTTP Request";
+}
+<h1>@ViewData["Title"]</h1>
+
+<form method="POST">
+    <p class="text-muted">Allows you to perform an HTTP request from the web server and render the results below.</p>
+    <div class="form-group">
+        <label for="requestUrl">URL</label>
+        <input type="text" name="requestUrl" id="requestUrl" value="@Model.RequestUrl" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label for="requestHostName">Override Host Name (optional)</label>
+        <input type="text" name="requestHostName" id="requestHostName" value="@Model.RequestHostName" class="form-control" />
+    </div>
+    <div class="form-group">
+        <input type="submit" value="Submit" class="btn btn-primary" />
+    </div>
+</form>
+
+@if (Model.ResponseBody != null)
+{
+    <div class="card">
+        <h5 class="card-header">
+            Response from <code>@Model.RequestUrl</code>
+            <small class="text-muted float-right">@DateTimeOffset.UtcNow.ToString("u") (UTC)</small>
+        </h5>
+        <div class="card-body">
+            <pre>@Model.ResponseBody</pre>
+        </div>
+    </div>
+}
+
+<partial name="_ExceptionCard" model="Model.Exception" />

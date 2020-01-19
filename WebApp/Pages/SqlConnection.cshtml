@@ -1,0 +1,36 @@
+@page
+@model SqlConnectionModel
+@{
+    ViewData["Title"] = "SQL Connection";
+}
+<h1>@ViewData["Title"]</h1>
+
+<form method="POST">
+    <p class="text-muted">Allows you to perform a (scalar) query on a SQL Connection from the web server and render the results below.</p>
+    <div class="form-group">
+        <label for="sqlConnectionString">SQL Connection String</label>
+        <input type="password" name="sqlConnectionString" id="sqlConnectionString" value="@Model.SqlConnectionString" class="form-control" autocomplete="off" />
+    </div>
+    <div class="form-group">
+        <label for="sqlQuery">SQL Query</label>
+        <input type="text" name="sqlQuery" id="sqlQuery" value="@Model.SqlQuery" class="form-control" />
+    </div>
+    <div class="form-group">
+        <input type="submit" value="Submit" class="btn btn-primary" />
+    </div>
+</form>
+
+@if (Model.Result != null)
+{
+    <div class="card">
+        <h5 class="card-header">
+            Result of <code>@Model.SqlQuery</code>
+            <small class="text-muted float-right">@DateTimeOffset.UtcNow.ToString("u") (UTC)</small>
+        </h5>
+        <div class="card-body">
+            <pre>@Model.Result</pre>
+        </div>
+    </div>
+}
+
+<partial name="_ExceptionCard" model="Model.Exception" />

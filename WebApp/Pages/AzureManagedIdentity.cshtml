@@ -1,0 +1,32 @@
+@page
+@model AzureManagedIdentityModel
+@{
+    ViewData["Title"] = "Azure Managed Identity";
+}
+<h1>@ViewData["Title"]</h1>
+
+<form method="POST">
+    <p class="text-muted">Allows you to request an access token for the <a href="https://docs.microsoft.com/en-us/azure/active-directory/managed-identities-azure-resources/overview" target="_blank">managed identity representing your application when running on a supported Azure service</a>.</p>
+    <div class="form-group">
+        <label for="resource">Resource (token audience)</label>
+        <input type="text" name="resource" id="resource" value="@Model.Resource" class="form-control" />
+    </div>
+    <div class="form-group">
+        <input type="submit" value="Submit" class="btn btn-primary" />
+    </div>
+</form>
+
+@if (Model.AccessToken != null)
+{
+    <div class="card">
+        <h5 class="card-header">
+            Token for <code>@Model.Resource</code>
+            <small class="text-muted float-right">@DateTimeOffset.UtcNow.ToString("u") (UTC)</small>
+        </h5>
+        <div class="card-body">
+            <pre>@Model.AccessToken</pre>
+        </div>
+    </div>
+}
+
+<partial name="_ExceptionCard" model="Model.Exception" />

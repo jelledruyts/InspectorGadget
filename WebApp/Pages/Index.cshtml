@@ -1,0 +1,46 @@
+﻿@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Home";
+}
+<ol class="list-inline">
+    <li class="list-inline-item">&raquo; <a href="#request">Request</a></li>
+    <li class="list-inline-item">&raquo; <a href="#http-headers">HTTP Headers</a></li>
+    <li class="list-inline-item">&raquo; <a href="#identity">Identity</a></li>
+    <li class="list-inline-item">&raquo; <a href="#configuration">Configuration</a></li>
+    <li class="list-inline-item">&raquo; <a href="#application">Application</a></li>
+    <li class="list-inline-item">&raquo; <a href="#environment">Environment</a></li>
+    <li class="list-inline-item">&raquo; <a href="#system">System</a></li>
+</ol>
+
+<a name="request"></a>
+<h3>Request</h3>
+<partial name="_Table" model="Model.InspectorInfo.Request" />
+
+<a name="http-headers"></a>
+<h3>HTTP Headers</h3>
+<partial name="_Table" model="Model.InspectorInfo.HttpHeaders" />
+
+<a name="identity"></a>
+<h3>Identity</h3>
+<partial name="_Table" model="Model.InspectorInfo.Identity" />
+
+<a name="configuration"></a>
+<h3>Configuration</h3>
+<div class="alert alert-secondary">
+    You can change the background color by setting the <code>BackgroundColor</code> configuration setting,
+    and add an informational message by setting the <code>InfoMessage</code> configuration setting.
+</div>
+<partial name="_Table" model="Model.InspectorInfo.Configuration" />
+
+<a name="application"></a>
+<h3>Application</h3>
+<partial name="_Table" model="Model.InspectorInfo.Application" />
+
+<a name="environment"></a>
+<h3>Environment</h3>
+<partial name="_Table" model="Model.InspectorInfo.Environment" />
+
+<a name="system"></a>
+<h3>System</h3>
+<partial name="_Table" model="Model.InspectorInfo.System" />
