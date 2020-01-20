@@ -1,11 +1,11 @@
-@model IList<KeyValuePair<string, string>>
+@model IList<InspectorValue>
 @if (Model != null && Model.Any())
 {
     <table class="table table-striped table-hover table-sm table-bordered table-responsive">
         @foreach (var item in Model)
         {
             <tr>
-                <td class="text-nowrap">@HtmlEncoder.Encode(item.Key)</td>
+                <td class="text-nowrap">@HtmlEncoder.Encode(item.DisplayName)</td>
                 <td style="width: 100%;">@HtmlEncoder.Encode(item.Value ?? string.Empty)</td>
             </tr>
         }

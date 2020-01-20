@@ -1,6 +1,6 @@
 using System;
-using System.Net;
 using System.Threading.Tasks;
+using InspectorGadget.WebApp.Gadgets;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
@@ -9,19 +9,16 @@ namespace InspectorGadget.WebApp.Pages
     public class DnsLookupModel : PageModel
     {
         [BindProperty]
-        public string Host { get; set; }
+        public DnsLookupGadget.Request GadgetRequest { get; set; } = new DnsLookupGadget.Request();
 
-        public IPHostEntry DnsEntry { get; set; }
+        public DnsLookupGadget.Response GadgetResponse { get; set; }
         public Exception Exception { get; set; }
 
         public async Task OnPost()
         {
             try
             {
-                if (!string.IsNullOrWhiteSpace(this.Host))
-                {
-                    this.DnsEntry = await Dns.GetHostEntryAsync(this.Host);
-                }
+                this.GadgetResponse = await DnsLookupGadget.ExecuteAsync(this.GadgetRequest);
             }
             catch (Exception exc)
             {

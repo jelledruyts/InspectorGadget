@@ -1,0 +1,76 @@
+@page
+@{
+    ViewData["Title"] = "API";
+}
+<h1>@ViewData["Title"]</h1>
+
+<p>You can use the REST API's below to retrieve details (inspector) or execute commands (gadgets).</p>
+
+<h3>Inspector</h3>
+
+<table class="table table-striped table-hover table-sm table-responsive mt-3">
+    <thead>
+        <tr>
+            <th>Path</th>
+            <th>Description</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td><a asp-controller="Inspector" asp-action="Get">@Url.Action("Get", "Inspector")</a></td>
+            <td>Returns all information from the inspector as a single document.</td>
+        </tr>
+        <tr>
+            <td>@Url.Action("Get", "Inspector", new { Area = "_area_" }).Replace("_area_", "<area>")</td>
+            <td>
+                Returns only a subset (area) of information from the inspector, e.g. only the
+                <a asp-controller="Inspector" asp-action="Get" asp-route-area="Request">request</a> part.
+                See the <a asp-controller="Inspector" asp-action="Get">full inspector document</a> for all available areas.
+            </td>
+        </tr>
+        <tr>
+            <td>@Url.Action("Get", "Inspector", new { Area = "_area_", Key = "_key_" }).Replace("_area_", "<area>").Replace("_key_", "<key>")</td>
+            <td>
+                Returns the value of only a single key (and only the first if there are multiple values) from the inspector,
+                e.g. only the <a asp-controller="Inspector" asp-action="Get" asp-route-area="Request" asp-route-key="request-url">request URL</a> part.
+                See the <a asp-controller="Inspector" asp-action="Get">full inspector document</a> for all available areas and keys.
+            </td>
+        </tr>
+    </tbody>
+</table>
+
+<h3>Gadgets</h3>
+
+<p>The API's below expect an HTTP POST with a JSON body containing the specified parameters.</p>
+
+<table class="table table-striped table-hover table-sm table-responsive mt-3">
+    <thead>
+        <tr>
+            <th>Path</th>
+            <th>Parameters</th>
+            <th>Description</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td><a asp-controller="Gadget" asp-action="DnsLookup">@Url.Action("DnsLookup", "Gadget")</a></td>
+            <td><code>host</code></td>
+            <td>Returns the results of a DNS lookup of the specified host name (or IP address).</td>
+        </tr>
+        <tr>
+            <td><a asp-controller="Gadget" asp-action="HttpRequest">@Url.Action("HttpRequest", "Gadget")</a></td>
+            <td><code>requestUrl</code>, <code>requestHostName</code></td>
+            <td>Returns the results of an HTTP request for the specified URL (with an optional host name override).</td>
+        </tr>
+        <tr>
+            <td><a asp-controller="Gadget" asp-action="SqlConnection">@Url.Action("SqlConnection", "Gadget")</a></td>
+            <td><code>sqlConnectionString</code>, <code>sqlQuery</code></td>
+            <td>Returns the results of the specified (scalar) SQL query against a given SQL database connection string.</td>
+        </tr>
+        <tr>
+            <td><a asp-controller="Gadget" asp-action="AzureManagedIdentity">@Url.Action("AzureManagedIdentity", "Gadget")</a></td>
+            <td><code>resource</code></td>
+            <td>Returns an access token for the specified resource on behalf of the <a href="https://docs.microsoft.com/azure/active-directory/managed-identities-azure-resources/overview" target="_blank">managed identity representing your application</a> (when running on a supported Azure service).</td>
+        </tr>
+    </tbody>
+</table>

@@ -14,13 +14,13 @@ namespace InspectorGadget.WebApp.Models
 {
     public class InspectorInfo
     {
-        public IList<KeyValuePair<string, string>> Request { get; set; }
-        public IList<KeyValuePair<string, string>> HttpHeaders { get; set; }
-        public IList<KeyValuePair<string, string>> Identity { get; set; }
-        public IList<KeyValuePair<string, string>> Application { get; set; }
-        public IList<KeyValuePair<string, string>> Configuration { get; set; }
-        public IList<KeyValuePair<string, string>> Environment { get; set; }
-        public IList<KeyValuePair<string, string>> System { get; set; }
+        public IList<InspectorValue> Request { get; set; }
+        public IList<InspectorValue> HttpHeaders { get; set; }
+        public IList<InspectorValue> Identity { get; set; }
+        public IList<InspectorValue> Application { get; set; }
+        public IList<InspectorValue> Configuration { get; set; }
+        public IList<InspectorValue> Environment { get; set; }
+        public IList<InspectorValue> System { get; set; }
 
         public static InspectorInfo Create(IWebHostEnvironment environment, IConfiguration configuration, HttpRequest request)
         {
@@ -30,102 +30,102 @@ namespace InspectorGadget.WebApp.Models
                 Request = GetRequestInfo(request),
                 HttpHeaders = GetHttpHeadersInfo(request),
                 Identity = GetIdentityInfo(request.HttpContext.User),
-                Application = GetApplicationInfo(environment),
                 Configuration = GetConfigurationInfo(configuration, environmentInfo),
                 Environment = environmentInfo,
+                Application = GetApplicationInfo(environment),
                 System = GetSystemInfo()
             };
         }
 
-        private static IList<KeyValuePair<string, string>> GetRequestInfo(HttpRequest request)
+        private static IList<InspectorValue> GetRequestInfo(HttpRequest request)
         {
-            var info = new List<KeyValuePair<string, string>>();
-            info.Add(new KeyValuePair<string, string>("URL", request.GetDisplayUrl()));
-            info.Add(new KeyValuePair<string, string>("HTTP Method", request.Method));
-            info.Add(new KeyValuePair<string, string>("Is HTTPS", request.IsHttps.ToString()));
-            info.Add(new KeyValuePair<string, string>("Client Certificate Serial Number", request.HttpContext.Connection.ClientCertificate?.SerialNumber));
-            info.Add(new KeyValuePair<string, string>("Local IP Address", request.HttpContext.Connection.LocalIpAddress.ToString()));
-            info.Add(new KeyValuePair<string, string>("Local Port", request.HttpContext.Connection.LocalPort.ToString()));
-            info.Add(new KeyValuePair<string, string>("Remote IP Address", request.HttpContext.Connection.RemoteIpAddress.ToString()));
-            info.Add(new KeyValuePair<string, string>("Remote Port", request.HttpContext.Connection.RemotePort.ToString()));
+            var info = new List<InspectorValue>();
+            info.Add(new InspectorValue("request-url", "URL", request.GetDisplayUrl()));
+            info.Add(new InspectorValue("request-method", "HTTP Method", request.Method));
+            info.Add(new InspectorValue("request-ishttps", "Is HTTPS", request.IsHttps.ToString()));
+            info.Add(new InspectorValue("clientcertificate-serialnumber", "Client Certificate Serial Number", request.HttpContext.Connection.ClientCertificate?.SerialNumber));
+            info.Add(new InspectorValue("local-ipaddress", "Local IP Address", request.HttpContext.Connection.LocalIpAddress.ToString()));
+            info.Add(new InspectorValue("local-port", "Local Port", request.HttpContext.Connection.LocalPort.ToString()));
+            info.Add(new InspectorValue("remote-ipaddress", "Remote IP Address", request.HttpContext.Connection.RemoteIpAddress.ToString()));
+            info.Add(new InspectorValue("remote-port", "Remote Port", request.HttpContext.Connection.RemotePort.ToString()));
             return info;
         }
 
-        private static IList<KeyValuePair<string, string>> GetHttpHeadersInfo(HttpRequest request)
+        private static IList<InspectorValue> GetHttpHeadersInfo(HttpRequest request)
         {
-            var info = new List<KeyValuePair<string, string>>();
+            var info = new List<InspectorValue>();
             foreach (var item in request.Headers.OrderBy(k => k.Key))
             {
                 foreach (var value in request.Headers[item.Key])
                 {
-                    info.Add(new KeyValuePair<string, string>(item.Key, value));
+                    info.Add(new InspectorValue(item.Key, item.Key, value));
                 }
             }
             return info;
         }
 
-        private static IList<KeyValuePair<string, string>> GetIdentityInfo(ClaimsPrincipal user)
+        private static IList<InspectorValue> GetIdentityInfo(ClaimsPrincipal user)
         {
-            var info = new List<KeyValuePair<string, string>>();
+            var info = new List<InspectorValue>();
             var identity = (ClaimsIdentity)user.Identity;
-            info.Add(new KeyValuePair<string, string>("User Name", user.Identity.Name));
-            info.Add(new KeyValuePair<string, string>("User Is Authenticated", user.Identity.IsAuthenticated.ToString()));
-            info.Add(new KeyValuePair<string, string>("User Authentication Type", user.Identity.AuthenticationType));
+            info.Add(new InspectorValue("user-name", "User Name", user.Identity.Name));
+            info.Add(new InspectorValue("user-isauthenticated", "User Is Authenticated", user.Identity.IsAuthenticated.ToString()));
+            info.Add(new InspectorValue("user-authenticationtype", "User Authentication Type", user.Identity.AuthenticationType));
             foreach (var claim in identity.Claims.OrderBy(c => c.Type))
             {
-                info.Add(new KeyValuePair<string, string>(claim.Type, claim.Value));
+                info.Add(new InspectorValue("user-claim-" + claim.Type, claim.Type, claim.Value));
             }
             return info;
         }
 
-        private static IList<KeyValuePair<string, string>> GetApplicationInfo(IWebHostEnvironment environment)
+        private static IList<InspectorValue> GetConfigurationInfo(IConfiguration configuration, IList<InspectorValue> itemsToExclude)
         {
-            var info = new List<KeyValuePair<string, string>>();
-            info.Add(new KeyValuePair<string, string>("Application Name", environment.ApplicationName));
-            info.Add(new KeyValuePair<string, string>("Content Root Path", environment.ContentRootPath));
-            info.Add(new KeyValuePair<string, string>("Web Root Path", environment.WebRootPath));
-            info.Add(new KeyValuePair<string, string>("Environment Name", environment.EnvironmentName));
-            return info;
-        }
-
-        private static IList<KeyValuePair<string, string>> GetConfigurationInfo(IConfiguration configuration, IList<KeyValuePair<string, string>> itemsToExclude)
-        {
-            var info = new List<KeyValuePair<string, string>>();
+            var info = new List<InspectorValue>();
             foreach (var item in configuration.AsEnumerable().OrderBy(k => k.Key))
             {
                 if (itemsToExclude == null || !itemsToExclude.Any(i => i.Key == item.Key && i.Value == item.Value))
                 {
-                    info.Add(new KeyValuePair<string, string>(item.Key, item.Value));
+                    info.Add(new InspectorValue(item.Key, item.Key, item.Value));
                 }
             }
             return info;
         }
 
-        private static IList<KeyValuePair<string, string>> GetEnvironmentInfo()
+        private static IList<InspectorValue> GetEnvironmentInfo()
         {
-            var info = new List<KeyValuePair<string, string>>();
+            var info = new List<InspectorValue>();
             foreach (var item in global::System.Environment.GetEnvironmentVariables().Cast<DictionaryEntry>().OrderBy(e => e.Key))
             {
-                info.Add(new KeyValuePair<string, string>(item.Key?.ToString(), item.Value?.ToString()));
+                info.Add(new InspectorValue(item.Key?.ToString(), item.Key?.ToString(), item.Value?.ToString()));
             }
             return info;
         }
 
-        private static IList<KeyValuePair<string, string>> GetSystemInfo()
+        private static IList<InspectorValue> GetApplicationInfo(IWebHostEnvironment environment)
         {
-            var info = new List<KeyValuePair<string, string>>();
-            info.Add(new KeyValuePair<string, string>("Machine Name", global::System.Environment.MachineName));
-            info.Add(new KeyValuePair<string, string>("64-bit OS", global::System.Environment.Is64BitOperatingSystem.ToString()));
-            info.Add(new KeyValuePair<string, string>("64-bit Process", global::System.Environment.Is64BitProcess.ToString()));
-            info.Add(new KeyValuePair<string, string>("OS Version", global::System.Environment.OSVersion.ToString()));
-            info.Add(new KeyValuePair<string, string>("Processor Count", global::System.Environment.ProcessorCount.ToString()));
-            info.Add(new KeyValuePair<string, string>("CLR Version", global::System.Environment.Version.ToString()));
-            info.Add(new KeyValuePair<string, string>("Logged On User Domain", global::System.Environment.UserDomainName));
-            info.Add(new KeyValuePair<string, string>("Logged On User Name", global::System.Environment.UserName));
-            info.Add(new KeyValuePair<string, string>("Garbage Collection Mode", GCSettings.IsServerGC ? "Server" : "Workstation"));
-            info.Add(new KeyValuePair<string, string>("System Time", Format(DateTimeOffset.UtcNow)));
-            info.Add(new KeyValuePair<string, string>("Process Uptime", GetProcessUptime().ToString()));
-            info.Add(new KeyValuePair<string, string>("Process Start Time", Format(DateTime.UtcNow - GetProcessUptime())));
+            var info = new List<InspectorValue>();
+            info.Add(new InspectorValue("application-name", "Application Name", environment.ApplicationName));
+            info.Add(new InspectorValue("application-contentrootpath", "Content Root Path", environment.ContentRootPath));
+            info.Add(new InspectorValue("application-webrootpath", "Web Root Path", environment.WebRootPath));
+            info.Add(new InspectorValue("application-environmentname", "Environment Name", environment.EnvironmentName));
+            return info;
+        }
+
+        private static IList<InspectorValue> GetSystemInfo()
+        {
+            var info = new List<InspectorValue>();
+            info.Add(new InspectorValue("machine-name", "Machine Name", global::System.Environment.MachineName));
+            info.Add(new InspectorValue("machine-uptime", "System Time", Format(DateTimeOffset.UtcNow)));
+            info.Add(new InspectorValue("machine-processorcount", "Processor Count", global::System.Environment.ProcessorCount.ToString()));
+            info.Add(new InspectorValue("os-is64bit", "64-bit OS", global::System.Environment.Is64BitOperatingSystem.ToString()));
+            info.Add(new InspectorValue("os-version", "OS Version", global::System.Environment.OSVersion.ToString()));
+            info.Add(new InspectorValue("process-is64bit", "64-bit Process", global::System.Environment.Is64BitProcess.ToString()));
+            info.Add(new InspectorValue("process-uptime", "Process Uptime", GetProcessUptime().ToString()));
+            info.Add(new InspectorValue("process-starttime", "Process Start Time", Format(DateTime.UtcNow - GetProcessUptime())));
+            info.Add(new InspectorValue("clr-version", ".NET CLR Version", global::System.Environment.Version.ToString()));
+            info.Add(new InspectorValue("clr-gcmode", ".NET Garbage Collection Mode", GCSettings.IsServerGC ? "Server" : "Workstation"));
+            info.Add(new InspectorValue("loggedonuser-domain", "Logged On User Domain", global::System.Environment.UserDomainName));
+            info.Add(new InspectorValue("loggedonuser-name", "Logged On User Name", global::System.Environment.UserName));
             return info;
         }
 

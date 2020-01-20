@@ -6,8 +6,6 @@ using Microsoft.Extensions.Hosting;
 
 namespace InspectorGadget.WebApp
 {
-    // TODO: Add Callchain page and API that performs calls across multiple hops and returns results.
-    // TODO: Add API that returns any selection from the info tables in the main page, e.g. caller's IP address or a specific environment variable.
     public class Startup
     {
         public Startup(IConfiguration configuration)
@@ -26,6 +24,7 @@ namespace InspectorGadget.WebApp
                 options.LowercaseUrls = true;
             });
             services.AddRazorPages().AddRazorRuntimeCompilation();
+            services.AddControllers();
             services.AddHttpClient();
         }
 
@@ -53,6 +52,7 @@ namespace InspectorGadget.WebApp
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapRazorPages();
+                endpoints.MapControllers();
             });
         }
     }
