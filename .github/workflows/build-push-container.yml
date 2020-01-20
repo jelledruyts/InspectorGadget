@@ -9,20 +9,15 @@ jobs:
     
     steps:
     - uses: actions/checkout@v2
-    - name: Docker Registry
+    - name: Log in to Docker Registry
       env:
         DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
         DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
       run: echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin
-    - name: List Directory
-      run: ls -A -R -l
-    - name: Building Docker Image
+    - name: Build Docker Image
+      run: docker build --no-cache -t jelledruyts/inspectorgadget:latest ./WebApp
+    - name: Push Docker Image to Registry
       env:
         DOCKER_REGISTRY_URL: jelledruyts
         CONTAINER_IMAGE_NAME: inspectorgadget
-      run: docker build --no-cache -t $DOCKER_REGISTRY_URL/$CONTAINER_IMAGE_NAME:latest ./WebApp
-    - name: Push Docker Container to Registry
-      env:
-        DOCKER_REGISTRY_URL: jelledruyts
-        CONTAINER_IMAGE_NAME: inspectorgadget
-      run: docker push $DOCKER_REGISTRY_URL/$CONTAINER_IMAGE_NAME:latest
+      run: docker push jelledruyts/inspectorgadget:latest
