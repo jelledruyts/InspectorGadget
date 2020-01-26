@@ -1,33 +1,48 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.Net.Http;
 using System.Threading.Tasks;
 
 namespace InspectorGadget.WebApp.Gadgets
 {
     public class DnsLookupGadget
     {
-        public class Request
+        public class Request : GadgetRequest<Request>
         {
             public string Host { get; set; }
+
+            public override Request Clone()
+            {
+                return new Request { Host = this.Host };
+            }
         }
 
-        public class Response
+        public class Response : GadgetResponse<Request, Response>
         {
             public string HostName { get; set; }
             public IList<string> Addresses { get; set; }
             public IList<string> Aliases { get; set; }
         }
 
-        public static async Task<Response> ExecuteAsync(Request request)
+        public static async Task<Response> ExecuteAsync(Request request, string relativeUrl, IHttpClientFactory httpClientFactory)
         {
-            var hostEntry = await Dns.GetHostEntryAsync(request.Host);
-            return new Response
+            var response = new Response { Request = request };
+            try
             {
-                HostName = hostEntry.HostName,
-                Addresses = hostEntry.AddressList.Select(a => a.ToString()).ToArray(),
-                Aliases = hostEntry.Aliases
-            };
+                var hostEntry = await Dns.GetHostEntryAsync(request.Host);
+                response.HostName = hostEntry.HostName;
+                response.Addresses = hostEntry.AddressList.Select(a => a.ToString()).ToArray();
+                response.Aliases = hostEntry.Aliases;
+            }
+            catch (Exception exc)
+            {
+                response.Error = exc.ToString();
+            }
+            response.ChainedResponse = await request.PerformCallChainAsync<Response>(httpClientFactory, relativeUrl);
+            response.TimeCompleted = DateTimeOffset.UtcNow;
+            return response;
         }
     }
 }

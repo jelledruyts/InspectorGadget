@@ -3,49 +3,29 @@
 @{
     ViewData["Title"] = "Home";
 }
+
 <ol class="list-inline">
-    <li class="list-inline-item">&raquo; <a href="#request">Request</a></li>
-    <li class="list-inline-item">&raquo; <a href="#http-headers">HTTP Headers</a></li>
-    <li class="list-inline-item">&raquo; <a href="#identity">Identity</a></li>
-    <li class="list-inline-item">&raquo; <a href="#configuration">Configuration</a></li>
-    <li class="list-inline-item">&raquo; <a href="#environment">Environment</a></li>
-    <li class="list-inline-item">&raquo; <a href="#application">Application</a></li>
-    <li class="list-inline-item">&raquo; <a href="#system">System</a></li>
+    @foreach (var group in InspectorGroup.AllGroups)
+    {
+        <li class="list-inline-item">&raquo; <a href="#@group.Key">@group.DisplayName</a></li>
+    }
 </ol>
 
-<a name="request"></a>
-<h3>Request</h3>
-<partial name="_Table" model="Model.InspectorInfo.Request" />
-
-<a name="http-headers"></a>
-<h3>HTTP Headers</h3>
-<partial name="_Table" model="Model.InspectorInfo.HttpHeaders" />
-
-<a name="identity"></a>
-<h3>Identity</h3>
-<partial name="_Table" model="Model.InspectorInfo.Identity" />
-
-<a name="configuration"></a>
-<h3>Configuration</h3>
-<div class="alert alert-secondary">
-    <b>Note:</b> this doesn't show values that are also available as <a href="#environment">environment variables</a>
-    in order to avoid duplication (as environment variables are also considered for configuration settings).
-</div>
-<div class="alert alert-secondary">
-    <b>Tip:</b> to easily distinguish multiple instances, you can change the background color by setting the
-    <code>BackgroundColor</code> configuration setting, and add an informational message by setting the
-    <code>InfoMessage</code> configuration setting.
-</div>
-<partial name="_Table" model="Model.InspectorInfo.Configuration" />
-
-<a name="environment"></a>
-<h3>Environment</h3>
-<partial name="_Table" model="Model.InspectorInfo.Environment" />
-
-<a name="application"></a>
-<h3>Application</h3>
-<partial name="_Table" model="Model.InspectorInfo.Application" />
-
-<a name="system"></a>
-<h3>System</h3>
-<partial name="_Table" model="Model.InspectorInfo.System" />
+@foreach (var group in InspectorGroup.AllGroups)
+{
+    <a name="@group.Key"></a>
+    <h3>@group.DisplayName</h3>
+    @if (group.Key == nameof(InspectorInfo.Configuration))
+    {
+        <div class="alert alert-secondary">
+            <b>Note:</b> this doesn't show values that are also available as <a href="#environment">environment variables</a>
+            in order to avoid duplication (as environment variables are also considered to be configuration settings).
+        </div>
+        <div class="alert alert-secondary">
+            <b>Tip:</b> to easily distinguish multiple instances of this app, you can change the background color by setting
+            the <code>BackgroundColor</code> configuration setting, and add an informational message by setting the
+            <code>InfoMessage</code> configuration setting.
+        </div>
+    }
+    <partial name="_Table" model="Model.InspectorInfo.GetValues(group.Key)" />
+}

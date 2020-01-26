@@ -1,0 +1,48 @@
+@model DnsLookupGadget.Response
+@if (Model != null)
+{
+    <div class="card mt-3">
+        <h5 class="card-header">
+            Response from <code>@Model.MachineName</code>
+            <small class="text-muted float-right">@Model.TimeStarted.ToDisplayString()</small>
+        </h5>
+        @if (!string.IsNullOrWhiteSpace(Model.Error))
+        {
+            <div class="card-body text-white bg-warning">
+                <pre>@Model.Error</pre>
+            </div>
+        }
+        @if (!string.IsNullOrWhiteSpace(Model.HostName))
+        {
+            <div class="card-body">
+                <h6 class="card-subtitle mb-2 text-muted">Host Name</h6>
+                <div>@Model.HostName</div>
+                @if (Model.Addresses != null && Model.Addresses.Any())
+                {
+                    <h6 class="card-subtitle mb-2 text-muted mt-3">IP Addresses</h6>
+                    <ul>
+                        @foreach (var address in Model.Addresses)
+                        {
+                            <li>@address</li>
+                        }
+                    </ul>
+                }
+                @if (Model.Aliases != null && Model.Aliases.Any())
+                {
+                    <h6 class="card-subtitle mb-2 text-muted mt-3">Aliases</h6>
+                    <ul>
+                        @foreach (var alias in Model.Aliases)
+                        {
+                            <li>@alias</li>
+                        }
+                    </ul>
+                }
+            </div>
+        }
+    </div>
+
+    @if (Model.ChainedResponse != null)
+    {
+        <partial name="DnsLookupResponsePartial" model="Model.ChainedResponse" />
+    }
+}

@@ -9,45 +9,15 @@
     <p class="text-muted">Allows you to perform a DNS lookup from the web server and render the results below.</p>
     <div class="form-group">
         <label for="host">Host name (or IP address)</label>
-        <input type="text" name="host" id="host" value="@Model.GadgetRequest.Host" class="form-control" />
+        <input type="text" name="host" id="host" value="@Model.GadgetRequest.Host" class="form-control val-required" placeholder="The host name or IP address for which to perform a DNS lookup" />
+    </div>
+    <div class="form-group">
+        <label for="callChainUrls"><a asp-page="/Api" asp-fragment="call-chaining">Call Chain</a></label>
+        <input type="text" name="callChainUrls" id="callChainUrls" value="@Model.GadgetRequest.CallChainUrls" class="form-control val-optional" placeholder="Optionally chain calls across multiple hops (separate base URL's by spaces)" />
     </div>
     <div class="form-group">
         <input type="submit" value="Submit" class="btn btn-primary" />
     </div>
 </form>
 
-@if (Model.GadgetResponse != null)
-{
-    <div class="card">
-        <h5 class="card-header">
-            DNS entry for <code>@Model.GadgetRequest.Host</code>
-            <small class="text-muted float-right">@DateTimeOffset.UtcNow.ToString("u") (UTC)</small>
-        </h5>
-        <div class="card-body">
-            <h6 class="card-subtitle mb-2 text-muted">Host Name</h6>
-            <div>@Model.GadgetResponse.HostName</div>
-            @if (Model.GadgetResponse.Addresses != null && Model.GadgetResponse.Addresses.Any())
-            {
-                <h6 class="card-subtitle mb-2 text-muted mt-3">IP Addresses</h6>
-                <ul>
-                    @foreach (var address in Model.GadgetResponse.Addresses)
-                    {
-                        <li>@address</li>
-                    }
-                </ul>
-            }
-            @if (Model.GadgetResponse.Aliases != null && Model.GadgetResponse.Aliases.Any())
-            {
-                <h6 class="card-subtitle mb-2 text-muted mt-3">Aliases</h6>
-                <ul>
-                    @foreach (var alias in Model.GadgetResponse.Aliases)
-                    {
-                        <li>@alias</li>
-                    }
-                </ul>
-            }
-        </div>
-    </div>
-}
-
-<partial name="_ExceptionCard" model="Model.Exception" />
+<partial name="DnsLookupResponsePartial" model="Model.GadgetResponse" />

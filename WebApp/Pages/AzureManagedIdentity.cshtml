@@ -8,25 +8,16 @@
 <form method="POST">
     <p class="text-muted">Allows you to request an access token for the <a href="https://docs.microsoft.com/azure/active-directory/managed-identities-azure-resources/overview" target="_blank">managed identity representing your application</a> (when running on a supported Azure service).</p>
     <div class="form-group">
-        <label for="resource">Resource (token audience)</label>
-        <input type="text" name="resource" id="resource" value="@Model.GadgetRequest.Resource" class="form-control" />
+        <label for="resource">Resource (App ID URI)</label>
+        <input type="text" name="resource" id="resource" value="@Model.GadgetRequest.Resource" class="form-control val-required" placeholder="The App ID URI of the resource for which a token should be requested" />
+    </div>
+    <div class="form-group">
+        <label for="callChainUrls"><a asp-page="/Api" asp-fragment="call-chaining">Call Chain</a></label>
+        <input type="text" name="callChainUrls" id="callChainUrls" value="@Model.GadgetRequest.CallChainUrls" class="form-control val-optional" placeholder="Optionally chain calls across multiple hops (separate base URL's by spaces)" />
     </div>
     <div class="form-group">
         <input type="submit" value="Submit" class="btn btn-primary" />
     </div>
 </form>
 
-@if (Model.GadgetResponse != null)
-{
-    <div class="card">
-        <h5 class="card-header">
-            Token for <code>@Model.GadgetRequest.Resource</code>
-            <small class="text-muted float-right">@DateTimeOffset.UtcNow.ToString("u") (UTC)</small>
-        </h5>
-        <div class="card-body">
-            <pre>@Model.GadgetResponse.AccessToken</pre>
-        </div>
-    </div>
-}
-
-<partial name="_ExceptionCard" model="Model.Exception" />
+<partial name="AzureManagedIdentityResponsePartial" model="Model.GadgetResponse" />

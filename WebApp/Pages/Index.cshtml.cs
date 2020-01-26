@@ -10,7 +10,7 @@ namespace InspectorGadget.WebApp.Pages
         private readonly IWebHostEnvironment environment;
         private readonly IConfiguration configuration;
 
-        public InspectorInfo InspectorInfo {get; set;}
+        public InspectorInfo InspectorInfo { get; set; }
 
         public IndexModel(IWebHostEnvironment environment, IConfiguration configuration)
         {
@@ -20,7 +20,7 @@ namespace InspectorGadget.WebApp.Pages
 
         public void OnGet()
         {
-            this.InspectorInfo = InspectorInfo.Create(this.environment, this.configuration, this.Request);
+            this.InspectorInfo = InspectorInfo.Create(this.environment, this.configuration, this.Request, true);
         }
     }
 }

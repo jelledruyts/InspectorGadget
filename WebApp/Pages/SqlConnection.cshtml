@@ -9,28 +9,19 @@
     <p class="text-muted">Allows you to perform a (scalar) query on a SQL Connection from the web server and render the results below.</p>
     <div class="form-group">
         <label for="sqlConnectionString">SQL Connection String</label>
-        <input type="password" name="sqlConnectionString" id="sqlConnectionString" value="@Model.GadgetRequest.SqlConnectionString" class="form-control" autocomplete="off" />
+        <input type="password" name="sqlConnectionString" id="sqlConnectionString" value="@Model.GadgetRequest.SqlConnectionString" class="form-control val-required" autocomplete="off" placeholder="The connection string with which to connect to the SQL database" />
     </div>
     <div class="form-group">
         <label for="sqlQuery">SQL Query</label>
-        <input type="text" name="sqlQuery" id="sqlQuery" value="@Model.GadgetRequest.SqlQuery" class="form-control" />
+        <input type="text" name="sqlQuery" id="sqlQuery" value="@Model.GadgetRequest.SqlQuery" class="form-control val-required" placeholder="The scalar SQL query to execute against the database" />
+    </div>
+    <div class="form-group">
+        <label for="callChainUrls"><a asp-page="/Api" asp-fragment="call-chaining">Call Chain</a></label>
+        <input type="text" name="callChainUrls" id="callChainUrls" value="@Model.GadgetRequest.CallChainUrls" class="form-control val-optional" placeholder="Optionally chain calls across multiple hops (separate base URL's by spaces)" />
     </div>
     <div class="form-group">
         <input type="submit" value="Submit" class="btn btn-primary" />
     </div>
 </form>
 
-@if (Model.GadgetResponse != null)
-{
-    <div class="card">
-        <h5 class="card-header">
-            Result of <code>@Model.GadgetRequest.SqlQuery</code>
-            <small class="text-muted float-right">@DateTimeOffset.UtcNow.ToString("u") (UTC)</small>
-        </h5>
-        <div class="card-body">
-            <pre>@Model.GadgetResponse.Result</pre>
-        </div>
-    </div>
-}
-
-<partial name="_ExceptionCard" model="Model.Exception" />
+<partial name="SqlConnectionResponsePartial" model="Model.GadgetResponse" />

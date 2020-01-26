@@ -1,0 +1,27 @@
+@model HttpRequestGadget.Response
+@if (Model != null)
+{
+    <div class="card mt-3">
+        <h5 class="card-header">
+            Response from <code>@Model.MachineName</code>
+            <small class="text-muted float-right">@Model.TimeStarted.ToDisplayString()</small>
+        </h5>
+        @if (!string.IsNullOrWhiteSpace(Model.Error))
+        {
+            <div class="card-body text-white bg-warning">
+                <pre>@Model.Error</pre>
+            </div>
+        }
+        @if (!string.IsNullOrWhiteSpace(Model.ResponseBody))
+        {
+            <div class="card-body">
+                <pre>@Model.ResponseBody</pre>
+            </div>
+        }
+    </div>
+
+    @if (Model.ChainedResponse != null)
+    {
+        <partial name="HttpRequestResponsePartial" model="Model.ChainedResponse" />
+    }
+}
