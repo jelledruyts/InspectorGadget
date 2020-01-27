@@ -1,6 +1,5 @@
 using System.Net.Http;
 using System.Threading.Tasks;
-using InspectorGadget.WebApp.Controllers;
 using InspectorGadget.WebApp.Gadgets;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -17,18 +16,19 @@ namespace InspectorGadget.WebApp.Pages
         
         [BindProperty]
         public IntrospectorGadget.Request GadgetRequest { get; set; } = new IntrospectorGadget.Request();
-        public IntrospectorGadget.Response GadgetResponse { get; set; }
+        public GadgetResponse<IntrospectorGadget.Result> GadgetResponse { get; set; }
 
-        public IntrospectorModel(IWebHostEnvironment environment, IConfiguration configuration, IHttpClientFactory httpClientFactory)
+        public IntrospectorModel(IHttpClientFactory httpClientFactory, IWebHostEnvironment environment, IConfiguration configuration)
         {
+            this.httpClientFactory = httpClientFactory;
             this.environment = environment;
             this.configuration = configuration;
-            this.httpClientFactory = httpClientFactory;
         }
 
         public async Task OnPost()
         {
-            this.GadgetResponse =  await IntrospectorGadget.ExecuteAsync(this.GadgetRequest, Url.Action(nameof(ApiController.Introspector), "Api"), this.Request, this.environment, this.configuration, this.httpClientFactory);
+            var gadget = new IntrospectorGadget(this.httpClientFactory, Url, this.Request, this.environment, this.configuration);
+            this.GadgetResponse =  await gadget.ExecuteAsync(this.GadgetRequest);
         }
     }
 }

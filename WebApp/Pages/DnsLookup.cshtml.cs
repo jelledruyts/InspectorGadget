@@ -1,6 +1,5 @@
 using System.Net.Http;
 using System.Threading.Tasks;
-using InspectorGadget.WebApp.Controllers;
 using InspectorGadget.WebApp.Gadgets;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -13,7 +12,7 @@ namespace InspectorGadget.WebApp.Pages
 
         [BindProperty]
         public DnsLookupGadget.Request GadgetRequest { get; set; } = new DnsLookupGadget.Request();
-        public DnsLookupGadget.Response GadgetResponse { get; set; }
+        public GadgetResponse<DnsLookupGadget.Result> GadgetResponse { get; set; }
 
         public DnsLookupModel(IHttpClientFactory httpClientFactory)
         {
@@ -22,7 +21,8 @@ namespace InspectorGadget.WebApp.Pages
 
         public async Task OnPost()
         {
-            this.GadgetResponse = await DnsLookupGadget.ExecuteAsync(this.GadgetRequest, Url.Action(nameof(ApiController.DnsLookup), "Api"), this.httpClientFactory);
+            var gadget = new DnsLookupGadget(this.httpClientFactory, Url);
+            this.GadgetResponse = await gadget.ExecuteAsync(this.GadgetRequest);
         }
     }
 }

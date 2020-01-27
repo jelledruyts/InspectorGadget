@@ -1,4 +1,4 @@
-@model DnsLookupGadget.Response
+@model GadgetResponse<DnsLookupGadget.Result>
 @if (Model != null)
 {
     <div class="card mt-3">
@@ -12,26 +12,26 @@
                 <pre>@Model.Error</pre>
             </div>
         }
-        @if (!string.IsNullOrWhiteSpace(Model.HostName))
+        @if (Model.Result != null)
         {
             <div class="card-body">
                 <h6 class="card-subtitle mb-2 text-muted">Host Name</h6>
-                <div>@Model.HostName</div>
-                @if (Model.Addresses != null && Model.Addresses.Any())
+                <div>@Model.Result.HostName</div>
+                @if (Model.Result.Addresses != null && Model.Result.Addresses.Any())
                 {
                     <h6 class="card-subtitle mb-2 text-muted mt-3">IP Addresses</h6>
                     <ul>
-                        @foreach (var address in Model.Addresses)
+                        @foreach (var address in Model.Result.Addresses)
                         {
                             <li>@address</li>
                         }
                     </ul>
                 }
-                @if (Model.Aliases != null && Model.Aliases.Any())
+                @if (Model.Result.Aliases != null && Model.Result.Aliases.Any())
                 {
                     <h6 class="card-subtitle mb-2 text-muted mt-3">Aliases</h6>
                     <ul>
-                        @foreach (var alias in Model.Aliases)
+                        @foreach (var alias in Model.Result.Aliases)
                         {
                             <li>@alias</li>
                         }
@@ -41,8 +41,5 @@
         }
     </div>
 
-    @if (Model.ChainedResponse != null)
-    {
-        <partial name="DnsLookupResponsePartial" model="Model.ChainedResponse" />
-    }
+    <partial name="DnsLookupResponsePartial" model="Model.ChainedResponse" />
 }

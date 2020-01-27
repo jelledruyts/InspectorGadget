@@ -1,4 +1,4 @@
-@model SqlConnectionGadget.Response
+@model GadgetResponse<SqlConnectionGadget.Result>
 @if (Model != null)
 {
     <div class="card mt-3">
@@ -12,16 +12,13 @@
                 <pre>@Model.Error</pre>
             </div>
         }
-        @if (!string.IsNullOrWhiteSpace(Model.Result))
+        @if (Model.Result != null)
         {
             <div class="card-body">
-                <pre>@Model.Result</pre>
+                <pre>@Model.Result.Output</pre>
             </div>
         }
     </div>
 
-    @if (Model.ChainedResponse != null)
-    {
-        <partial name="SqlConnectionResponsePartial" model="Model.ChainedResponse" />
-    }
+    <partial name="SqlConnectionResponsePartial" model="Model.ChainedResponse" />
 }

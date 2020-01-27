@@ -1,4 +1,4 @@
-@model HttpRequestGadget.Response
+@model GadgetResponse<HttpRequestGadget.Result>
 @if (Model != null)
 {
     <div class="card mt-3">
@@ -12,16 +12,13 @@
                 <pre>@Model.Error</pre>
             </div>
         }
-        @if (!string.IsNullOrWhiteSpace(Model.ResponseBody))
+        @if (Model.Result != null)
         {
             <div class="card-body">
-                <pre>@Model.ResponseBody</pre>
+                <pre>@Model.Result.ResponseBody</pre>
             </div>
         }
     </div>
 
-    @if (Model.ChainedResponse != null)
-    {
-        <partial name="HttpRequestResponsePartial" model="Model.ChainedResponse" />
-    }
+    <partial name="HttpRequestResponsePartial" model="Model.ChainedResponse" />
 }

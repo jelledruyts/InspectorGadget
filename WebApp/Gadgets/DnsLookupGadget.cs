@@ -1,48 +1,41 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
+using InspectorGadget.WebApp.Controllers;
+using Microsoft.AspNetCore.Mvc;
 
 namespace InspectorGadget.WebApp.Gadgets
 {
-    public class DnsLookupGadget
+    public class DnsLookupGadget : GadgetBase<DnsLookupGadget.Request, DnsLookupGadget.Result>
     {
-        public class Request : GadgetRequest<Request>
+        public class Request : GadgetRequest
         {
             public string Host { get; set; }
-
-            public override Request Clone()
-            {
-                return new Request { Host = this.Host };
-            }
         }
 
-        public class Response : GadgetResponse<Request, Response>
+        public class Result
         {
             public string HostName { get; set; }
             public IList<string> Addresses { get; set; }
             public IList<string> Aliases { get; set; }
         }
 
-        public static async Task<Response> ExecuteAsync(Request request, string relativeUrl, IHttpClientFactory httpClientFactory)
+        public DnsLookupGadget(IHttpClientFactory httpClientFactory, IUrlHelper url)
+            : base(httpClientFactory, url, nameof(ApiController.DnsLookup))
         {
-            var response = new Response { Request = request };
-            try
+        }
+
+        protected override async Task<Result> ExecuteCoreAsync(Request request)
+        {
+            var hostEntry = await Dns.GetHostEntryAsync(request.Host);
+            return new Result
             {
-                var hostEntry = await Dns.GetHostEntryAsync(request.Host);
-                response.HostName = hostEntry.HostName;
-                response.Addresses = hostEntry.AddressList.Select(a => a.ToString()).ToArray();
-                response.Aliases = hostEntry.Aliases;
-            }
-            catch (Exception exc)
-            {
-                response.Error = exc.ToString();
-            }
-            response.ChainedResponse = await request.PerformCallChainAsync<Response>(httpClientFactory, relativeUrl);
-            response.TimeCompleted = DateTimeOffset.UtcNow;
-            return response;
+                HostName = hostEntry.HostName,
+                Addresses = hostEntry.AddressList.Select(a => a.ToString()).ToArray(),
+                Aliases = hostEntry.Aliases
+            };
         }
     }
 }

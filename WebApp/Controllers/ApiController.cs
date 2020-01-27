@@ -32,33 +32,38 @@ namespace InspectorGadget.WebApp.Controllers
         }
 
         [HttpPost]
-        public async Task<IntrospectorGadget.Response> Introspector([FromBody]IntrospectorGadget.Request request)
+        public async Task<GadgetResponse<IntrospectorGadget.Result>> Introspector([FromBody]IntrospectorGadget.Request request)
         {
-            return await IntrospectorGadget.ExecuteAsync(request, Url.Action(nameof(Introspector)), this.Request, this.environment, this.configuration, this.httpClientFactory);
+            var gadget = new IntrospectorGadget(this.httpClientFactory, Url, this.Request, this.environment, this.configuration);
+            return await gadget.ExecuteAsync(request);
         }
 
         [HttpPost]
-        public async Task<object> DnsLookup([FromBody]DnsLookupGadget.Request request)
+        public async Task<GadgetResponse<DnsLookupGadget.Result>> DnsLookup([FromBody]DnsLookupGadget.Request request)
         {
-            return await DnsLookupGadget.ExecuteAsync(request, Url.Action(nameof(DnsLookup)), this.httpClientFactory);
+            var gadget = new DnsLookupGadget(this.httpClientFactory, Url);
+            return await gadget.ExecuteAsync(request);
         }
 
         [HttpPost]
-        public async Task<HttpRequestGadget.Response> HttpRequest([FromBody]HttpRequestGadget.Request request)
+        public async Task<GadgetResponse<HttpRequestGadget.Result>> HttpRequest([FromBody]HttpRequestGadget.Request request)
         {
-            return await HttpRequestGadget.ExecuteAsync(request, Url.Action(nameof(HttpRequest)), this.httpClientFactory);
+            var gadget = new HttpRequestGadget(this.httpClientFactory, Url);
+            return await gadget.ExecuteAsync(request);
         }
 
         [HttpPost]
-        public async Task<object> SqlConnection([FromBody]SqlConnectionGadget.Request request)
+        public async Task<GadgetResponse<SqlConnectionGadget.Result>> SqlConnection([FromBody]SqlConnectionGadget.Request request)
         {
-            return await SqlConnectionGadget.ExecuteAsync(request, Url.Action(nameof(SqlConnection)), this.httpClientFactory);
+            var gadget = new SqlConnectionGadget(this.httpClientFactory, Url);
+            return await gadget.ExecuteAsync(request);
         }
 
         [HttpPost]
-        public async Task<object> AzureManagedIdentity([FromBody]AzureManagedIdentityGadget.Request request)
+        public async Task<GadgetResponse<AzureManagedIdentityGadget.Result>> AzureManagedIdentity([FromBody]AzureManagedIdentityGadget.Request request)
         {
-            return await AzureManagedIdentityGadget.ExecuteAsync(request, Url.Action(nameof(AzureManagedIdentity)), this.httpClientFactory);
+            var gadget = new AzureManagedIdentityGadget(this.httpClientFactory, Url);
+            return await gadget.ExecuteAsync(request);
         }
     }
 }

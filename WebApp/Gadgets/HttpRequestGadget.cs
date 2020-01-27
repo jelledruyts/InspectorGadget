@@ -1,47 +1,37 @@
-using System;
 using System.Net.Http;
 using System.Threading.Tasks;
+using InspectorGadget.WebApp.Controllers;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Net.Http.Headers;
 
 namespace InspectorGadget.WebApp.Gadgets
 {
-    public class HttpRequestGadget
+    public class HttpRequestGadget : GadgetBase<HttpRequestGadget.Request, HttpRequestGadget.Result>
     {
-        public class Request : GadgetRequest<Request>
+        public class Request : GadgetRequest
         {
             public string RequestUrl { get; set; }
             public string RequestHostName { get; set; }
-
-            public override Request Clone()
-            {
-                return new Request { RequestUrl = this.RequestUrl, RequestHostName = this.RequestHostName };
-            }
         }
 
-        public class Response : GadgetResponse<Request, Response>
+        public class Result
         {
             public string ResponseBody { get; set; }
         }
 
-        public static async Task<Response> ExecuteAsync(Request request, string relativeUrl, IHttpClientFactory httpClientFactory)
+        public HttpRequestGadget(IHttpClientFactory httpClientFactory, IUrlHelper url)
+            : base(httpClientFactory, url, nameof(ApiController.HttpRequest))
         {
-            var response = new Response { Request = request };
-            try
+        }
+
+        protected override async Task<Result> ExecuteCoreAsync(Request request)
+        {
+            var httpClient = this.HttpClientFactory.CreateClient();
+            if (!string.IsNullOrWhiteSpace(request.RequestHostName))
             {
-                var httpClient = httpClientFactory.CreateClient();
-                if (!string.IsNullOrWhiteSpace(request.RequestHostName))
-                {
-                    httpClient.DefaultRequestHeaders.Add(HeaderNames.Host, request.RequestHostName);
-                }
-                response.ResponseBody = await httpClient.GetStringAsync(request.RequestUrl);
+                httpClient.DefaultRequestHeaders.Add(HeaderNames.Host, request.RequestHostName);
             }
-            catch (Exception exc)
-            {
-                response.Error = exc.ToString();
-            }
-            response.ChainedResponse = await request.PerformCallChainAsync<Response>(httpClientFactory, relativeUrl);
-            response.TimeCompleted = DateTimeOffset.UtcNow;
-            return response;
+            return new Result { ResponseBody = await httpClient.GetStringAsync(request.RequestUrl) };
         }
     }
 }

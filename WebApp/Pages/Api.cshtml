@@ -9,7 +9,7 @@
 <p>
     The API's invoked with an HTTP POST expect a JSON body containing the specified parameters.
     Every POST API also supports an additional <code>callChainUrls</code> parameter containing a list
-    of space-separated URL's for <a href="call-chaining">call chaining</a>.
+    of space-separated URL's used for <a href="#call-chaining">call chaining</a>.
 </p>
 
 <table class="table table-striped table-hover table-sm table-responsive mt-3">
@@ -45,7 +45,7 @@
             <td></td>
             <td>
                 Returns the value of only a single key (and only the first if there are multiple values) from the inspector,
-                e.g. only the <a asp-controller="Api" asp-action="Introspector" asp-route-group="Request" asp-route-key="request-url">Request URL</a> part.
+                e.g. only the <a asp-controller="Api" asp-action="Introspector" asp-route-group="Request" asp-route-key="request-id">Request ID</a> part.
                 See above for all available groups, and see the <a asp-controller="Api" asp-action="Introspector">full inspector document</a> for all available keys.
             </td>
         </tr>

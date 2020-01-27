@@ -1,4 +1,4 @@
-@model AzureManagedIdentityGadget.Response
+@model GadgetResponse<AzureManagedIdentityGadget.Result>
 @if (Model != null)
 {
     <div class="card mt-3">
@@ -12,16 +12,13 @@
                 <pre>@Model.Error</pre>
             </div>
         }
-        @if (!string.IsNullOrWhiteSpace(Model.AccessToken))
+        @if (Model.Result != null)
         {
             <div class="card-body">
-                <pre>@Model.AccessToken</pre>
+                <pre>@Model.Result.AccessToken</pre>
             </div>
         }
     </div>
 
-    @if (Model.ChainedResponse != null)
-    {
-        <partial name="AzureManagedIdentityResponsePartial" model="Model.ChainedResponse" />
-    }
+    <partial name="AzureManagedIdentityResponsePartial" model="Model.ChainedResponse" />
 }

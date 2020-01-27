@@ -1,6 +1,5 @@
 using System.Net.Http;
 using System.Threading.Tasks;
-using InspectorGadget.WebApp.Controllers;
 using InspectorGadget.WebApp.Gadgets;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -13,7 +12,7 @@ namespace InspectorGadget.WebApp.Pages
 
         [BindProperty]
         public AzureManagedIdentityGadget.Request GadgetRequest { get; set; } = new AzureManagedIdentityGadget.Request { Resource = "https://management.azure.com/" };
-        public AzureManagedIdentityGadget.Response GadgetResponse { get; set; }
+        public GadgetResponse<AzureManagedIdentityGadget.Result> GadgetResponse { get; set; }
 
         public AzureManagedIdentityModel(IHttpClientFactory httpClientFactory)
         {
@@ -22,7 +21,8 @@ namespace InspectorGadget.WebApp.Pages
 
         public async Task OnPost()
         {
-            this.GadgetResponse = await AzureManagedIdentityGadget.ExecuteAsync(this.GadgetRequest, Url.Action(nameof(ApiController.AzureManagedIdentity), "Api"), this.httpClientFactory);
+            var gadget = new AzureManagedIdentityGadget(this.httpClientFactory, Url);
+            this.GadgetResponse = await gadget.ExecuteAsync(this.GadgetRequest);
         }
     }
 }

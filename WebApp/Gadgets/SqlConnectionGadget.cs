@@ -1,49 +1,39 @@
-using System;
 using System.Net.Http;
 using System.Threading.Tasks;
+using InspectorGadget.WebApp.Controllers;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
 
 namespace InspectorGadget.WebApp.Gadgets
 {
-    public class SqlConnectionGadget
+    public class SqlConnectionGadget : GadgetBase<SqlConnectionGadget.Request, SqlConnectionGadget.Result>
     {
-        public class Request : GadgetRequest<Request>
+        public class Request : GadgetRequest
         {
             public string SqlConnectionString { get; set; }
             public string SqlQuery { get; set; }
-
-            public override Request Clone()
-            {
-                return new Request { SqlConnectionString = this.SqlConnectionString, SqlQuery = this.SqlQuery };
-            }
         }
 
-        public class Response : GadgetResponse<Request, Response>
+        public class Result
         {
-            public string Result { get; set; }
+            public string Output { get; set; }
         }
 
-        public static async Task<Response> ExecuteAsync(Request request, string relativeUrl, IHttpClientFactory httpClientFactory)
+        public SqlConnectionGadget(IHttpClientFactory httpClientFactory, IUrlHelper url)
+            : base(httpClientFactory, url, nameof(ApiController.SqlConnection))
         {
-            var response = new Response { Request = request };
-            try
+        }
+
+        protected override async Task<Result> ExecuteCoreAsync(Request request)
+        {
+            using (var connection = new SqlConnection(request.SqlConnectionString))
+            using (var command = connection.CreateCommand())
             {
-                using (var connection = new SqlConnection(request.SqlConnectionString))
-                using (var command = connection.CreateCommand())
-                {
-                    connection.Open();
-                    command.CommandText = request.SqlQuery;
-                    var result = await command.ExecuteScalarAsync();
-                    response.Result = result?.ToString();
-                }
+                connection.Open();
+                command.CommandText = request.SqlQuery;
+                var result = await command.ExecuteScalarAsync();
+                return new Result { Output = result?.ToString() };
             }
-            catch (Exception exc)
-            {
-                response.Error = exc.ToString();
-            }
-            response.ChainedResponse = await request.PerformCallChainAsync<Response>(httpClientFactory, relativeUrl);
-            response.TimeCompleted = DateTimeOffset.UtcNow;
-            return response;
         }
     }
 }

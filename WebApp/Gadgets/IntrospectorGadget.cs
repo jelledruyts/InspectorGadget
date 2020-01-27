@@ -1,55 +1,54 @@
-using System;
 using System.Net.Http;
 using System.Text.Json;
 using System.Threading.Tasks;
+using InspectorGadget.WebApp.Controllers;
 using InspectorGadget.WebApp.Models;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 
 namespace InspectorGadget.WebApp.Gadgets
 {
-    public class IntrospectorGadget
+    public class IntrospectorGadget : GadgetBase<IntrospectorGadget.Request, IntrospectorGadget.Result>
     {
-        public class Request : GadgetRequest<Request>
+        public class Request : GadgetRequest
         {
             public string Group { get; set; }
             public string Key { get; set; }
-
-            public override Request Clone()
-            {
-                return new Request { Group = this.Group, Key = this.Key };
-            }
         }
 
-        public class Response : GadgetResponse<Request, Response>
+        public class Result
         {
             public string ResponseBody { get; set; }
         }
 
-        public static async Task<Response> ExecuteAsync(Request request, string relativeUrl, HttpRequest httpRequest, IWebHostEnvironment environment, IConfiguration configuration, IHttpClientFactory httpClientFactory)
+        private readonly HttpRequest httpRequest;
+        private readonly IWebHostEnvironment environment;
+        private readonly IConfiguration configuration;
+
+        public IntrospectorGadget(IHttpClientFactory httpClientFactory, IUrlHelper url, HttpRequest httpRequest, IWebHostEnvironment environment, IConfiguration configuration)
+            : base(httpClientFactory, url, nameof(ApiController.Introspector))
         {
-            var response = new Response { Request = request };
-            try
+            this.httpRequest = httpRequest;
+            this.environment = environment;
+            this.configuration = configuration;
+        }
+
+        protected override Task<Result> ExecuteCoreAsync(Request request)
+        {
+            var info = InspectorInfo.Create(this.environment, this.configuration, this.httpRequest, false);
+            var value = info.GetPart(request.Group, request.Key);
+            var result = new Result();
+            if (value is string)
             {
-                var info = InspectorInfo.Create(environment, configuration, httpRequest, false);
-                var value = info.GetPart(request.Group, request.Key);
-                if (value is string)
-                {
-                    response.ResponseBody = value.ToString();
-                }
-                else
-                {
-                    response.ResponseBody = JsonSerializer.Serialize(value, new JsonSerializerOptions { WriteIndented = true, PropertyNamingPolicy = JsonNamingPolicy.CamelCase });
-                }
+                result.ResponseBody = value.ToString();
             }
-            catch (Exception exc)
+            else
             {
-                response.Error = exc.ToString();
+                result.ResponseBody = JsonSerializer.Serialize(value, new JsonSerializerOptions { WriteIndented = true, PropertyNamingPolicy = JsonNamingPolicy.CamelCase });
             }
-            response.ChainedResponse = await request.PerformCallChainAsync<Response>(httpClientFactory, relativeUrl);
-            response.TimeCompleted = DateTimeOffset.UtcNow;
-            return response;
+            return Task.FromResult(result);
         }
     }
 }

@@ -1,6 +1,5 @@
 using System.Net.Http;
 using System.Threading.Tasks;
-using InspectorGadget.WebApp.Controllers;
 using InspectorGadget.WebApp.Gadgets;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -13,7 +12,7 @@ namespace InspectorGadget.WebApp.Pages
 
         [BindProperty]
         public HttpRequestGadget.Request GadgetRequest { get; set; } = new HttpRequestGadget.Request { RequestUrl = "http://ipinfo.io/ip" };
-        public HttpRequestGadget.Response GadgetResponse { get; set; }
+        public GadgetResponse<HttpRequestGadget.Result> GadgetResponse { get; set; }
 
         public HttpRequestModel(IHttpClientFactory httpClientFactory)
         {
@@ -22,7 +21,8 @@ namespace InspectorGadget.WebApp.Pages
 
         public async Task OnPost()
         {
-            this.GadgetResponse = await HttpRequestGadget.ExecuteAsync(this.GadgetRequest, Url.Action(nameof(ApiController.HttpRequest), "Api"), this.httpClientFactory);
+            var gadget = new HttpRequestGadget(this.httpClientFactory, Url);
+            this.GadgetResponse = await gadget.ExecuteAsync(this.GadgetRequest);
         }
     }
 }
