@@ -1,0 +1,24 @@
+@model GadgetResponse
+@if (Model != null)
+{
+    <div class="card mt-3">
+        <h5 class="card-header">
+            Response from <code>@Model.MachineName</code>
+            <small class="text-muted float-right" title="Duration: @((Model.TimeCompleted - Model.TimeStarted).TotalMilliseconds) ms">@Model.TimeStarted.ToDisplayString()</small>
+        </h5>
+        @if (!string.IsNullOrWhiteSpace(Model.Error))
+        {
+            <div class="card-body text-white bg-warning">
+                <pre>@Model.Error</pre>
+            </div>
+        }
+        @if (Model.ResultObject != null)
+        {
+            <div class="card-body">
+                @Html.DisplayFor(m => m.ResultObject, Model.ResultObject.GetType().FullName.Replace(Model.ResultObject.GetType().Namespace, "").Replace(".", "").Replace("+", ""))
+            </div>
+        }
+    </div>
+
+    @Html.DisplayFor(m => Model.ChainedResponseObject)
+}

@@ -1,0 +1,23 @@
+@model DnsLookupGadget.Result
+<h6 class="card-subtitle mb-2 text-muted">Host Name</h6>
+<div>@Model.HostName</div>
+@if (Model.Addresses != null && Model.Addresses.Any())
+{
+    <h6 class="card-subtitle mb-2 text-muted mt-3">IP Addresses</h6>
+    <ul>
+        @foreach (var address in Model.Addresses)
+        {
+            <li>@address</li>
+        }
+    </ul>
+}
+@if (Model.Aliases != null && Model.Aliases.Any())
+{
+    <h6 class="card-subtitle mb-2 text-muted mt-3">Aliases</h6>
+    <ul>
+        @foreach (var alias in Model.Aliases)
+        {
+            <li>@alias</li>
+        }
+    </ul>
+}
