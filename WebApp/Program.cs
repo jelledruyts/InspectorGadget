@@ -20,6 +20,12 @@ namespace InspectorGadget.WebApp
             Host.CreateDefaultBuilder(args)
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
+                    // Override the port to listen on if passed via an environment variable (e.g. for App Service).
+                    // See https://github.com/Azure/app-service-linux-docs/blob/master/app_service_linux_vnet_integration.md.
+                    if (int.TryParse(Environment.GetEnvironmentVariable("PORT"), out var port))
+                    {
+                        webBuilder.UseUrls($"http://*:{port}");
+                    }
                     webBuilder.UseStartup<Startup>();
                 });
     }
