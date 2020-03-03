@@ -1,9 +1,9 @@
 using System;
 using System.Net.Http;
 using System.Threading.Tasks;
-using System.Web;
 using InspectorGadget.WebApp.Controllers;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Azure.Services.AppAuthentication;
 
 namespace InspectorGadget.WebApp.Gadgets
 {
@@ -17,6 +17,9 @@ namespace InspectorGadget.WebApp.Gadgets
         public class Result
         {
             public string AccessToken { get; set; }
+            public DateTimeOffset ExpiresOn { get; set; }
+            public string Resource { get; set; }
+            public string TokenType { get; set; }
         }
 
         public AzureManagedIdentityGadget(IHttpClientFactory httpClientFactory, IUrlHelper url)
@@ -26,25 +29,14 @@ namespace InspectorGadget.WebApp.Gadgets
 
         protected override async Task<Result> ExecuteCoreAsync(Request request)
         {
-            var httpClient = this.HttpClientFactory.CreateClient();
-            var msiEndpoint = Environment.GetEnvironmentVariable("MSI_ENDPOINT");
-            var msiSecret = Environment.GetEnvironmentVariable("MSI_SECRET");
-            var result = new Result();
-            if (!string.IsNullOrWhiteSpace(msiEndpoint) && !string.IsNullOrWhiteSpace(msiSecret))
+            var authenticationResult = await new AzureServiceTokenProvider().GetAuthenticationResultAsync(request.Resource);
+            return new Result
             {
-                // Running on App Service, use the corresponding endpoint and header.
-                var requestUrl = msiEndpoint + "?api-version=2017-09-01&resource=" + HttpUtility.UrlEncode(request.Resource);
-                httpClient.DefaultRequestHeaders.Add("Secret", msiSecret);
-                result.AccessToken = await httpClient.GetStringAsync(requestUrl);
-            }
-            else
-            {
-                // See https://docs.microsoft.com/en-us/azure/active-directory/managed-identities-azure-resources/how-to-use-vm-token#get-a-token-using-c
-                var requestUrl = "http://169.254.169.254/metadata/identity/oauth2/token?api-version=2018-02-01&resource=" + HttpUtility.UrlEncode(request.Resource);
-                httpClient.DefaultRequestHeaders.Add("Metadata", "true");
-                result.AccessToken = await httpClient.GetStringAsync(requestUrl);
-            }
-            return result;
+                AccessToken = authenticationResult.AccessToken,
+                ExpiresOn = authenticationResult.ExpiresOn,
+                Resource = authenticationResult.Resource,
+                TokenType = authenticationResult.TokenType
+            };
         }
     }
 }

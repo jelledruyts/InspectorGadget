@@ -1,2 +1,20 @@
 @model AzureManagedIdentityGadget.Result
-<pre>@Model.AccessToken</pre>
+<dl>
+    @if(!string.IsNullOrWhiteSpace(Model.TokenType))
+    {
+    <dt>Token Type</dt>
+    <dd><code>@Model.TokenType</code></dd>
+    }
+    @if(!string.IsNullOrWhiteSpace(Model.Resource))
+    {
+    <dt>Resource</dt>
+    <dd><code>@Model.Resource</code></dd>
+    }
+    <dt>Expires On</dt>
+    <dd><code>@Model.ExpiresOn.ToDisplayString()</code></dd>
+    @if(!string.IsNullOrWhiteSpace(Model.AccessToken))
+    {
+    <dt>Access Token</dt>
+    <dd><pre>@Model.AccessToken</pre></dd>
+    }
+</dl>
