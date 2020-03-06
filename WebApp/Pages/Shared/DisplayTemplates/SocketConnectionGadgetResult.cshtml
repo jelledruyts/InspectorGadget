@@ -1,0 +1,10 @@
+@model SocketConnectionGadget.Result
+<dl>
+    <dt>Status</dt>
+    <dd><pre>@Model.Status</pre></dd>
+    @if(!string.IsNullOrWhiteSpace(Model.ResponseBody))
+    {
+    <dt>Response</dt>
+    <dd><pre>@Model.ResponseBody</pre></dd>
+    }
+</dl>

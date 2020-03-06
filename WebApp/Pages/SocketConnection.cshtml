@@ -1,0 +1,35 @@
+@page
+@model SocketConnectionModel
+@{
+    ViewData["Title"] = "Socket Connection";
+}
+<h1>@ViewData["Title"]</h1>
+
+<form method="POST">
+    <p class="text-muted">Allows you to perform a raw TCP socket connection from the web server and render the results below.</p>
+    <div class="form-group">
+        <label for="requestHostName">Host name (or IP address)</label>
+        <input type="text" name="requestHostName" id="requestHostName" value="@Model.GadgetRequest.RequestHostName" class="form-control val-required" placeholder="The host name or IP address to connect to" />
+    </div>
+    <div class="form-group">
+        <label for="requestPort">Port</label>
+        <input type="text" name="requestPort" id="requestPort" value="@Model.GadgetRequest.RequestPort" class="form-control val-required" placeholder="The port to connect to" />
+    </div>
+    <div class="form-group">
+        <label for="requestBody">Request body</label>
+        <textarea name="requestBody" id="requestBody" rows="3" class="form-control val-optional" placeholder="The (optional) request body to send">@Model.GadgetRequest.RequestBody</textarea>
+    </div>
+    <div class="form-group form-check">
+        <input type="checkbox" name="readResponse" id="readResponse" value="true" checked="@Model.GadgetRequest.ReadResponse" class="form-check-input" />
+        <label class="form-check-label" for="readResponse">Read response from socket</label>
+    </div>
+    <div class="form-group">
+        <label for="callChainUrls"><a asp-page="/Api" asp-fragment="call-chaining">Call Chain</a></label>
+        <input type="text" name="callChainUrls" id="callChainUrls" value="@Model.GadgetRequest.CallChainUrls" class="form-control val-optional" placeholder="Optionally chain calls across multiple hops (separate base URL's by spaces)" />
+    </div>
+    <div class="form-group">
+        <input type="submit" value="Submit" class="btn btn-primary" />
+    </div>
+</form>
+
+@Html.DisplayFor(m => m.GadgetResponse)

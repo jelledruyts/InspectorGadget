@@ -65,5 +65,12 @@ namespace InspectorGadget.WebApp.Controllers
             var gadget = new AzureManagedIdentityGadget(this.httpClientFactory, Url);
             return await gadget.ExecuteAsync(request);
         }
+
+        [HttpPost]
+        public async Task<GadgetResponse<SocketConnectionGadget.Result>> SocketConnection([FromBody]SocketConnectionGadget.Request request)
+        {
+            var gadget = new SocketConnectionGadget(this.httpClientFactory, Url);
+            return await gadget.ExecuteAsync(request);
+        }
     }
 }
