@@ -208,7 +208,7 @@
 
     protected void RenderDnsLookup()
     {
-        var dnsLookup = Request["dnsLookup"];
+        var dnsLookup = Request["dnsLookup"] ?? ConfigurationManager.AppSettings["DefaultDnsLookupHost"];
 
         Response.Write(Environment.NewLine);
         Response.Write(@"
@@ -216,7 +216,7 @@
             <p class=""text-muted"">Allows you to perform a DNS lookup from the web server and render the results below.</p>
             <div class=""form-group"">
                 <label for=""dnsLookup"">Host name (or IP address)</label>
-                <input type=""text"" name=""dnsLookup"" id=""dnsLookup"" value=""" + dnsLookup + @""" class=""form-control"" />
+                <input type=""text"" name=""dnsLookup"" id=""dnsLookup"" value=""" + dnsLookup + @""" class=""form-control"" title=""You can set the default value as a 'DefaultDnsLookupHost' configuration setting"" />
             </div>
             <div class=""form-group"">
                 <input type=""hidden"" name=""requestType"" value=""DnsLookup"" />
@@ -250,8 +250,8 @@
     
     protected void RenderOutboundHttpRequest()
     {
-        var requestUrl = Request["requestUrl"];
-        var requestHostName = Request["requestHostName"];
+        var requestUrl = Request["requestUrl"] ?? ConfigurationManager.AppSettings["DefaultHttpRequestUrl"] ?? "http://ipinfo.io/ip";
+        var requestHostName = Request["requestHostName"] ?? ConfigurationManager.AppSettings["DefaultHttpRequestHostName"];
 
         Response.Write(Environment.NewLine);
         Response.Write(@"
@@ -259,11 +259,11 @@
             <p class=""text-muted"">Allows you to perform an HTTP request from the web server and render the results below.</p>
             <div class=""form-group"">
                 <label for=""requestUrl"">URL</label>
-                <input type=""text"" name=""requestUrl"" id=""requestUrl"" value=""" + requestUrl + @""" class=""form-control"" />
+                <input type=""text"" name=""requestUrl"" id=""requestUrl"" value=""" + requestUrl + @""" class=""form-control"" title=""You can set the default value as a 'DefaultHttpRequestUrl' configuration setting"" />
             </div>
             <div class=""form-group"">
                 <label for=""requestHostName"">Override Host Name (optional)</label>
-                <input type=""text"" name=""requestHostName"" id=""requestHostName"" value=""" + requestHostName + @""" class=""form-control"" />
+                <input type=""text"" name=""requestHostName"" id=""requestHostName"" value=""" + requestHostName + @""" class=""form-control"" title=""You can set the default value as a 'DefaultHttpRequestHostName' configuration setting"" />
             </div>
             <div class=""form-group"">
                 <input type=""hidden"" name=""requestType"" value=""OutboundHttpRequest"" />
@@ -300,8 +300,8 @@
 
     protected void RenderOutboundSqlConnection()
     {
-        var sqlConnectionString = Request["sqlConnectionString"];
-        var sqlQuery = Request["sqlQuery"] == null ? "SELECT CONNECTIONPROPERTY('client_net_address')" : Request["sqlQuery"];
+        var sqlConnectionString = Request["sqlConnectionString"] ?? ConfigurationManager.AppSettings["DefaultSqlConnectionSqlConnectionString"];
+        var sqlQuery = Request["sqlQuery"] ?? ConfigurationManager.AppSettings["DefaultSqlConnectionSqlQuery"] ?? "SELECT CONNECTIONPROPERTY('client_net_address')";
 
         Response.Write(Environment.NewLine);
         Response.Write(@"
@@ -309,11 +309,11 @@
             <p class=""text-muted"">Allows you to perform a (scalar) query on a SQL Connection from the web server and render the results below.</p>
             <div class=""form-group"">
                 <label for=""sqlConnectionString"">SQL Connection String</label>
-                <input type=""password"" name=""sqlConnectionString"" id=""sqlConnectionString"" value=""" + sqlConnectionString + @""" class=""form-control"" autocomplete=""off"" />
+                <input type=""password"" name=""sqlConnectionString"" id=""sqlConnectionString"" value=""" + sqlConnectionString + @""" class=""form-control"" autocomplete=""off"" title=""You can set the default value as a 'DefaultSqlConnectionSqlConnectionString' configuration setting"" />
             </div>
             <div class=""form-group"">
                 <label for=""sqlQuery"">Query</label>
-                <input type=""text"" name=""sqlQuery"" id=""sqlQuery"" value=""" + sqlQuery + @""" class=""form-control"" />
+                <input type=""text"" name=""sqlQuery"" id=""sqlQuery"" value=""" + sqlQuery + @""" class=""form-control"" title=""You can set the default value as a 'DefaultSqlConnectionSqlQuery' configuration setting"" />
             </div>
             <div class=""form-group"">
                 <input type=""hidden"" name=""requestType"" value=""OutboundSqlConnection"" />
@@ -345,7 +345,7 @@
     
     protected void RenderAzureManagedIdentity()
     {
-        var resource = Request["resource"] == null ? "https://management.azure.com/" : Request["resource"];
+        var resource = Request["resource"] ?? ConfigurationManager.AppSettings["DefaultAzureManagedIdentityResource"] ?? "https://management.azure.com/";
 
         Response.Write(Environment.NewLine);
         Response.Write(@"
@@ -353,7 +353,7 @@
             <p class=""text-muted"">Allows you to request an access token for the <a href=""https://docs.microsoft.com/en-us/azure/active-directory/managed-identities-azure-resources/overview"" target=""_blank"">managed identity representing your application when running on a supported Azure service</a>.</p>
             <div class=""form-group"">
                 <label for=""resource"">Resource (token audience)</label>
-                <input type=""text"" name=""resource"" id=""resource"" value=""" + resource + @""" class=""form-control"" />
+                <input type=""text"" name=""resource"" id=""resource"" value=""" + resource + @""" class=""form-control"" title=""You can set the default value as a 'DefaultAzureManagedIdentityResource' configuration setting"" />
             </div>
             <div class=""form-group"">
                 <input type=""hidden"" name=""requestType"" value=""AzureManagedIdentity"" />

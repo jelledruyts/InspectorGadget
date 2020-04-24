@@ -9,7 +9,7 @@
     <p class="text-muted">Allows you to perform an inspector request from the web server and render the results below.</p>
     <div class="form-group">
         <label for="group">Group</label>
-        <select class="form-control val-optional" name="group" id="group">
+        <select class="form-control val-optional" name="group" id="group" title="You can set the default value as a 'DefaultIntrospectorGroup' configuration setting">
             <option value="">None</option>
             @foreach (var group in InspectorGroup.AllGroups)
             {
@@ -19,11 +19,11 @@
     </div>
     <div class="form-group">
         <label for="key">Key</label>
-        <input type="text" name="key" id="key" value="@Model.GadgetRequest.Key" class="form-control val-optional" placeholder="Optionally return only the specific key of the selected group to retrieve the value for" />
+        <input type="text" name="key" id="key" value="@Model.GadgetRequest.Key" class="form-control val-optional" placeholder="Optionally return only the specific key of the selected group to retrieve the value for" title="You can set the default value as a 'DefaultIntrospectorKey' configuration setting" />
     </div>
     <div class="form-group">
         <label for="callChainUrls"><a asp-page="/Api" asp-fragment="call-chaining">Call Chain</a></label>
-        <input type="text" name="callChainUrls" id="callChainUrls" value="@Model.GadgetRequest.CallChainUrls" class="form-control val-optional" placeholder="Optionally chain calls across multiple hops (separate base URL's by spaces)" />
+        <input type="text" name="callChainUrls" id="callChainUrls" value="@Model.GadgetRequest.CallChainUrls" class="form-control val-optional" placeholder="Optionally chain calls across multiple hops (separate base URL's by spaces)" title="You can set the default value as a 'DefaultCallChainUrls' configuration setting" />
     </div>
     <div class="form-group">
         <input type="submit" value="Submit" class="btn btn-primary" />

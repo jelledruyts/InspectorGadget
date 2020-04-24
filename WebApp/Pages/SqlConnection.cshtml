@@ -9,19 +9,19 @@
     <p class="text-muted">Allows you to perform a (scalar) query on a SQL Connection from the web server and render the results below.</p>
     <div class="form-group">
         <label for="sqlConnectionString">SQL Connection String</label>
-        <input type="password" name="sqlConnectionString" id="sqlConnectionString" value="@Model.GadgetRequest.SqlConnectionString" class="form-control val-required" autocomplete="off" placeholder="The connection string with which to connect to the SQL database" />
+        <input type="password" name="sqlConnectionString" id="sqlConnectionString" value="@Model.GadgetRequest.SqlConnectionString" class="form-control val-required" autocomplete="off" placeholder="The connection string with which to connect to the SQL database" title="You can set the default value as a 'DefaultSqlConnectionSqlConnectionString' configuration setting" />
     </div>
     <div class="form-group">
         <label for="sqlQuery">SQL Query</label>
-        <input type="text" name="sqlQuery" id="sqlQuery" value="@Model.GadgetRequest.SqlQuery" class="form-control val-required" placeholder="The scalar SQL query to execute against the database" />
+        <input type="text" name="sqlQuery" id="sqlQuery" value="@Model.GadgetRequest.SqlQuery" class="form-control val-required" placeholder="The scalar SQL query to execute against the database" title="You can set the default value as a 'DefaultSqlConnectionSqlQuery' configuration setting" />
     </div>
     <div class="form-group form-check">
-        <input type="checkbox" name="useAzureManagedIdentity" id="useAzureManagedIdentity" value="true" checked="@Model.GadgetRequest.UseAzureManagedIdentity" class="form-check-input" />
+        <input type="checkbox" name="useAzureManagedIdentity" id="useAzureManagedIdentity" value="true" checked="@Model.GadgetRequest.UseAzureManagedIdentity" class="form-check-input" title="You can set the default value as a 'DefaultSqlConnectionUseAzureManagedIdentity' configuration setting" />
         <label class="form-check-label" for="useAzureManagedIdentity">Use Azure Managed Identity to connect to Azure SQL Database</label>
     </div>
     <div class="form-group">
         <label for="callChainUrls"><a asp-page="/Api" asp-fragment="call-chaining">Call Chain</a></label>
-        <input type="text" name="callChainUrls" id="callChainUrls" value="@Model.GadgetRequest.CallChainUrls" class="form-control val-optional" placeholder="Optionally chain calls across multiple hops (separate base URL's by spaces)" />
+        <input type="text" name="callChainUrls" id="callChainUrls" value="@Model.GadgetRequest.CallChainUrls" class="form-control val-optional" placeholder="Optionally chain calls across multiple hops (separate base URL's by spaces)" title="You can set the default value as a 'DefaultCallChainUrls' configuration setting" />
     </div>
     <div class="form-group">
         <input type="submit" value="Submit" class="btn btn-primary" />
