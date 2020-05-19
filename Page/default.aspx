@@ -196,7 +196,7 @@
     protected IList<KeyValuePair<string, string>> GetServerVariablesInfo()
     {
         var info = new List<KeyValuePair<string, string>>();
-        foreach (var key in Request.ServerVariables.AllKeys.OrderBy(k => k))
+        foreach (var key in Request.ServerVariables.AllKeys.Where(k => Request.ServerVariables.GetValues(k) != null).OrderBy(k => k))
         {
             foreach (var value in Request.ServerVariables.GetValues(key))
             {
