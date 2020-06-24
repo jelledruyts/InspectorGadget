@@ -14,10 +14,17 @@ jobs:
         DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
         DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
       run: echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin
-    - name: Build Docker Image
+    - name: Build Docker Image (Linux)
       run: docker build --no-cache -t jelledruyts/inspectorgadget:latest ./WebApp
-    - name: Push Docker Image to Registry
+    - name: Push Docker Image to Registry (Linux)
       env:
         DOCKER_REGISTRY_URL: jelledruyts
         CONTAINER_IMAGE_NAME: inspectorgadget
       run: docker push jelledruyts/inspectorgadget:latest
+    - name: Build Docker Image (Windows)
+      run: docker build --no-cache -t jelledruyts/inspectorgadget:latest-nanoserver ./WebApp -f Dockerfile-Nanoserver
+    - name: Push Docker Image to Registry (Windows)
+      env:
+        DOCKER_REGISTRY_URL: jelledruyts
+        CONTAINER_IMAGE_NAME: inspectorgadget
+      run: docker push jelledruyts/inspectorgadget:latest-nanoserver
