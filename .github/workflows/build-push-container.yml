@@ -1,9 +1,7 @@
 name: Build Inspector Gadget container and push to Docker Hub
 
 on:
-  push:
-    paths:
-    - ./WebApp/
+  push
 
 jobs:
   build:
