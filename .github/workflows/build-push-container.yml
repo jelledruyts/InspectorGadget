@@ -22,7 +22,7 @@ jobs:
         CONTAINER_IMAGE_NAME: inspectorgadget
       run: docker push jelledruyts/inspectorgadget:latest
     - name: Build Docker Image (Windows)
-      run: docker build --no-cache -t jelledruyts/inspectorgadget:latest-nanoserver -f Dockerfile-Nanoserver ./WebApp
+      run: docker build --no-cache -t jelledruyts/inspectorgadget:latest-nanoserver -f ./WebApp/Dockerfile-Nanoserver ./WebApp
     - name: Push Docker Image to Registry (Windows)
       env:
         DOCKER_REGISTRY_URL: jelledruyts
