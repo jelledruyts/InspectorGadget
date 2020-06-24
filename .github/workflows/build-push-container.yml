@@ -1,12 +1,14 @@
 name: Build Inspector Gadget container and push to Docker Hub
 
 on:
-  push
+  push:
+    paths:
+    - 'WebApp/**'
 
 jobs:
   build:
 
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
     
     steps:
     - uses: actions/checkout@v2
@@ -14,18 +16,11 @@ jobs:
       env:
         DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
         DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
-      run: docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
-    - name: Build Docker Image (Linux)
+      run: echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin
+    - name: Build Docker Image
       run: docker build --no-cache -t jelledruyts/inspectorgadget:latest ./WebApp
-    - name: Push Docker Image to Registry (Linux)
+    - name: Push Docker Image to Registry
       env:
         DOCKER_REGISTRY_URL: jelledruyts
         CONTAINER_IMAGE_NAME: inspectorgadget
       run: docker push jelledruyts/inspectorgadget:latest
-    - name: Build Docker Image (Windows)
-      run: docker build --no-cache -t jelledruyts/inspectorgadget:latest-nanoserver -f ./WebApp/Dockerfile-Nanoserver ./WebApp
-    - name: Push Docker Image to Registry (Windows)
-      env:
-        DOCKER_REGISTRY_URL: jelledruyts
-        CONTAINER_IMAGE_NAME: inspectorgadget
-      run: docker push jelledruyts/inspectorgadget:latest-nanoserver
