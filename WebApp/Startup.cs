@@ -42,7 +42,6 @@ namespace InspectorGadget.WebApp
                 app.UseHsts();
             }
 
-            app.UseHttpsRedirection();
             app.UseStaticFiles();
 
             app.UseRouting();
