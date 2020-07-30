@@ -18,7 +18,7 @@ jobs:
         DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
       run: echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin
     - name: Build Docker Image
-      run: docker build --no-cache -t jelledruyts/inspectorgadget:latest ./WebApp
+      run: docker build --no-cache --build-arg app_version=1.0.$GITHUB_RUN_NUMBER --build-arg source_version=$GITHUB_SHA -t jelledruyts/inspectorgadget:latest ./WebApp
     - name: Push Docker Image to Registry
       env:
         DOCKER_REGISTRY_URL: jelledruyts

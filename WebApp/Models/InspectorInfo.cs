@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Reflection;
 using System.Runtime;
 using System.Security.Claims;
 using InspectorGadget.WebApp.Infrastructure;
@@ -178,6 +179,7 @@ namespace InspectorGadget.WebApp.Models
         {
             var info = new List<InspectorValue>();
             info.Add(new InspectorValue("application-name", "Application Name", environment.ApplicationName));
+            info.Add(new InspectorValue("application-version", "Application Version", Assembly.GetEntryAssembly().GetCustomAttribute<AssemblyInformationalVersionAttribute>().InformationalVersion));
             info.Add(new InspectorValue("application-contentrootpath", "Content Root Path", environment.ContentRootPath));
             info.Add(new InspectorValue("application-webrootpath", "Web Root Path", environment.WebRootPath));
             info.Add(new InspectorValue("application-environmentname", "Environment Name", environment.EnvironmentName));
