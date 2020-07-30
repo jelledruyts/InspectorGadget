@@ -5,8 +5,8 @@
         @foreach (var item in Model)
         {
             <tr>
-                <td class="text-nowrap">@HtmlEncoder.Encode(item.DisplayName)</td>
-                <td style="width: 100%;">@HtmlEncoder.Encode(item.Value?.ToString() ?? string.Empty)</td>
+                <td class="text-nowrap">@(item.DisplayName)</td>
+                <td style="width: 100%;">@(item.Value?.ToString() ?? string.Empty)</td>
             </tr>
         }
     </table>
