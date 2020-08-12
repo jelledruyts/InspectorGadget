@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -23,7 +24,11 @@ namespace InspectorGadget.WebApp
             {
                 options.LowercaseUrls = true;
             });
-            services.AddRazorPages().AddRazorRuntimeCompilation();
+            services.AddRazorPages(options =>
+            {
+                // Disable ASP.NET Core antiforgery (as it depends on Data Protection keys which are environment-dependent and this container should as be portable as possible).
+                options.Conventions.ConfigureFilter(new IgnoreAntiforgeryTokenAttribute());
+            }).AddRazorRuntimeCompilation();
             services.AddControllers();
             services.AddHttpClient();
         }
