@@ -5,6 +5,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using InspectorGadget.WebApp.Controllers;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 
 namespace InspectorGadget.WebApp.Gadgets
 {
@@ -22,13 +23,14 @@ namespace InspectorGadget.WebApp.Gadgets
             public IList<string> Aliases { get; set; }
         }
 
-        public DnsLookupGadget(IHttpClientFactory httpClientFactory, IUrlHelper url)
-            : base(httpClientFactory, url, nameof(ApiController.DnsLookup))
+        public DnsLookupGadget(ILogger logger, IHttpClientFactory httpClientFactory, IUrlHelper url)
+            : base(logger, httpClientFactory, url, nameof(ApiController.DnsLookup))
         {
         }
 
         protected override async Task<Result> ExecuteCoreAsync(Request request)
         {
+            this.Logger.LogInformation("Resolving DNS for Host {Host}", request.Host);
             var hostEntry = await Dns.GetHostEntryAsync(request.Host);
             return new Result
             {

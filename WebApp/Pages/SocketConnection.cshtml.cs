@@ -5,20 +5,23 @@ using InspectorGadget.WebApp.Infrastructure;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 
 namespace InspectorGadget.WebApp.Pages
 {
     public class SocketConnectionModel : PageModel
     {
         private const string DefaultHostName = "ipinfo.io";
+        private readonly ILogger logger;
         private readonly IHttpClientFactory httpClientFactory;
 
         [BindProperty]
         public SocketConnectionGadget.Request GadgetRequest { get; set; }
         public GadgetResponse<SocketConnectionGadget.Result> GadgetResponse { get; set; }
 
-        public SocketConnectionModel(IHttpClientFactory httpClientFactory, IConfiguration configuration)
+        public SocketConnectionModel(ILogger<SocketConnectionModel> logger, IHttpClientFactory httpClientFactory, IConfiguration configuration)
         {
+            this.logger = logger;
             this.httpClientFactory = httpClientFactory;
             this.GadgetRequest = new SocketConnectionGadget.Request
             {
@@ -32,7 +35,8 @@ namespace InspectorGadget.WebApp.Pages
 
         public async Task OnPost()
         {
-            var gadget = new SocketConnectionGadget(this.httpClientFactory, Url);
+            this.logger.LogInformation("Executing Socket Connection page");
+            var gadget = new SocketConnectionGadget(this.logger, this.httpClientFactory, Url);
             this.GadgetResponse = await gadget.ExecuteAsync(this.GadgetRequest);
         }
     }

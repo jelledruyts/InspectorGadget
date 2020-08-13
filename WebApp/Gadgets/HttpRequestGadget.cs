@@ -2,6 +2,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using InspectorGadget.WebApp.Controllers;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using Microsoft.Net.Http.Headers;
 
 namespace InspectorGadget.WebApp.Gadgets
@@ -19,13 +20,14 @@ namespace InspectorGadget.WebApp.Gadgets
             public string ResponseBody { get; set; }
         }
 
-        public HttpRequestGadget(IHttpClientFactory httpClientFactory, IUrlHelper url)
-            : base(httpClientFactory, url, nameof(ApiController.HttpRequest))
+        public HttpRequestGadget(ILogger logger, IHttpClientFactory httpClientFactory, IUrlHelper url)
+            : base(logger, httpClientFactory, url, nameof(ApiController.HttpRequest))
         {
         }
 
         protected override async Task<Result> ExecuteCoreAsync(Request request)
         {
+            this.Logger.LogInformation("Executing HTTP Request for RequestUrl {RequestUrl} and RequestHostName {RequestHostName}", request.RequestUrl, request.RequestHostName);
             var httpClient = this.HttpClientFactory.CreateClient();
             if (!string.IsNullOrWhiteSpace(request.RequestHostName))
             {

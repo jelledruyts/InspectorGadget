@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 
 namespace InspectorGadget.WebApp.Gadgets
 {
@@ -27,8 +28,8 @@ namespace InspectorGadget.WebApp.Gadgets
         private readonly IWebHostEnvironment environment;
         private readonly IConfiguration configuration;
 
-        public IntrospectorGadget(IHttpClientFactory httpClientFactory, IUrlHelper url, HttpRequest httpRequest, IWebHostEnvironment environment, IConfiguration configuration)
-            : base(httpClientFactory, url, nameof(ApiController.Introspector))
+        public IntrospectorGadget(ILogger logger, IHttpClientFactory httpClientFactory, IUrlHelper url, HttpRequest httpRequest, IWebHostEnvironment environment, IConfiguration configuration)
+            : base(logger, httpClientFactory, url, nameof(ApiController.Introspector))
         {
             this.httpRequest = httpRequest;
             this.environment = environment;
@@ -37,6 +38,7 @@ namespace InspectorGadget.WebApp.Gadgets
 
         protected override Task<Result> ExecuteCoreAsync(Request request)
         {
+            this.Logger.LogInformation("Executing Introspector request for Group {Group} and Key {Key}", request.Group, request.Key);
             var info = InspectorInfo.Create(this.environment, this.configuration, this.httpRequest, false);
             var value = info.GetPart(request.Group, request.Key);
             var result = new Result();

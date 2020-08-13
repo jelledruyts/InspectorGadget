@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using InspectorGadget.WebApp.Controllers;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.Services.AppAuthentication;
+using Microsoft.Extensions.Logging;
 
 namespace InspectorGadget.WebApp.Gadgets
 {
@@ -22,13 +23,14 @@ namespace InspectorGadget.WebApp.Gadgets
             public string TokenType { get; set; }
         }
 
-        public AzureManagedIdentityGadget(IHttpClientFactory httpClientFactory, IUrlHelper url)
-            : base(httpClientFactory, url, nameof(ApiController.AzureManagedIdentity))
+        public AzureManagedIdentityGadget(ILogger logger, IHttpClientFactory httpClientFactory, IUrlHelper url)
+            : base(logger, httpClientFactory, url, nameof(ApiController.AzureManagedIdentity))
         {
         }
 
         protected override async Task<Result> ExecuteCoreAsync(Request request)
         {
+            this.Logger.LogInformation("Acquiring token using Azure Managed Identity for Resource {Resource}", request.Resource);
             var authenticationResult = await new AzureServiceTokenProvider().GetAuthenticationResultAsync(request.Resource);
             return new Result
             {
