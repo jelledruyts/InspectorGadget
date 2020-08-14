@@ -5,7 +5,7 @@ ARG source_version=local
 WORKDIR /build
 COPY . .
 RUN dotnet restore
-RUN dotnet publish -c Release -o /app /p:Version=${app_version} /p:SourceRevisionId=${source_version}
+RUN dotnet publish -c Release -o /app /p:Version=%app_version% /p:SourceRevisionId=%source_version%
 # Stage 2
 FROM mcr.microsoft.com/dotnet/core/aspnet:3.1-nanoserver-1809 AS final
 WORKDIR /app
