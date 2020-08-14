@@ -9,7 +9,21 @@ on:
     - 'WebApp/**'
 
 jobs:
-  build:
+  build-deploy-linux:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Check Out Repo
+      uses: actions/checkout@v2
+    - name: Docker Hub login
+      uses: azure/docker-login@v1
+      with:
+        username: ${{ secrets.DOCKER_USERNAME }}
+        password: ${{ secrets.DOCKER_PASSWORD }}
+    - name: Build Docker Image
+      run: docker build --no-cache --build-arg app_version=1.0.$GITHUB_RUN_NUMBER --build-arg source_version=$GITHUB_SHA -t jelledruyts/inspectorgadget:latest -f ./WebApp/Linux.Dockerfile ./WebApp
+    - name: Push Docker Image to Registry
+      run: docker push jelledruyts/inspectorgadget:latest
+  build-deploy-windows:
     runs-on: windows-latest
     steps:
     - name: Check Out Repo
@@ -19,11 +33,7 @@ jobs:
       with:
         username: ${{ secrets.DOCKER_USERNAME }}
         password: ${{ secrets.DOCKER_PASSWORD }}
-    - name: Build Docker Image (Linux)
-      run: docker build --no-cache --build-arg app_version=1.0.${env:GITHUB_RUN_NUMBER} --build-arg source_version=${env:GITHUB_SHA} -t jelledruyts/inspectorgadget:latest -f ./WebApp/Linux.Dockerfile ./WebApp
-    - name: Push Docker Image to Registry (Linux)
-      run: docker push jelledruyts/inspectorgadget:latest
-    - name: Build Docker Image (Windows)
+    - name: Build Docker Image
       run: docker build --no-cache --build-arg app_version=1.0.${env:GITHUB_RUN_NUMBER} --build-arg source_version=${env:GITHUB_SHA} -t jelledruyts/inspectorgadget:latest-windows -f ./WebApp/Windows.Dockerfile ./WebApp
-    - name: Push Docker Image to Registry (Windows)
+    - name: Push Docker Image to Registry
       run: docker push jelledruyts/inspectorgadget:latest-windows
