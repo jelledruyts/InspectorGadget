@@ -1,6 +1,7 @@
 name: Build Inspector Gadget container and push to Docker Hub
 
 on:
+  workflow_dispatch:
   push:
     branches:
     - master
