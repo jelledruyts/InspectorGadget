@@ -1,0 +1,22 @@
+@model ProcessRunGadget.Result
+<dl>
+    <dt>Exit Code</dt>
+    @if (Model.ExitCode.HasValue)
+    {
+    <dd><pre>@Model.ExitCode</pre></dd>
+    }
+    else
+    {
+    <dd>The process did not exit.</dd>
+    }
+    @if (!string.IsNullOrWhiteSpace(Model.StandardOutput))
+    {
+    <dt>Standard Output</dt>
+    <dd><pre>@Model.StandardOutput</pre></dd>
+    }
+    @if (!string.IsNullOrWhiteSpace(Model.ErrorOutput))
+    {
+    <dt>Error Output</dt>
+    <dd><pre>@Model.ErrorOutput</pre></dd>
+    }
+</dl>

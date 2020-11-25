@@ -24,7 +24,7 @@ namespace InspectorGadget.WebApp.Pages
             this.httpClientFactory = httpClientFactory;
             this.GadgetRequest = new AzureManagedIdentityGadget.Request
             {
-                CallChainUrls = configuration.GetValueOrDefault("DefaultCallChainUrls", null),
+                CallChainUrls = configuration.GetValueOrDefault("DefaultCallChainUrls", default(string)),
                 Resource = configuration.GetValueOrDefault("DefaultAzureManagedIdentityResource", "https://management.azure.com/")
             };
         }

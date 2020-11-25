@@ -25,7 +25,7 @@ namespace InspectorGadget.WebApp.Pages
             this.httpClientFactory = httpClientFactory;
             this.GadgetRequest = new SocketConnectionGadget.Request
             {
-                CallChainUrls = configuration.GetValueOrDefault("DefaultCallChainUrls", null),
+                CallChainUrls = configuration.GetValueOrDefault("DefaultCallChainUrls", default(string)),
                 RequestHostName = configuration.GetValueOrDefault("DefaultSocketConnectionRequestHostName", DefaultHostName),
                 RequestPort = configuration.GetValueOrDefault("DefaultSocketConnectionRequestPort", 80),
                 RequestBody = configuration.GetValueOrDefault("DefaultSocketConnectionRequestBody", "GET / HTTP/1.1\r\nHost: " + DefaultHostName + "\r\nConnection: Close\r\n\r\n"),

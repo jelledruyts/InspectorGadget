@@ -29,9 +29,9 @@ namespace InspectorGadget.WebApp.Pages
             this.configuration = configuration;
             this.GadgetRequest = new IntrospectorGadget.Request
             {
-                CallChainUrls = configuration.GetValueOrDefault("DefaultCallChainUrls", null),
-                Group = configuration.GetValueOrDefault("DefaultIntrospectorGroup", null),
-                Key = configuration.GetValueOrDefault("DefaultIntrospectorKey", null)
+                CallChainUrls = configuration.GetValueOrDefault("DefaultCallChainUrls", default(string)),
+                Group = configuration.GetValueOrDefault("DefaultIntrospectorGroup", default(string)),
+                Key = configuration.GetValueOrDefault("DefaultIntrospectorKey", default(string))
             };
         }
 

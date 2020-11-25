@@ -24,8 +24,8 @@ namespace InspectorGadget.WebApp.Pages
             this.httpClientFactory = httpClientFactory;
             this.GadgetRequest = new DnsLookupGadget.Request
             {
-                CallChainUrls = configuration.GetValueOrDefault("DefaultCallChainUrls", null),
-                Host = configuration.GetValueOrDefault("DefaultDnsLookupHost", null)
+                CallChainUrls = configuration.GetValueOrDefault("DefaultCallChainUrls", default(string)),
+                Host = configuration.GetValueOrDefault("DefaultDnsLookupHost", default(string))
             };
         }
 

@@ -24,8 +24,8 @@ namespace InspectorGadget.WebApp.Pages
             this.httpClientFactory = httpClientFactory;
             this.GadgetRequest = new SqlConnectionGadget.Request
             {
-                CallChainUrls = configuration.GetValueOrDefault("DefaultCallChainUrls", null),
-                SqlConnectionString = configuration.GetValueOrDefault("DefaultSqlConnectionSqlConnectionString", null),
+                CallChainUrls = configuration.GetValueOrDefault("DefaultCallChainUrls", default(string)),
+                SqlConnectionString = configuration.GetValueOrDefault("DefaultSqlConnectionSqlConnectionString", default(string)),
                 SqlQuery = configuration.GetValueOrDefault("DefaultSqlConnectionSqlQuery", "SELECT CONNECTIONPROPERTY('client_net_address')"),
                 UseAzureManagedIdentity = configuration.GetValueOrDefault("DefaultSqlConnectionUseAzureManagedIdentity", false)
             };

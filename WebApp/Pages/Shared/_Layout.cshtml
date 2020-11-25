@@ -10,20 +10,21 @@
 </head>
 <body style="@(string.IsNullOrWhiteSpace(Configuration.GetValue<string>("BackgroundColor")) ? "" : "background-color: " + Configuration.GetValue<string>("BackgroundColor") + ";")">
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+        <nav class="navbar navbar-expand-lg navbar-toggleable-lg navbar-light bg-white border-bottom box-shadow mb-3">
             <div class="container">
                 <a class="navbar-brand" asp-area="" asp-page="/Index">Inspector Gadget</a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
+                <div class="navbar-collapse collapse d-lg-inline-flex flex-lg-row-reverse">
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item"><a class="nav-link text-dark" asp-page="/DnsLookup">DNS Lookup</a></li>
                         <li class="nav-item"><a class="nav-link text-dark" asp-page="/HttpRequest">HTTP Request</a></li>
                         <li class="nav-item"><a class="nav-link text-dark" asp-page="/SqlConnection">SQL Connection</a></li>
                         <li class="nav-item"><a class="nav-link text-dark" asp-page="/AzureManagedIdentity">Azure Managed Identity</a></li>
                         <li class="nav-item"><a class="nav-link text-dark" asp-page="/SocketConnection">Socket Connection</a></li>
+                        <li class="nav-item"><a class="nav-link text-dark" asp-page="/ProcessRun">Process Run</a></li>
                         <li class="nav-item"><a class="nav-link text-dark" asp-page="/Introspector">Introspector</a></li>
                         <li class="nav-item"><a class="nav-link text-dark" asp-page="/Api">API</a></li>
                     </ul>

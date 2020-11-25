@@ -24,9 +24,9 @@ namespace InspectorGadget.WebApp.Pages
             this.httpClientFactory = httpClientFactory;
             this.GadgetRequest = new HttpRequestGadget.Request
             {
-                CallChainUrls = configuration.GetValueOrDefault("DefaultCallChainUrls", null),
+                CallChainUrls = configuration.GetValueOrDefault("DefaultCallChainUrls", default(string)),
                 RequestUrl = configuration.GetValueOrDefault("DefaultHttpRequestUrl", "http://ipinfo.io/ip"),
-                RequestHostName = configuration.GetValueOrDefault("DefaultHttpRequestHostName", null)
+                RequestHostName = configuration.GetValueOrDefault("DefaultHttpRequestHostName", default(string))
             };
         }
 

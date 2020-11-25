@@ -82,5 +82,13 @@ namespace InspectorGadget.WebApp.Controllers
             var gadget = new SocketConnectionGadget(this.logger, this.httpClientFactory, Url);
             return await gadget.ExecuteAsync(request);
         }
+
+        [HttpPost]
+        public async Task<GadgetResponse<ProcessRunGadget.Result>> ProcessRun([FromBody]ProcessRunGadget.Request request)
+        {
+            this.logger.LogInformation("Executing Process Run");
+            var gadget = new ProcessRunGadget(this.logger, this.httpClientFactory, Url);
+            return await gadget.ExecuteAsync(request);
+        }
     }
 }

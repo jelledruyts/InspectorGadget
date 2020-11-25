@@ -28,6 +28,16 @@ namespace InspectorGadget.WebApp.Infrastructure
             return int.TryParse(value.GetValue<string>(key), out int configValue) ? configValue : defaultValue;
         }
 
+        public static int? GetValueOrDefault(this IConfiguration value, string key, int? defaultValue)
+        {
+            var configValueString = value.GetValue<string>(key);
+            if (!string.IsNullOrWhiteSpace(configValueString))
+            {
+                return int.TryParse(configValueString, out int configValue) ? configValue : defaultValue;
+            }
+            return defaultValue;
+        }
+
         public static bool GetValueOrDefault(this IConfiguration value, string key, bool defaultValue)
         {
             return bool.TryParse(value.GetValue<string>(key), out bool configValue) ? configValue : defaultValue;
