@@ -1,4 +1,6 @@
 using System;
+using InspectorGadget.WebApp.Controllers;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 
 namespace InspectorGadget.WebApp.Infrastructure
@@ -41,6 +43,11 @@ namespace InspectorGadget.WebApp.Infrastructure
         public static bool GetValueOrDefault(this IConfiguration value, string key, bool defaultValue)
         {
             return bool.TryParse(value.GetValue<string>(key), out bool configValue) ? configValue : defaultValue;
+        }
+
+        public static string GetRelativeApiUrl(this IUrlHelper url, string apiActionName)
+        {
+            return url.Action(apiActionName, ApiController.ControllerName);
         }
     }
 }

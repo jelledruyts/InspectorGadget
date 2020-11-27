@@ -19,14 +19,17 @@ namespace InspectorGadget.WebApp
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            // Enforce use of TLS 1.2.
             System.Net.ServicePointManager.SecurityProtocol = System.Net.SecurityProtocolType.Tls12;
+
+            services.AddSingleton<AppSettings>();
             services.AddRouting(options =>
             {
                 options.LowercaseUrls = true;
             });
             services.AddRazorPages(options =>
             {
-                // Disable ASP.NET Core antiforgery (as it depends on Data Protection keys which are environment-dependent and this container should as be portable as possible).
+                // Disable ASP.NET Core antiforgery (as it depends on Data Protection keys which are environment-dependent and this container should be as portable as possible).
                 options.Conventions.ConfigureFilter(new IgnoreAntiforgeryTokenAttribute());
             }).AddRazorRuntimeCompilation();
             services.AddControllers();

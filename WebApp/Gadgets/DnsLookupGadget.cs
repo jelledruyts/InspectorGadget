@@ -4,6 +4,7 @@ using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using InspectorGadget.WebApp.Controllers;
+using InspectorGadget.WebApp.Infrastructure;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
@@ -23,8 +24,8 @@ namespace InspectorGadget.WebApp.Gadgets
             public IList<string> Aliases { get; set; }
         }
 
-        public DnsLookupGadget(ILogger logger, IHttpClientFactory httpClientFactory, IUrlHelper url)
-            : base(logger, httpClientFactory, url, nameof(ApiController.DnsLookup))
+        public DnsLookupGadget(ILogger logger, IHttpClientFactory httpClientFactory, IUrlHelper url, AppSettings appSettings)
+            : base(logger, httpClientFactory, url.GetRelativeApiUrl(nameof(ApiController.DnsLookup)), appSettings.DisableDnsLookup)
         {
         }
 

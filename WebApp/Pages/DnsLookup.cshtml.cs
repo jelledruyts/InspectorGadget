@@ -1,10 +1,8 @@
 using System.Net.Http;
 using System.Threading.Tasks;
 using InspectorGadget.WebApp.Gadgets;
-using InspectorGadget.WebApp.Infrastructure;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 
 namespace InspectorGadget.WebApp.Pages
@@ -13,26 +11,28 @@ namespace InspectorGadget.WebApp.Pages
     {
         private readonly ILogger logger;
         private readonly IHttpClientFactory httpClientFactory;
+        private readonly AppSettings appSettings;
 
         [BindProperty]
         public DnsLookupGadget.Request GadgetRequest { get; set; }
         public GadgetResponse<DnsLookupGadget.Result> GadgetResponse { get; set; }
 
-        public DnsLookupModel(ILogger<DnsLookupModel> logger, IHttpClientFactory httpClientFactory, IConfiguration configuration)
+        public DnsLookupModel(ILogger<DnsLookupModel> logger, IHttpClientFactory httpClientFactory, AppSettings appSettings)
         {
             this.logger = logger;
             this.httpClientFactory = httpClientFactory;
+            this.appSettings = appSettings;
             this.GadgetRequest = new DnsLookupGadget.Request
             {
-                CallChainUrls = configuration.GetValueOrDefault("DefaultCallChainUrls", default(string)),
-                Host = configuration.GetValueOrDefault("DefaultDnsLookupHost", default(string))
+                CallChainUrls = this.appSettings.DefaultCallChainUrls,
+                Host = this.appSettings.DefaultDnsLookupHost
             };
         }
 
         public async Task OnPost()
         {
             this.logger.LogInformation("Executing DNS Lookup page");
-            var gadget = new DnsLookupGadget(this.logger, this.httpClientFactory, Url);
+            var gadget = new DnsLookupGadget(this.logger, this.httpClientFactory, Url, this.appSettings);
             this.GadgetResponse = await gadget.ExecuteAsync(this.GadgetRequest);
         }
     }

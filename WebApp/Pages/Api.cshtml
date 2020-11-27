@@ -1,4 +1,5 @@
 @page
+@inject AppSettings AppSettings
 @{
     ViewData["Title"] = "API";
 }
@@ -22,42 +23,62 @@
         </tr>
     </thead>
     <tbody>
+        @if (!AppSettings.DisableDnsLookup)
+        {
         <tr>
             <td>POST</td>
             <td><a asp-controller="Api" asp-action="DnsLookup">@Url.Action("DnsLookup", "Api")</a></td>
             <td><code>host</code></td>
             <td>Returns the results of a DNS lookup of the specified host name (or IP address).</td>
         </tr>
+        }
+        @if (!AppSettings.DisableHttpRequest)
+        {
         <tr>
             <td>POST</td>
             <td><a asp-controller="Api" asp-action="HttpRequest">@Url.Action("HttpRequest", "Api")</a></td>
             <td><code>requestUrl</code>, <code>requestHostName</code></td>
             <td>Returns the results of an HTTP request for the specified URL (with an optional host name override).</td>
         </tr>
+        }
+        @if (!AppSettings.DisableSqlConnection)
+        {
         <tr>
             <td>POST</td>
             <td><a asp-controller="Api" asp-action="SqlConnection">@Url.Action("SqlConnection", "Api")</a></td>
             <td><code>sqlConnectionString</code>, <code>sqlQuery</code></td>
             <td>Returns the results of the specified (scalar) SQL query against a given SQL database connection string.</td>
         </tr>
+        }
+        @if (!AppSettings.DisableAzureManagedIdentity)
+        {
         <tr>
             <td>POST</td>
             <td><a asp-controller="Api" asp-action="AzureManagedIdentity">@Url.Action("AzureManagedIdentity", "Api")</a></td>
             <td><code>resource</code></td>
             <td>Returns an access token for the specified resource on behalf of the <a href="https://docs.microsoft.com/azure/active-directory/managed-identities-azure-resources/overview" target="_blank">managed identity representing your application</a> (when running on a supported Azure service).</td>
         </tr>
+        }
+        @if (!AppSettings.DisableSocketConnection)
+        {
         <tr>
             <td>POST</td>
             <td><a asp-controller="Api" asp-action="SocketConnection">@Url.Action("SocketConnection", "Api")</a></td>
             <td><code>requestHostName</code>, <code>requestPort</code>, <code>requestBody</code>, <code>readResponse</code></td>
             <td>Returns the results of performing a raw TCP socket connection from the web server.</td>
         </tr>
+        }
+        @if (!AppSettings.DisableProcessRun)
+        {
         <tr>
             <td>POST</td>
             <td><a asp-controller="Api" asp-action="ProcessRun">@Url.Action("ProcessRun", "Api")</a></td>
             <td><code>fileName</code>, <code>arguments</code>, <code>timeoutSeconds</code></td>
             <td>Returns the output of running a certain process on the host.</td>
         </tr>
+        }
+        @if (!AppSettings.DisableIntrospector)
+        {
         <tr>
             <td>GET</td>
             <td><a asp-controller="Api" asp-action="Introspector">@Url.Action("Introspector", "Api")</a></td>
@@ -91,6 +112,7 @@
             <td><code>group</code>, <code>key</code></td>
             <td>Returns the requested information from the inspector (see above for <code>group</code> and <code>key</code> details).</td>
         </tr>
+        }
     </tbody>
 </table>
 

@@ -4,6 +4,7 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
 using InspectorGadget.WebApp.Controllers;
+using InspectorGadget.WebApp.Infrastructure;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
@@ -25,8 +26,8 @@ namespace InspectorGadget.WebApp.Gadgets
             public string ResponseBody { get; set; }
         }
 
-        public SocketConnectionGadget(ILogger logger, IHttpClientFactory httpClientFactory, IUrlHelper url)
-            : base(logger, httpClientFactory, url, nameof(ApiController.SocketConnection))
+        public SocketConnectionGadget(ILogger logger, IHttpClientFactory httpClientFactory, IUrlHelper url, AppSettings appSettings)
+            : base(logger, httpClientFactory, url.GetRelativeApiUrl(nameof(ApiController.SocketConnection)), appSettings.DisableSocketConnection)
         {
         }
 

@@ -1,6 +1,7 @@
 using System.Net.Http;
 using System.Threading.Tasks;
 using InspectorGadget.WebApp.Controllers;
+using InspectorGadget.WebApp.Infrastructure;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.Services.AppAuthentication;
 using Microsoft.Data.SqlClient;
@@ -22,8 +23,8 @@ namespace InspectorGadget.WebApp.Gadgets
             public string Output { get; set; }
         }
 
-        public SqlConnectionGadget(ILogger logger, IHttpClientFactory httpClientFactory, IUrlHelper url)
-            : base(logger, httpClientFactory, url, nameof(ApiController.SqlConnection))
+        public SqlConnectionGadget(ILogger logger, IHttpClientFactory httpClientFactory, IUrlHelper url, AppSettings appSettings)
+            : base(logger, httpClientFactory, url.GetRelativeApiUrl(nameof(ApiController.SqlConnection)), appSettings.DisableSqlConnection)
         {
         }
 

@@ -1,7 +1,6 @@
 using System;
 using System.Net.Http;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
 namespace InspectorGadget.WebApp.Gadgets
@@ -11,28 +10,37 @@ namespace InspectorGadget.WebApp.Gadgets
         protected ILogger Logger { get; }
         protected IHttpClientFactory HttpClientFactory { get; }
         protected string RelativeUrl { get; }
+        protected bool IsDisabled { get; }
 
-        protected GadgetBase(ILogger logger, IHttpClientFactory httpClientFactory, IUrlHelper url, string apiActionName)
+        protected GadgetBase(ILogger logger, IHttpClientFactory httpClientFactory, string relativeUrl, bool isDisabled)
         {
             this.Logger = logger;
             this.HttpClientFactory = httpClientFactory;
-            this.RelativeUrl = url.Action(apiActionName, "Api");
+            this.RelativeUrl = relativeUrl;
+            this.IsDisabled = isDisabled;
         }
 
         public async Task<GadgetResponse<TResult>> ExecuteAsync(TRequest request)
         {
             this.Logger.LogDebug("Executing Gadget base functionality");
             var response = new GadgetResponse<TResult>();
-            try
+            if (this.IsDisabled)
             {
-                this.Logger.LogDebug("Executing Gadget core functionality");
-                response.Result = await ExecuteCoreAsync(request);
-                this.Logger.LogDebug("Executed Gadget core functionality");
+                response.Error = "This gadget is disabled";
             }
-            catch (Exception exc)
+            else
             {
-                this.Logger.LogError(exc, "Exception while executing Gadget core functionality");
-                response.Error = exc.ToString();
+                try
+                {
+                    this.Logger.LogDebug("Executing Gadget core functionality");
+                    response.Result = await ExecuteCoreAsync(request);
+                    this.Logger.LogDebug("Executed Gadget core functionality");
+                }
+                catch (Exception exc)
+                {
+                    this.Logger.LogError(exc, "Exception while executing Gadget core functionality");
+                    response.Error = exc.ToString();
+                }
             }
             response.ChainedResponse = await this.PerformCallChainAsync(request);
             response.TimeCompleted = DateTimeOffset.UtcNow;

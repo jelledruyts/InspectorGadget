@@ -2,6 +2,7 @@ using System;
 using System.Net.Http;
 using System.Threading.Tasks;
 using InspectorGadget.WebApp.Controllers;
+using InspectorGadget.WebApp.Infrastructure;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.Services.AppAuthentication;
 using Microsoft.Extensions.Logging;
@@ -23,8 +24,8 @@ namespace InspectorGadget.WebApp.Gadgets
             public string TokenType { get; set; }
         }
 
-        public AzureManagedIdentityGadget(ILogger logger, IHttpClientFactory httpClientFactory, IUrlHelper url)
-            : base(logger, httpClientFactory, url, nameof(ApiController.AzureManagedIdentity))
+        public AzureManagedIdentityGadget(ILogger logger, IHttpClientFactory httpClientFactory, IUrlHelper url, AppSettings appSettings)
+            : base(logger, httpClientFactory, url.GetRelativeApiUrl(nameof(ApiController.AzureManagedIdentity)), appSettings.DisableAzureManagedIdentity)
         {
         }
 

@@ -1,6 +1,7 @@
 using System.Net.Http;
 using System.Threading.Tasks;
 using InspectorGadget.WebApp.Controllers;
+using InspectorGadget.WebApp.Infrastructure;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Microsoft.Net.Http.Headers;
@@ -20,8 +21,8 @@ namespace InspectorGadget.WebApp.Gadgets
             public string ResponseBody { get; set; }
         }
 
-        public HttpRequestGadget(ILogger logger, IHttpClientFactory httpClientFactory, IUrlHelper url)
-            : base(logger, httpClientFactory, url, nameof(ApiController.HttpRequest))
+        public HttpRequestGadget(ILogger logger, IHttpClientFactory httpClientFactory, IUrlHelper url, AppSettings appSettings)
+            : base(logger, httpClientFactory, url.GetRelativeApiUrl(nameof(ApiController.HttpRequest)), appSettings.DisableHttpRequest)
         {
         }
 

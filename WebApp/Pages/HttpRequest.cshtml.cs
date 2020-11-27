@@ -1,10 +1,8 @@
 using System.Net.Http;
 using System.Threading.Tasks;
 using InspectorGadget.WebApp.Gadgets;
-using InspectorGadget.WebApp.Infrastructure;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 
 namespace InspectorGadget.WebApp.Pages
@@ -13,27 +11,29 @@ namespace InspectorGadget.WebApp.Pages
     {
         private readonly ILogger logger;
         private readonly IHttpClientFactory httpClientFactory;
+        private readonly AppSettings appSettings;
 
         [BindProperty]
         public HttpRequestGadget.Request GadgetRequest { get; set; }
         public GadgetResponse<HttpRequestGadget.Result> GadgetResponse { get; set; }
 
-        public HttpRequestModel(ILogger<HttpRequestModel> logger, IHttpClientFactory httpClientFactory, IConfiguration configuration)
+        public HttpRequestModel(ILogger<HttpRequestModel> logger, IHttpClientFactory httpClientFactory, AppSettings appSettings)
         {
             this.logger = logger;
             this.httpClientFactory = httpClientFactory;
+            this.appSettings = appSettings;
             this.GadgetRequest = new HttpRequestGadget.Request
             {
-                CallChainUrls = configuration.GetValueOrDefault("DefaultCallChainUrls", default(string)),
-                RequestUrl = configuration.GetValueOrDefault("DefaultHttpRequestUrl", "http://ipinfo.io/ip"),
-                RequestHostName = configuration.GetValueOrDefault("DefaultHttpRequestHostName", default(string))
+                CallChainUrls = this.appSettings.DefaultCallChainUrls,
+                RequestUrl = this.appSettings.DefaultHttpRequestUrl,
+                RequestHostName = this.appSettings.DefaultHttpRequestHostName
             };
         }
 
         public async Task OnPost()
         {
             this.logger.LogInformation("Executing HTTP Request page");
-            var gadget = new HttpRequestGadget(this.logger, this.httpClientFactory, Url);
+            var gadget = new HttpRequestGadget(this.logger, this.httpClientFactory, Url, this.appSettings);
             this.GadgetResponse = await gadget.ExecuteAsync(this.GadgetRequest);
         }
     }

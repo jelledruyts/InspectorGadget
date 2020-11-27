@@ -13,11 +13,15 @@
     </div>
     <div class="form-group">
         <label for="arguments">Arguments</label>
-        <input type="text" name="arguments" id="arguments" value="@Model.GadgetRequest.Arguments" class="form-control" placeholder="The arguments for the process (note: these should use Windows command-line escaping rules)" title="You can set the default value as a 'DefaultProcessRunArguments' configuration setting" />
+        <input type="text" name="arguments" id="arguments" value="@Model.GadgetRequest.Arguments" class="form-control val-optional" placeholder="The arguments for the process (note: these should use Windows command-line escaping rules)" title="You can set the default value as a 'DefaultProcessRunArguments' configuration setting" />
     </div>
     <div class="form-group">
         <label for="timeoutSeconds">Timeout</label>
-        <input type="text" name="timeoutSeconds" id="timeoutSeconds" value="@Model.GadgetRequest.TimeoutSeconds" class="form-control" placeholder="The number of seconds to wait for the process to exit; note that if this is specified the output can be truncated even if the process exited" title="You can set the default value as a 'DefaultProcessRunTimeoutSeconds' configuration setting" />
+        <input type="text" name="timeoutSeconds" id="timeoutSeconds" value="@Model.GadgetRequest.TimeoutSeconds" class="form-control val-optional" placeholder="The number of seconds to wait for the process to exit; note that if this is specified the output can be truncated even if the process exited" title="You can set the default value as a 'DefaultProcessRunTimeoutSeconds' configuration setting" />
+    </div>
+    <div class="form-group">
+        <label for="callChainUrls"><a asp-page="/Api" asp-fragment="call-chaining">Call Chain</a></label>
+        <input type="text" name="callChainUrls" id="callChainUrls" value="@Model.GadgetRequest.CallChainUrls" class="form-control val-optional" placeholder="Optionally chain calls across multiple hops (separate base URL's by spaces)" title="You can set the default value as a 'DefaultCallChainUrls' configuration setting" />
     </div>
     <div class="form-group">
         <input type="submit" value="Submit" class="btn btn-primary" />

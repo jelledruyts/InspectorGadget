@@ -24,8 +24,8 @@ namespace InspectorGadget.WebApp.Gadgets
             public string ErrorOutput { get; set; }
         }
 
-        public ProcessRunGadget(ILogger logger, IHttpClientFactory httpClientFactory, IUrlHelper url)
-            : base(logger, httpClientFactory, url, nameof(ApiController.ProcessRun))
+        public ProcessRunGadget(ILogger logger, IHttpClientFactory httpClientFactory, IUrlHelper url, AppSettings appSettings)
+            : base(logger, httpClientFactory, url.GetRelativeApiUrl(nameof(ApiController.ProcessRun)), appSettings.DisableProcessRun)
         {
         }
 
