@@ -37,6 +37,7 @@ html {
 .border-top {
   border-top: 1px solid #e5e5e5;
 }
+
 .border-bottom {
   border-bottom: 1px solid #e5e5e5;
 }
@@ -58,15 +59,25 @@ html {
 }
 
 body {
+  padding-top: 5rem;
   /* Margin bottom by footer height */
   margin-bottom: 60px;
 }
+
 .footer {
   position: absolute;
   bottom: 0;
   width: 100%;
   white-space: nowrap;
   line-height: 60px; /* Vertically center the text there */
+}
+
+/* https://stackoverflow.com/questions/10732690/offsetting-an-html-anchor-to-adjust-for-fixed-header */
+a.anchor {
+  display: block;
+  position: relative;
+  top: -72px;
+  visibility: hidden;
 }
 
 /* Validation */

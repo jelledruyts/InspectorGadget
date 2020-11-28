@@ -13,7 +13,7 @@
 
 @foreach (var group in InspectorGroup.AllGroups)
 {
-    <a name="@group.Key"></a>
+    <a name="@group.Key" class="anchor"></a>
     <h3>@group.DisplayName</h3>
     @if (group.Key == nameof(InspectorInfo.Configuration))
     {
