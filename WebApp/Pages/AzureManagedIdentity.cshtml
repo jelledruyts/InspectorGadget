@@ -8,8 +8,12 @@
 <form method="POST">
     <p class="text-muted">Allows you to request an access token for the <a href="https://docs.microsoft.com/azure/active-directory/managed-identities-azure-resources/overview" target="_blank">managed identity representing your application</a> (when running on a supported Azure service).</p>
     <div class="form-group">
-        <label for="resource">Resource (App ID URI)</label>
-        <input type="text" name="resource" id="resource" value="@Model.GadgetRequest.Resource" class="form-control val-required" placeholder="The App ID URI of the resource for which a token should be requested" title="You can set the default value as a 'DefaultAzureManagedIdentityResource' configuration setting" />
+        <label for="scopes">Scopes</label>
+        <input type="text" name="scopes" id="scopes" value="@Model.GadgetRequest.Scopes" class="form-control val-required" placeholder="The (space-separated) scopes for which a token should be requested" title="You can set the default value as a 'DefaultAzureManagedIdentityScopes' configuration setting" />
+    </div>
+    <div class="form-group">
+        <label for="azureManagedIdentityClientId">User-Assigned Managed Identity Client ID</label>
+        <input type="text" name="azureManagedIdentityClientId" id="azureManagedIdentityClientId" value="@Model.GadgetRequest.AzureManagedIdentityClientId" class="form-control val-optional" placeholder="The Client ID of a User-Assigned Managed Identity; leave blank to use the System-Assigned Managed Identity" title="You can set the default value as a 'DefaultAzureManagedIdentityClientId' configuration setting" />
     </div>
     <div class="form-group">
         <label for="callChainUrls"><a asp-page="/Api" asp-fragment="call-chaining">Call Chain</a></label>

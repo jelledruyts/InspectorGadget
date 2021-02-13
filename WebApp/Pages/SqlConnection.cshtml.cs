@@ -27,7 +27,8 @@ namespace InspectorGadget.WebApp.Pages
                 CallChainUrls = this.appSettings.DefaultCallChainUrls,
                 SqlConnectionString = this.appSettings.DefaultSqlConnectionSqlConnectionString,
                 SqlQuery = this.appSettings.DefaultSqlConnectionSqlQuery,
-                UseAzureManagedIdentity = this.appSettings.DefaultSqlConnectionUseAzureManagedIdentity
+                UseAzureManagedIdentity = this.appSettings.DefaultSqlConnectionUseAzureManagedIdentity,
+                AzureManagedIdentityClientId = this.appSettings.DefaultSqlConnectionAzureManagedIdentityClientId
             };
         }
 

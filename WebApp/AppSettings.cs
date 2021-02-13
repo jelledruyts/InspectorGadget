@@ -13,7 +13,8 @@ namespace InspectorGadget.WebApp
         public string DefaultCallChainUrls => configuration.GetValueOrDefault("DefaultCallChainUrls", default(string));
         
         public bool DisableAzureManagedIdentity => configuration.GetValueOrDefault("DisableAzureManagedIdentity", false);
-        public string DefaultAzureManagedIdentityResource => configuration.GetValueOrDefault("DefaultAzureManagedIdentityResource", "https://management.azure.com/");
+        public string DefaultAzureManagedIdentityScopes => configuration.GetValueOrDefault("DefaultAzureManagedIdentityScopes", "https://management.azure.com/.default");
+        public string DefaultAzureManagedIdentityClientId => configuration.GetValueOrDefault("DefaultAzureManagedIdentityClientId", default(string));
         
         public bool DisableDnsLookup => configuration.GetValueOrDefault("DisableDnsLookup", false);
         public string DefaultDnsLookupHost => configuration.GetValueOrDefault("DefaultDnsLookupHost", default(string));
@@ -41,6 +42,7 @@ namespace InspectorGadget.WebApp
         public string DefaultSqlConnectionSqlConnectionString => configuration.GetValueOrDefault("DefaultSqlConnectionSqlConnectionString", default(string));
         public string DefaultSqlConnectionSqlQuery => configuration.GetValueOrDefault("DefaultSqlConnectionSqlQuery", "SELECT 'User \"' + USER_NAME() + '\" logged in from IP address \"' + CAST(CONNECTIONPROPERTY('client_net_address') AS NVARCHAR) + '\" to database \"' + DB_NAME() + '\" on server \"' + @@SERVERNAME + '\"'");
         public bool DefaultSqlConnectionUseAzureManagedIdentity => configuration.GetValueOrDefault("DefaultSqlConnectionUseAzureManagedIdentity", false);
+        public string DefaultSqlConnectionAzureManagedIdentityClientId => configuration.GetValueOrDefault("DefaultSqlConnectionAzureManagedIdentityClientId", default(string));
 
         public AppSettings(IConfiguration configuration)
         {

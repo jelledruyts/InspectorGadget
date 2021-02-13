@@ -1,9 +1,10 @@
 using System.Net.Http;
 using System.Threading.Tasks;
+using Azure.Core;
+using Azure.Identity;
 using InspectorGadget.WebApp.Controllers;
 using InspectorGadget.WebApp.Infrastructure;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Azure.Services.AppAuthentication;
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Logging;
 
@@ -16,6 +17,7 @@ namespace InspectorGadget.WebApp.Gadgets
             public string SqlConnectionString { get; set; }
             public string SqlQuery { get; set; }
             public bool UseAzureManagedIdentity { get; set; }
+            public string AzureManagedIdentityClientId { get; set; }
         }
 
         public class Result
@@ -37,8 +39,11 @@ namespace InspectorGadget.WebApp.Gadgets
                 if (request.UseAzureManagedIdentity)
                 {
                     // Request an access token for Azure SQL Database using the current Azure Managed Identity.
-                    this.Logger.LogInformation("Acquiring access token using Azure Managed Identity");
-                    connection.AccessToken = await new AzureServiceTokenProvider().GetAccessTokenAsync("https://database.windows.net/");
+                    this.Logger.LogInformation("Acquiring access token using Azure Managed Identity using Client ID \"{ClientId}\"", request.AzureManagedIdentityClientId);
+                    // If AzureManagedIdentityClientId is requested, that indicates the User-Assigned Managed Identity to use; if omitted the System-Assigned Managed Identity will be used.
+                    var credential = new DefaultAzureCredential(new DefaultAzureCredentialOptions { ManagedIdentityClientId = request.AzureManagedIdentityClientId });
+                    var authenticationResult = await credential.GetTokenAsync(new TokenRequestContext(new[] { "https://database.windows.net/.default" }));
+                    connection.AccessToken = authenticationResult.Token;
                 }
                 connection.Open();
                 command.CommandText = request.SqlQuery;

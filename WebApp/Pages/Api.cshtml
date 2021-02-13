@@ -46,7 +46,7 @@
         <tr>
             <td>POST</td>
             <td><a asp-controller="Api" asp-action="SqlConnection">@Url.Action("SqlConnection", "Api")</a></td>
-            <td><code>sqlConnectionString</code>, <code>sqlQuery</code></td>
+            <td><code>sqlConnectionString</code>, <code>sqlQuery</code>, <code>useAzureManagedIdentity</code>, <code>azureManagedIdentityClientId</code></td>
             <td>Returns the results of the specified (scalar) SQL query against a given SQL database connection string.</td>
         </tr>
         }
@@ -55,8 +55,8 @@
         <tr>
             <td>POST</td>
             <td><a asp-controller="Api" asp-action="AzureManagedIdentity">@Url.Action("AzureManagedIdentity", "Api")</a></td>
-            <td><code>resource</code></td>
-            <td>Returns an access token for the specified resource on behalf of the <a href="https://docs.microsoft.com/azure/active-directory/managed-identities-azure-resources/overview" target="_blank">managed identity representing your application</a> (when running on a supported Azure service).</td>
+            <td><code>scopes</code>, <code>azureManagedIdentityClientId</code></td>
+            <td>Returns an access token for the specified scopes on behalf of the <a href="https://docs.microsoft.com/azure/active-directory/managed-identities-azure-resources/overview" target="_blank">managed identity representing your application</a> (when running on a supported Azure service).</td>
         </tr>
         }
         @if (!AppSettings.DisableSocketConnection)

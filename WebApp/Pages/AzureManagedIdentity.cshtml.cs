@@ -25,7 +25,8 @@ namespace InspectorGadget.WebApp.Pages
             this.GadgetRequest = new AzureManagedIdentityGadget.Request
             {
                 CallChainUrls = this.appSettings.DefaultCallChainUrls,
-                Resource = this.appSettings.DefaultAzureManagedIdentityResource
+                Scopes = this.appSettings.DefaultAzureManagedIdentityScopes,
+                AzureManagedIdentityClientId = this.appSettings.DefaultAzureManagedIdentityClientId
             };
         }
 

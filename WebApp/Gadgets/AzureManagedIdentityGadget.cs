@@ -1,10 +1,11 @@
 using System;
 using System.Net.Http;
 using System.Threading.Tasks;
+using Azure.Core;
+using Azure.Identity;
 using InspectorGadget.WebApp.Controllers;
 using InspectorGadget.WebApp.Infrastructure;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Azure.Services.AppAuthentication;
 using Microsoft.Extensions.Logging;
 
 namespace InspectorGadget.WebApp.Gadgets
@@ -13,15 +14,14 @@ namespace InspectorGadget.WebApp.Gadgets
     {
         public class Request : GadgetRequest
         {
-            public string Resource { get; set; }
+            public string Scopes { get; set; }
+            public string AzureManagedIdentityClientId { get; set; }
         }
 
         public class Result
         {
             public string AccessToken { get; set; }
             public DateTimeOffset ExpiresOn { get; set; }
-            public string Resource { get; set; }
-            public string TokenType { get; set; }
         }
 
         public AzureManagedIdentityGadget(ILogger logger, IHttpClientFactory httpClientFactory, IUrlHelper url, AppSettings appSettings)
@@ -31,14 +31,15 @@ namespace InspectorGadget.WebApp.Gadgets
 
         protected override async Task<Result> ExecuteCoreAsync(Request request)
         {
-            this.Logger.LogInformation("Acquiring token using Azure Managed Identity for Resource {Resource}", request.Resource);
-            var authenticationResult = await new AzureServiceTokenProvider().GetAuthenticationResultAsync(request.Resource);
+            this.Logger.LogInformation("Acquiring token using Azure Managed Identity for Scopes \"{Scopes}\" using Client ID \"{ClientId}\"", request.Scopes, request.AzureManagedIdentityClientId);
+            var scopes = request.Scopes == null ? Array.Empty<string>() : request.Scopes.Split(' ', StringSplitOptions.RemoveEmptyEntries);
+            // If AzureManagedIdentityClientId is requested, that indicates the User-Assigned Managed Identity to use; if omitted the System-Assigned Managed Identity will be used.
+            var credential = new DefaultAzureCredential(new DefaultAzureCredentialOptions { ManagedIdentityClientId = request.AzureManagedIdentityClientId });
+            var authenticationResult = await credential.GetTokenAsync(new TokenRequestContext(scopes));
             return new Result
             {
-                AccessToken = authenticationResult.AccessToken,
-                ExpiresOn = authenticationResult.ExpiresOn,
-                Resource = authenticationResult.Resource,
-                TokenType = authenticationResult.TokenType
+                AccessToken = authenticationResult.Token,
+                ExpiresOn = authenticationResult.ExpiresOn
             };
         }
     }

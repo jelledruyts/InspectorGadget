@@ -17,31 +17,29 @@ There are two versions that you can choose from:
 
 The following gadgets are available:
 
-| Gadget                     | Purpose                                                                                                                                                                                                                                    |
-| -------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| **DNS Lookup**             | Allows you to perform a DNS lookup from the web server.                                                                                                                                                                                    |
-| **SQL Connection**         | Allows you to perform a (scalar) query on a SQL Connection from the web server (optionally using an Azure Managed Identity to connect to Azure SQL Database).                                                                              |
-| **Azure Managed Identity** | Allows you to request an access token for the [managed identity representing your application](https://docs.microsoft.com/azure/active-directory/managed-identities-azure-resources/overview) (when running on a supported Azure service). |
-| **Socket Connection**      | Allows you to perform a raw TCP socket connection from the web server (optionally with a request body and reading back the response).                                                                                                      |
-| **Process Run**            | Allows you to run a process on the host and capture the output.                                                                                                                                                                            |
-| **Introspector**           | Allows you to perform an inspector request from the web server, returning all information the inspector knows about or only a subset (group) or even single item (key).                                                                    |
+- **DNS Lookup** allows you to perform a DNS lookup from the web server.
+- **SQL Connection** allows you to perform a (scalar) query on a SQL Connection from the web server (optionally using an Azure Managed Identity to connect to Azure SQL Database).
+- **Azure Managed Identity** allows you to request an access token for the [managed identity representing your application](https://docs.microsoft.com/azure/active-directory/managed-identities-azure-resources/overview) (when running on a supported Azure service).
+- **Socket Connection** allows you to perform a raw TCP socket connection from the web server (optionally with a request body and reading back the response).
+- **Process Run** allows you to run a process on the host and capture the output.
+- **Introspector** allows you to perform an inspector request from the web server, returning all information the inspector knows about or only a subset (group) or even single item (key).
 
 ## API Access
 
 Each gadget can also be accessed through a REST API:
 
-| Method | Path                              | Parameters                                                      |
-| ------ | --------------------------------- | --------------------------------------------------------------- |
-| POST   | `/api/dnslookup`                  | `host`                                                          |
-| POST   | `/api/httprequest`                | `requestUrl`, `requestHostName`                                 |
-| POST   | `/api/sqlconnection`              | `sqlConnectionString`, `sqlQuery`                               |
-| POST   | `/api/azuremanagedidentity`       | `resource`                                                      |
-| POST   | `/api/socketconnection`           | `requestHostName`, `requestPort`, `requestBody`, `readResponse` |
-| POST   | `/api/processrun`                 | `fileName`, `arguments`, `timeoutSeconds`                       |
-| GET    | `/api/introspector`               |                                                                 |
-| GET    | `/api/introspector/<group>`       |                                                                 |
-| GET    | `/api/introspector/<group>/<key>` |                                                                 |
-| POST   | `/api/introspector`               | `group`, `key`                                                  |
+| Method | Path                              | Parameters                                                        |
+| ------ | --------------------------------- | ----------------------------------------------------------------- |
+| POST   | `/api/dnslookup`                  | `host`                                                            |
+| POST   | `/api/httprequest`                | `requestUrl`, `requestHostName`                                   |
+| POST   | `/api/sqlconnection`              | `sqlConnectionString`, `sqlQuery`, `azureManagedIdentityClientId` |
+| POST   | `/api/azuremanagedidentity`       | `scopes`, `azureManagedIdentityClientId`                          |
+| POST   | `/api/socketconnection`           | `requestHostName`, `requestPort`, `requestBody`, `readResponse`   |
+| POST   | `/api/processrun`                 | `fileName`, `arguments`, `timeoutSeconds`                         |
+| GET    | `/api/introspector`               |                                                                   |
+| GET    | `/api/introspector/<group>`       |                                                                   |
+| GET    | `/api/introspector/<group>/<key>` |                                                                   |
+| POST   | `/api/introspector`               | `group`, `key`                                                    |
 
 ## Call Chaining
 
@@ -57,34 +55,36 @@ The main purpose for these API's is so that you can perform call chains of reque
 
 The app can be configured with the configuration settings below (using environment variables).
 
-| Setting                                       | Purpose                                                                                                                         |
-| --------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------- |
-| `BackgroundColor`                             | An HTML/CSS color value to set as the background color for all pages, e.g. to easily distinguish multiple instances of this app |
-| `InfoMessage`                                 | An informational message to put at the top of all pages, e.g. to easily distinguish multiple instances of this app              |
-| `DefaultCallChainUrls`                        | The default value for the Call Chain URL's (applies to all gadgets)                                                             |
-| `DisableAzureManagedIdentity`                 | Allows you to disable the **Azure Managed Identity** gadget                                                                     |
-| `DefaultAzureManagedIdentityResource`         | The default value for the Azure Managed Identity gadget resource                                                                |
-| `DisableDnsLookup`                            | Allows you to disable the **DNS Lookup** gadget                                                                                 |
-| `DefaultDnsLookupHost`                        | The default value for the DNS Lookup gadget host                                                                                |
-| `DisableHttpRequest`                          | Allows you to disable the **HTTP Request** gadget                                                                               |
-| `DefaultHttpRequestUrl`                       | The default value for the HTTP Request gadget URL                                                                               |
-| `DefaultHttpRequestHostName`                  | The default value for the HTTP Request gadget host name                                                                         |
-| `DisableIntrospector`                         | Allows you to disable the **Introspector** gadget                                                                               |
-| `DefaultIntrospectorGroup`                    | The default value for the Introspector gadget group                                                                             |
-| `DefaultIntrospectorKey`                      | The default value for the Introspector gadget key                                                                               |
-| `DisableProcessRun`                           | Allows you to disable the **Process Run** gadget                                                                                |
-| `DefaultProcessRunFileName`                   | The default value for the Process Run gadget file name                                                                          |
-| `DefaultProcessRunArguments`                  | The default value for the Process Run gadget arguments                                                                          |
-| `DefaultProcessRunTimeoutSeconds`             | The default value for the Process Run gadget timeout (in seconds)                                                               |
-| `DisableSocketConnection`                     | Allows you to disable the **Socket Connection** gadget                                                                          |
-| `DefaultSocketConnectionRequestHostName`      | The default value for the Socket Connection gadget request host name                                                            |
-| `DefaultSocketConnectionRequestPort`          | The default value for the Socket Connection gadget request port                                                                 |
-| `DefaultSocketConnectionRequestBody`          | The default value for the Socket Connection gadget request body                                                                 |
-| `DefaultSocketConnectionReadResponse`         | The default value for the Socket Connection gadget setting to read the response                                                 |
-| `DisableSqlConnection`                        | Allows you to disable the **SQL Connection** gadget                                                                             |
-| `DefaultSqlConnectionSqlConnectionString`     | The default value for the SQL Connection gadget SQL connection string                                                           |
-| `DefaultSqlConnectionSqlQuery`                | The default value for the SQL Connection gadget SQL query                                                                       |
-| `DefaultSqlConnectionUseAzureManagedIdentity` | The default value for the SQL Connection gadget setting to use the Azure Managed Identity of the app                            |
+| Setting                                            | Gadget                 | Purpose                                                                                                                         |
+| -------------------------------------------------- | ---------------------- | ------------------------------------------------------------------------------------------------------------------------------- |
+| `BackgroundColor`                                  |                        | An HTML/CSS color value to set as the background color for all pages, e.g. to easily distinguish multiple instances of this app |
+| `InfoMessage`                                      |                        | An informational message to put at the top of all pages, e.g. to easily distinguish multiple instances of this app              |
+| `DefaultCallChainUrls`                             | (All)                  | The default value for the Call Chain URL's                                                                                      |
+| `DisableDnsLookup`                                 | DNS Lookup             | Allows you to disable the **DNS Lookup** gadget                                                                                 |
+| `DefaultDnsLookupHost`                             | DNS Lookup             | The default value for the host                                                                                                  |
+| `DisableHttpRequest`                               | HTTP Request           | Allows you to disable the **HTTP Request** gadget                                                                               |
+| `DefaultHttpRequestUrl`                            | HTTP Request           | The default value for the URL                                                                                                   |
+| `DefaultHttpRequestHostName`                       | HTTP Request           | The default value for the host name                                                                                             |
+| `DisableSqlConnection`                             | SQL Connection         | Allows you to disable the **SQL Connection** gadget                                                                             |
+| `DefaultSqlConnectionSqlConnectionString`          | SQL Connection         | The default value for the SQL connection string                                                                                 |
+| `DefaultSqlConnectionSqlQuery`                     | SQL Connection         | The default value for the SQL query                                                                                             |
+| `DefaultSqlConnectionUseAzureManagedIdentity`      | SQL Connection         | The default value for the setting to use the Azure Managed Identity of the app                                                  |
+| `DefaultSqlConnectionAzureManagedIdentityClientId` | SQL Connection         | The default value for the Client ID when using a User-Assigned Managed Identity                                                 |
+| `DisableAzureManagedIdentity`                      | Azure Managed Identity | Allows you to disable the **Azure Managed Identity** gadget                                                                     |
+| `DefaultAzureManagedIdentityScopes`                | Azure Managed Identity | The default value for the scopes                                                                                                |
+| `DefaultAzureManagedIdentityClientId`              | Azure Managed Identity | The default value for the Client ID when using a User-Assigned Managed Identity                                                 |
+| `DisableSocketConnection`                          | Socket Connection      | Allows you to disable the **Socket Connection** gadget                                                                          |
+| `DefaultSocketConnectionRequestHostName`           | Socket Connection      | The default value for the request host name                                                                                     |
+| `DefaultSocketConnectionRequestPort`               | Socket Connection      | The default value for the request port                                                                                          |
+| `DefaultSocketConnectionRequestBody`               | Socket Connection      | The default value for the request body                                                                                          |
+| `DefaultSocketConnectionReadResponse`              | Socket Connection      | The default value for the setting to read the response                                                                          |
+| `DisableProcessRun`                                | Process Run            | Allows you to disable the **Process Run** gadget                                                                                |
+| `DefaultProcessRunFileName`                        | Process Run            | The default value for the file name                                                                                             |
+| `DefaultProcessRunArguments`                       | Process Run            | The default value for the arguments                                                                                             |
+| `DefaultProcessRunTimeoutSeconds`                  | Process Run            | The default value for the timeout (in seconds)                                                                                  |
+| `DisableIntrospector`                              | Introspector           | Allows you to disable the **Introspector** gadget                                                                               |
+| `DefaultIntrospectorGroup`                         | Introspector           | The default value for the group                                                                                                 |
+| `DefaultIntrospectorKey`                           | Introspector           | The default value for the key                                                                                                   |
 
 ## License
 
