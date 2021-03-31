@@ -25,6 +25,7 @@ namespace InspectorGadget.WebApp.Pages
             this.GadgetRequest = new SqlConnectionGadget.Request
             {
                 CallChainUrls = this.appSettings.DefaultCallChainUrls,
+                DatabaseType = this.appSettings.DefaultSqlConnectionDatabaseType,
                 SqlConnectionString = this.appSettings.DefaultSqlConnectionSqlConnectionString,
                 SqlQuery = this.appSettings.DefaultSqlConnectionSqlQuery,
                 UseAzureManagedIdentity = this.appSettings.DefaultSqlConnectionUseAzureManagedIdentity,

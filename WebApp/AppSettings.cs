@@ -1,3 +1,4 @@
+using InspectorGadget.WebApp.Gadgets;
 using InspectorGadget.WebApp.Infrastructure;
 using Microsoft.Extensions.Configuration;
 
@@ -39,8 +40,9 @@ namespace InspectorGadget.WebApp
         public bool DefaultSocketConnectionReadResponse => configuration.GetValueOrDefault("DefaultSocketConnectionReadResponse", true);
         
         public bool DisableSqlConnection => configuration.GetValueOrDefault("DisableSqlConnection", false);
+        public string DefaultSqlConnectionDatabaseType => configuration.GetValueOrDefault("DefaultSqlConnectionDatabaseType", default(string));
         public string DefaultSqlConnectionSqlConnectionString => configuration.GetValueOrDefault("DefaultSqlConnectionSqlConnectionString", default(string));
-        public string DefaultSqlConnectionSqlQuery => configuration.GetValueOrDefault("DefaultSqlConnectionSqlQuery", "SELECT 'User \"' + USER_NAME() + '\" logged in from IP address \"' + CAST(CONNECTIONPROPERTY('client_net_address') AS NVARCHAR) + '\" to database \"' + DB_NAME() + '\" on server \"' + @@SERVERNAME + '\"'");
+        public string DefaultSqlConnectionSqlQuery => configuration.GetValueOrDefault("DefaultSqlConnectionSqlQuery", SqlConnectionGadget.SqlServerDefaultQuery);
         public bool DefaultSqlConnectionUseAzureManagedIdentity => configuration.GetValueOrDefault("DefaultSqlConnectionUseAzureManagedIdentity", false);
         public string DefaultSqlConnectionAzureManagedIdentityClientId => configuration.GetValueOrDefault("DefaultSqlConnectionAzureManagedIdentityClientId", default(string));
 

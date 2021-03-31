@@ -46,8 +46,8 @@
         <tr>
             <td>POST</td>
             <td><a asp-controller="Api" asp-action="SqlConnection">@Url.Action("SqlConnection", "Api")</a></td>
-            <td><code>sqlConnectionString</code>, <code>sqlQuery</code>, <code>useAzureManagedIdentity</code>, <code>azureManagedIdentityClientId</code></td>
-            <td>Returns the results of the specified (scalar) SQL query against a given SQL database connection string.</td>
+            <td><code>databaseType</code>, <code>sqlConnectionString</code>, <code>sqlQuery</code>, <code>useAzureManagedIdentity</code>, <code>azureManagedIdentityClientId</code></td>
+            <td>Returns the results of the specified (scalar) SQL query against a given SQL database connection string. The <code>databaseType</code> can be <code>@SqlConnectionGadget.SqlServerDatabaseType</code> (used by default if omitted), <code>@SqlConnectionGadget.PostgreSqlDatabaseType</code> or <code>@SqlConnectionGadget.MySqlDatabaseType</code>.</td>
         </tr>
         }
         @if (!AppSettings.DisableAzureManagedIdentity)

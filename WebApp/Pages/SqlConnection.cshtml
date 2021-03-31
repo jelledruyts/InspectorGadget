@@ -8,6 +8,14 @@
 <form method="POST">
     <p class="text-muted">Allows you to perform a (scalar) query on a SQL Connection from the web server and render the results below.</p>
     <div class="form-group">
+        <label for="databaseType">Database Type</label>
+        <select class="form-control val-required" name="databaseType" id="databaseType" title="You can set the default value as a 'DefaultSqlConnectionDatabaseType' configuration setting" onchange="updateUI()">
+            <option value="@SqlConnectionGadget.SqlServerDatabaseType" selected="@(Model.GadgetRequest.DatabaseType == @SqlConnectionGadget.SqlServerDatabaseType ? true : false)">SQL Server, Azure SQL Database, ...</option>
+            <option value="@SqlConnectionGadget.PostgreSqlDatabaseType" selected="@(Model.GadgetRequest.DatabaseType == @SqlConnectionGadget.PostgreSqlDatabaseType ? true : false)">PostgreSQL</option>
+            <option value="@SqlConnectionGadget.MySqlDatabaseType" selected="@(Model.GadgetRequest.DatabaseType == @SqlConnectionGadget.MySqlDatabaseType ? true : false)">MySQL, MariaDB, ...</option>
+        </select>
+    </div>
+    <div class="form-group">
         <label for="sqlConnectionString">SQL Connection String</label>
         <input type="password" name="sqlConnectionString" id="sqlConnectionString" value="@Model.GadgetRequest.SqlConnectionString" class="form-control val-required" autocomplete="off" placeholder="The connection string with which to connect to the SQL database" title="You can set the default value as a 'DefaultSqlConnectionSqlConnectionString' configuration setting" />
     </div>
@@ -15,13 +23,15 @@
         <label for="sqlQuery">SQL Query</label>
         <input type="text" name="sqlQuery" id="sqlQuery" value="@Model.GadgetRequest.SqlQuery" class="form-control val-required" placeholder="The scalar SQL query to execute against the database" title="You can set the default value as a 'DefaultSqlConnectionSqlQuery' configuration setting" />
     </div>
-    <div class="form-group form-check">
-        <input type="checkbox" name="useAzureManagedIdentity" id="useAzureManagedIdentity" value="true" checked="@Model.GadgetRequest.UseAzureManagedIdentity" class="form-check-input" title="You can set the default value as a 'DefaultSqlConnectionUseAzureManagedIdentity' configuration setting" />
-        <label class="form-check-label" for="useAzureManagedIdentity">Use Azure Managed Identity to connect to Azure SQL Database</label>
-    </div>
-    <div class="form-group">
-        <label for="azureManagedIdentityClientId">User-Assigned Managed Identity Client ID</label>
-        <input type="text" name="azureManagedIdentityClientId" id="azureManagedIdentityClientId" value="@Model.GadgetRequest.AzureManagedIdentityClientId" class="form-control val-optional" placeholder="The Client ID of a User-Assigned Managed Identity; leave blank to use the System-Assigned Managed Identity" title="You can set the default value as a 'DefaultSqlConnectionAzureManagedIdentityClientId' configuration setting" />
+    <div id="azureManagedIdentityPanel">
+        <div class="form-group form-check">
+            <input type="checkbox" name="useAzureManagedIdentity" id="useAzureManagedIdentity" value="true" checked="@Model.GadgetRequest.UseAzureManagedIdentity" class="form-check-input" title="You can set the default value as a 'DefaultSqlConnectionUseAzureManagedIdentity' configuration setting" />
+            <label class="form-check-label" for="useAzureManagedIdentity">Use Azure Managed Identity to connect to Azure SQL Database</label>
+        </div>
+        <div class="form-group">
+            <label for="azureManagedIdentityClientId">User-Assigned Managed Identity Client ID</label>
+            <input type="text" name="azureManagedIdentityClientId" id="azureManagedIdentityClientId" value="@Model.GadgetRequest.AzureManagedIdentityClientId" class="form-control val-optional" placeholder="The Client ID of a User-Assigned Managed Identity; leave blank to use the System-Assigned Managed Identity" title="You can set the default value as a 'DefaultSqlConnectionAzureManagedIdentityClientId' configuration setting" />
+        </div>
     </div>
     <div class="form-group">
         <label for="callChainUrls"><a asp-page="/Api" asp-fragment="call-chaining">Call Chain</a></label>
@@ -33,3 +43,32 @@
 </form>
 
 @Html.DisplayFor(m => m.GadgetResponse)
+
+<script>
+function updateUI() {
+    var databaseType = document.getElementById('databaseType').value;
+    var sqlQuery = document.getElementById('sqlQuery').value;
+
+    // Hide the Azure Managed Identity panel if not supported.
+    if (databaseType == '@SqlConnectionGadget.SqlServerDatabaseType') {
+        document.getElementById('azureManagedIdentityPanel').style.display = 'block';
+    } else {
+        document.getElementById('azureManagedIdentityPanel').style.display = 'none';
+    }
+
+    // Set the default query depending on the database type.
+    const SqlServerDefaultQuery = '@Html.Raw(SqlConnectionGadget.SqlServerDefaultQuery.Replace("'", "\\'"))';
+    const PostgreSqlDefaultQuery = '@Html.Raw(SqlConnectionGadget.PostgreSqlDefaultQuery.Replace("'", "\\'"))';
+    const MySqlDefaultQuery = '@Html.Raw(SqlConnectionGadget.MySqlDefaultQuery.Replace("'", "\\'"))';
+    if (sqlQuery == SqlServerDefaultQuery || sqlQuery == PostgreSqlDefaultQuery || sqlQuery == MySqlDefaultQuery) {
+        if (databaseType == '@SqlConnectionGadget.SqlServerDatabaseType') {
+            document.getElementById('sqlQuery').value = SqlServerDefaultQuery;
+        } else if (databaseType == '@SqlConnectionGadget.PostgreSqlDatabaseType') {
+            document.getElementById('sqlQuery').value = PostgreSqlDefaultQuery;
+        } else if (databaseType == '@SqlConnectionGadget.MySqlDatabaseType') {
+            document.getElementById('sqlQuery').value = MySqlDefaultQuery;
+        }
+    }
+}
+updateUI();
+</script>
