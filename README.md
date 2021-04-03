@@ -18,28 +18,30 @@ There are two versions that you can choose from:
 The following gadgets are available:
 
 - **DNS Lookup** allows you to perform a DNS lookup from the web server.
-- **SQL Connection** allows you to perform a (scalar) query on a SQL Connection from the web server (optionally using an Azure Managed Identity to connect to Azure SQL Database).
+- **SQL Connection** allows you to perform a (scalar) query on a SQL Connection from the web server to a SQL Server, PostgreSQL or MySQL database (optionally using an Azure Managed Identity to connect to Azure SQL Database).
 - **Azure Managed Identity** allows you to request an access token for the [managed identity representing your application](https://docs.microsoft.com/azure/active-directory/managed-identities-azure-resources/overview) (when running on a supported Azure service).
 - **Socket Connection** allows you to perform a raw TCP socket connection from the web server (optionally with a request body and reading back the response).
 - **Process Run** allows you to run a process on the host and capture the output.
+- **Health Check** allows you to configure the health check endpoint, e.g. for testing load balancers or container orchestrators.
 - **Introspector** allows you to perform an inspector request from the web server, returning all information the inspector knows about or only a subset (group) or even single item (key).
 
 ## API Access
 
 Each gadget can also be accessed through a REST API:
 
-| Method | Path                              | Parameters                                                                        |
-| ------ | --------------------------------- | --------------------------------------------------------------------------------- |
-| POST   | `/api/dnslookup`                  | `host`                                                                            |
-| POST   | `/api/httprequest`                | `requestUrl`, `requestHostName`                                                   |
-| POST   | `/api/sqlconnection`              | `databaseType`, `sqlConnectionString`, `sqlQuery`, `azureManagedIdentityClientId` |
-| POST   | `/api/azuremanagedidentity`       | `scopes`, `azureManagedIdentityClientId`                                          |
-| POST   | `/api/socketconnection`           | `requestHostName`, `requestPort`, `requestBody`, `readResponse`                   |
-| POST   | `/api/processrun`                 | `fileName`, `arguments`, `timeoutSeconds`                                         |
-| GET    | `/api/introspector`               |                                                                                   |
-| GET    | `/api/introspector/<group>`       |                                                                                   |
-| GET    | `/api/introspector/<group>/<key>` |                                                                                   |
-| POST   | `/api/introspector`               | `group`, `key`                                                                    |
+| Method | Path                              | Parameters                                                                                                                      |
+| ------ | --------------------------------- | ------------------------------------------------------------------------------------------------------------------------------- |
+| POST   | `/api/dnslookup`                  | `host`                                                                                                                          |
+| POST   | `/api/httprequest`                | `requestUrl`, `requestHostName`                                                                                                 |
+| POST   | `/api/sqlconnection`              | `databaseType` (can be `sqlserver`, `postgresql` or `mysql`), `sqlConnectionString`, `sqlQuery`, `azureManagedIdentityClientId` |
+| POST   | `/api/azuremanagedidentity`       | `scopes`, `azureManagedIdentityClientId`                                                                                        |
+| POST   | `/api/socketconnection`           | `requestHostName`, `requestPort`, `requestBody`, `readResponse`                                                                 |
+| POST   | `/api/processrun`                 | `fileName`, `arguments`, `timeoutSeconds`                                                                                       |
+| POST   | `/api/healthcheck`                | `healthCheckMode` (can be `AlwaysSucceed`, `AlwaysFail` or `FailNextNumberOfTimes`), `failNextNumberOfTimes`                    |
+| GET    | `/api/introspector`               |                                                                                                                                 |
+| GET    | `/api/introspector/<group>`       |                                                                                                                                 |
+| GET    | `/api/introspector/<group>/<key>` |                                                                                                                                 |
+| POST   | `/api/introspector`               | `group`, `key`                                                                                                                  |
 
 ## Call Chaining
 
@@ -66,6 +68,7 @@ The app can be configured with the configuration settings below (using environme
 | `DefaultHttpRequestUrl`                            | HTTP Request           | The default value for the URL                                                                                                   |
 | `DefaultHttpRequestHostName`                       | HTTP Request           | The default value for the host name                                                                                             |
 | `DisableSqlConnection`                             | SQL Connection         | Allows you to disable the **SQL Connection** gadget                                                                             |
+| `DefaultSqlConnectionDatabaseType`                 | SQL Connection         | The default value for the database type (can be `sqlserver`, `postgresql` or `mysql`)                                           |
 | `DefaultSqlConnectionSqlConnectionString`          | SQL Connection         | The default value for the SQL connection string                                                                                 |
 | `DefaultSqlConnectionSqlQuery`                     | SQL Connection         | The default value for the SQL query                                                                                             |
 | `DefaultSqlConnectionUseAzureManagedIdentity`      | SQL Connection         | The default value for the setting to use the Azure Managed Identity of the app                                                  |
@@ -82,6 +85,9 @@ The app can be configured with the configuration settings below (using environme
 | `DefaultProcessRunFileName`                        | Process Run            | The default value for the file name                                                                                             |
 | `DefaultProcessRunArguments`                       | Process Run            | The default value for the arguments                                                                                             |
 | `DefaultProcessRunTimeoutSeconds`                  | Process Run            | The default value for the timeout (in seconds)                                                                                  |
+| `DisableHealthCheck`                               | Health Check           | Allows you to disable the **Health Check** gadget                                                                               |
+| `DefaultHealthCheckMode`                           | Health Check           | The default value for the health check mode (can be `AlwaysSucceed`, `AlwaysFail` or `FailNextNumberOfTimes`)                   |
+| `DefaultHealthCheckFailNumberOfTimes`              | Health Check           | The default value for the next number of times to fail the health check                                                         |
 | `DisableIntrospector`                              | Introspector           | Allows you to disable the **Introspector** gadget                                                                               |
 | `DefaultIntrospectorGroup`                         | Introspector           | The default value for the group                                                                                                 |
 | `DefaultIntrospectorKey`                           | Introspector           | The default value for the key                                                                                                   |

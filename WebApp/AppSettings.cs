@@ -46,6 +46,10 @@ namespace InspectorGadget.WebApp
         public bool DefaultSqlConnectionUseAzureManagedIdentity => configuration.GetValueOrDefault("DefaultSqlConnectionUseAzureManagedIdentity", false);
         public string DefaultSqlConnectionAzureManagedIdentityClientId => configuration.GetValueOrDefault("DefaultSqlConnectionAzureManagedIdentityClientId", default(string));
 
+        public bool DisableHealthCheck => configuration.GetValueOrDefault("DisableHealthCheck", false);
+        public ConfigurableHealthCheckMode DefaultHealthCheckMode => configuration.GetValueOrDefault("DefaultHealthCheckMode", ConfigurableHealthCheckMode.AlwaysSucceed);
+        public int DefaultHealthCheckFailNumberOfTimes => configuration.GetValueOrDefault("DefaultHealthCheckFailNumberOfTimes", 10);
+
         public AppSettings(IConfiguration configuration)
         {
             this.configuration = configuration;

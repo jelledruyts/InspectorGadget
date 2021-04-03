@@ -80,6 +80,10 @@ a.anchor {
   visibility: hidden;
 }
 
+.form-control-narrow {
+  width: 3em !important;
+}
+
 /* Validation */
 .val-required {
   border-left: solid 5px #f0ad4e;

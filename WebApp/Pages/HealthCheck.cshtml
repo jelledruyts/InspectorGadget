@@ -1,0 +1,63 @@
+@page
+@model HealthCheckModel
+@{
+    ViewData["Title"] = "Health Check";
+}
+<h1>@ViewData["Title"]</h1>
+
+<form method="POST">
+    <p class="text-muted">Allows you to configure the health check endpoint (located at <a href="health">@ConfigurableHealthCheck.HealthCheckPath</a>), e.g. for testing load balancers or container orchestrators.</p>
+    <div class="form-group">
+        <div class="form-check">
+            <input class="form-check-input" type="radio" name="healthCheckMode" id="healthCheckModeAlwaysSucceed" value="@ConfigurableHealthCheckMode.AlwaysSucceed.ToString()" checked="@(Model.GadgetRequest.HealthCheckMode == ConfigurableHealthCheckMode.AlwaysSucceed)">
+            <label class="form-check-label" for="healthCheckModeAlwaysSucceed">Always succeed</label>
+        </div>
+        <div class="form-check">
+            <input class="form-check-input" type="radio" name="healthCheckMode" id="healthCheckModeAlwaysFail" value="@ConfigurableHealthCheckMode.AlwaysFail.ToString()" checked="@(Model.GadgetRequest.HealthCheckMode == ConfigurableHealthCheckMode.AlwaysFail)">
+            <label class="form-check-label" for="healthCheckModeAlwaysFail">Always fail</label>
+        </div>
+        <div class="form-inline">
+            <div class="form-check">
+                <input class="form-check-input" type="radio" name="healthCheckMode" id="healthCheckModeFailNextNumberOfTimes" value="@ConfigurableHealthCheckMode.FailNextNumberOfTimes.ToString()" checked="@(Model.GadgetRequest.HealthCheckMode == ConfigurableHealthCheckMode.FailNextNumberOfTimes)">
+                <label class="form-check-label mr-1" for="healthCheckModeFailNextNumberOfTimes">Fail for next</label>
+                <input type="text" name="failNextNumberOfTimes" id="failNextNumberOfTimes" value="@Model.GadgetRequest.FailNextNumberOfTimes" class="form-control form-control-sm form-control-narrow mr-1 val-required" placeholder="Set the next number of times the health check should fail" title="You can set the default value as a 'DefaultHealthCheckFailNumberOfTimes' configuration setting" />
+                <label class="form-check-label" for="healthCheckModeFailNextNumberOfTimes">times</label>
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="callChainUrls"><a asp-page="/Api" asp-fragment="call-chaining">Call Chain</a></label>
+        <input type="text" name="callChainUrls" id="callChainUrls" value="@Model.GadgetRequest.CallChainUrls" class="form-control val-optional" placeholder="Optionally chain calls across multiple hops (separate base URL's by spaces)" title="You can set the default value as a 'DefaultCallChainUrls' configuration setting" />
+    </div>
+    <div class="form-group">
+        <input type="submit" value="Submit" class="btn btn-primary" />
+    </div>
+</form>
+
+@Html.DisplayFor(m => m.GadgetResponse)
+
+@if (ConfigurableHealthCheck.History.Any())
+{
+    <h3>History</h3>
+    <table class="table table-striped table-hover table-sm table-responsive mt-3">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Status</th>
+                <th>Description</th>
+                <th>Time</th>
+            </tr>
+        </thead>
+        <tbody>
+        @foreach (var item in ConfigurableHealthCheck.History.Reverse())
+        {
+            <tr>
+                <td>@item.Id</td>
+                <td class="@(item.Healthy ? "table-success" : "table-danger")">@(item.Healthy ? "Healthy" : "Unhealthy")</td>
+                <td>@item.Description</td>
+                <td>@item.TimeStamp.ToDisplayString()</td>
+            </tr>
+        }
+        </tbody>
+    </table>
+}

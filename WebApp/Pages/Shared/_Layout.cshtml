@@ -21,33 +21,37 @@
                     <ul class="navbar-nav flex-grow-1">
                         @if (!AppSettings.DisableDnsLookup)
                         {
-                        <li class="nav-item"><a class="nav-link text-dark" asp-page="/DnsLookup">DNS Lookup</a></li>
+                        <li class="nav-item"><a class="nav-link text-dark" asp-page="/DnsLookup" title="DNS Lookup">DNS</a></li>
                         }
                         @if (!AppSettings.DisableHttpRequest)
                         {
-                        <li class="nav-item"><a class="nav-link text-dark" asp-page="/HttpRequest">HTTP Request</a></li>
+                        <li class="nav-item"><a class="nav-link text-dark" asp-page="/HttpRequest" title="HTTP Request">HTTP</a></li>
                         }
                         @if (!AppSettings.DisableSqlConnection)
                         {
-                        <li class="nav-item"><a class="nav-link text-dark" asp-page="/SqlConnection">SQL Connection</a></li>
+                        <li class="nav-item"><a class="nav-link text-dark" asp-page="/SqlConnection" title="SQL Connection">SQL</a></li>
                         }
                         @if (!AppSettings.DisableAzureManagedIdentity)
                         {
-                        <li class="nav-item"><a class="nav-link text-dark" asp-page="/AzureManagedIdentity">Azure Managed Identity</a></li>
+                        <li class="nav-item"><a class="nav-link text-dark" asp-page="/AzureManagedIdentity" title="Azure Managed Identity">Azure Managed Identity</a></li>
                         }
                         @if (!AppSettings.DisableSocketConnection)
                         {
-                        <li class="nav-item"><a class="nav-link text-dark" asp-page="/SocketConnection">Socket Connection</a></li>
+                        <li class="nav-item"><a class="nav-link text-dark" asp-page="/SocketConnection" title="Socket Connection">Socket</a></li>
                         }
                         @if (!AppSettings.DisableProcessRun)
                         {
-                        <li class="nav-item"><a class="nav-link text-dark" asp-page="/ProcessRun">Process Run</a></li>
+                        <li class="nav-item"><a class="nav-link text-dark" asp-page="/ProcessRun" title="Process Run">Process</a></li>
+                        }
+                        @if (!AppSettings.DisableHealthCheck)
+                        {
+                        <li class="nav-item"><a class="nav-link text-dark" asp-page="/HealthCheck" title="Health Check">Health</a></li>
                         }
                         @if (!AppSettings.DisableIntrospector)
                         {
-                        <li class="nav-item"><a class="nav-link text-dark" asp-page="/Introspector">Introspector</a></li>
+                        <li class="nav-item"><a class="nav-link text-dark" asp-page="/Introspector" title="Introspector">Introspector</a></li>
                         }
-                        <li class="nav-item"><a class="nav-link text-dark" asp-page="/Api">API</a></li>
+                        <li class="nav-item"><a class="nav-link text-dark" asp-page="/Api" title="API">API</a></li>
                     </ul>
                 </div>
             </div>

@@ -183,6 +183,8 @@ namespace InspectorGadget.WebApp.Models
             info.Add(new InspectorValue("application-contentrootpath", "Content Root Path", environment.ContentRootPath));
             info.Add(new InspectorValue("application-webrootpath", "Web Root Path", environment.WebRootPath));
             info.Add(new InspectorValue("application-environmentname", "Environment Name", environment.EnvironmentName));
+            info.Add(new InspectorValue("healthcheck-mode", "Health Check Mode", ConfigurableHealthCheck.Mode.ToString()));
+            info.Add(new InspectorValue("healthcheck-failnextnumberoftimes", "Health Check Fail Next Number Of Times", ConfigurableHealthCheck.FailNextNumberOfTimes));
             return info;
         }
 

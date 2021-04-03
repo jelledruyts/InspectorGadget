@@ -93,5 +93,13 @@ namespace InspectorGadget.WebApp.Controllers
             var gadget = new ProcessRunGadget(this.logger, this.httpClientFactory, Url, this.appSettings);
             return await gadget.ExecuteAsync(request);
         }
+
+        [HttpPost]
+        public async Task<GadgetResponse<HealthCheckGadget.Result>> HealthCheck([FromBody] HealthCheckGadget.Request request)
+        {
+            this.logger.LogInformation("Executing Health Check API");
+            var gadget = new HealthCheckGadget(this.logger, this.httpClientFactory, Url, this.appSettings);
+            return await gadget.ExecuteAsync(request);
+        }
     }
 }

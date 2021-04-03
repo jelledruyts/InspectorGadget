@@ -77,6 +77,15 @@
             <td>Returns the output of running a certain process on the host.</td>
         </tr>
         }
+        @if (!AppSettings.DisableHealthCheck)
+        {
+        <tr>
+            <td>POST</td>
+            <td><a asp-controller="Api" asp-action="HealthCheck">@Url.Action("HealthCheck", "Api")</a></td>
+            <td><code>healthCheckMode</code>, <code>failNextNumberOfTimes</code></td>
+            <td>Configures the health check endpoint. The <code>healthCheckMode</code> can be <code>@ConfigurableHealthCheckMode.AlwaysSucceed</code>, <code>@ConfigurableHealthCheckMode.AlwaysFail</code> or <code>@ConfigurableHealthCheckMode.FailNextNumberOfTimes</code>.</td>
+        </tr>
+        }
         @if (!AppSettings.DisableIntrospector)
         {
         <tr>
