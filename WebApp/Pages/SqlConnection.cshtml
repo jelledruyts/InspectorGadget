@@ -69,7 +69,7 @@ function updateUI() {
     }
 
     // Set the default query depending on the database type.
-    const SqlServerDefaultQuery = 'SELECT \'User "\' + USER_NAME() + \'" logged in from IP address "\' + CAST(CONNECTIONPROPERTY(\'client_net_address\') AS NVARCHAR) + \'" to database "\' + DB_NAME() + \'" on server "\' + @@SERVERNAME + \'"\'';
+    const SqlServerDefaultQuery = 'SELECT \'User "\' + USER_NAME() + \'" logged in from IP address "\' + CAST(CONNECTIONPROPERTY(\'client_net_address\') AS NVARCHAR) + \'" to database "\' + DB_NAME() + \'" on server "\' + @@@@SERVERNAME + \'"\'';
     const PostgreSqlDefaultQuery = 'SELECT CONCAT(\'User "\', CURRENT_USER, \'" logged in from IP address "\', INET_CLIENT_ADDR(), \'" to database "\', CURRENT_DATABASE(), \'"\')';
     const MySqlDefaultQuery = 'SELECT CONCAT_WS(\'\', \'User "\', USER(), \'" logged in to database "\', DATABASE(), \'"\')';
     const CosmosDBDefaultQuery = 'SELECT GetCurrentDateTime() AS currentUtcDateTime';
