@@ -10,14 +10,18 @@
     <div class="form-group">
         <label for="databaseType">Database Type</label>
         <select class="form-control val-required" name="databaseType" id="databaseType" title="You can set the default value as a 'DefaultSqlConnectionDatabaseType' configuration setting" onchange="updateUI()">
-            <option value="@SqlConnectionGadget.SqlServerDatabaseType" selected="@(Model.GadgetRequest.DatabaseType == @SqlConnectionGadget.SqlServerDatabaseType ? true : false)">SQL Server, Azure SQL Database, ...</option>
-            <option value="@SqlConnectionGadget.PostgreSqlDatabaseType" selected="@(Model.GadgetRequest.DatabaseType == @SqlConnectionGadget.PostgreSqlDatabaseType ? true : false)">PostgreSQL</option>
-            <option value="@SqlConnectionGadget.MySqlDatabaseType" selected="@(Model.GadgetRequest.DatabaseType == @SqlConnectionGadget.MySqlDatabaseType ? true : false)">MySQL, MariaDB, ...</option>
+            <option value="@SqlConnectionDatabaseType.SqlServer" selected="@(Model.GadgetRequest.DatabaseType == @SqlConnectionDatabaseType.SqlServer ? true : false)">SQL Server, Azure SQL Database, ...</option>
+            <option value="@SqlConnectionDatabaseType.PostgreSql" selected="@(Model.GadgetRequest.DatabaseType == @SqlConnectionDatabaseType.PostgreSql ? true : false)">PostgreSQL</option>
+            <option value="@SqlConnectionDatabaseType.MySql" selected="@(Model.GadgetRequest.DatabaseType == @SqlConnectionDatabaseType.MySql ? true : false)">MySQL, MariaDB, ...</option>
+            <option value="@SqlConnectionDatabaseType.CosmosDB" selected="@(Model.GadgetRequest.DatabaseType == @SqlConnectionDatabaseType.CosmosDB ? true : false)">Azure Cosmos DB (SQL API)</option>
         </select>
     </div>
     <div class="form-group">
         <label for="sqlConnectionString">SQL Connection String</label>
         <input type="password" name="sqlConnectionString" id="sqlConnectionString" value="@Model.GadgetRequest.SqlConnectionString" class="form-control val-required" autocomplete="off" placeholder="The connection string with which to connect to the SQL database" title="You can set the default value as a 'DefaultSqlConnectionSqlConnectionString' configuration setting" />
+        <small id="cosmosDBConnectionStringInfoPanel" class="form-text text-muted">
+            Optionally, add a <code>Database</code> and <code>Container</code> connection string property to go deeper than the account level, e.g. <code>&quot;AccountEndpoint=...;AccountKey=...;Database=SampleDB;Container=Persons;&quot;</code>.
+        </small>
     </div>
     <div class="form-group">
         <label for="sqlQuery">SQL Query</label>
@@ -49,24 +53,35 @@ function updateUI() {
     var databaseType = document.getElementById('databaseType').value;
     var sqlQuery = document.getElementById('sqlQuery').value;
 
-    // Hide the Azure Managed Identity panel if not supported.
-    if (databaseType == '@SqlConnectionGadget.SqlServerDatabaseType') {
+    // Show the Azure Managed Identity panel if supported.
+    if (databaseType == '@SqlConnectionDatabaseType.SqlServer') {
         document.getElementById('azureManagedIdentityPanel').style.display = 'block';
     } else {
         document.getElementById('azureManagedIdentityPanel').style.display = 'none';
     }
 
+    // Show the Cosmos DB connection string info panel if appropriate.
+    if (databaseType == '@SqlConnectionDatabaseType.CosmosDB') {
+        document.getElementById('cosmosDBConnectionStringInfoPanel').style.display = 'block';
+    } else {
+        document.getElementById('cosmosDBConnectionStringInfoPanel').style.display = 'none';
+    }
+
     // Set the default query depending on the database type.
-    const SqlServerDefaultQuery = '@Html.Raw(SqlConnectionGadget.SqlServerDefaultQuery.Replace("'", "\\'"))';
-    const PostgreSqlDefaultQuery = '@Html.Raw(SqlConnectionGadget.PostgreSqlDefaultQuery.Replace("'", "\\'"))';
-    const MySqlDefaultQuery = '@Html.Raw(SqlConnectionGadget.MySqlDefaultQuery.Replace("'", "\\'"))';
-    if (sqlQuery == SqlServerDefaultQuery || sqlQuery == PostgreSqlDefaultQuery || sqlQuery == MySqlDefaultQuery) {
-        if (databaseType == '@SqlConnectionGadget.SqlServerDatabaseType') {
+    const SqlServerDefaultQuery = 'SELECT \'User "\' + USER_NAME() + \'" logged in from IP address "\' + CAST(CONNECTIONPROPERTY(\'client_net_address\') AS NVARCHAR) + \'" to database "\' + DB_NAME() + \'" on server "\' + @@SERVERNAME + \'"\'';
+    const PostgreSqlDefaultQuery = 'SELECT CONCAT(\'User "\', CURRENT_USER, \'" logged in from IP address "\', INET_CLIENT_ADDR(), \'" to database "\', CURRENT_DATABASE(), \'"\')';
+    const MySqlDefaultQuery = 'SELECT CONCAT_WS(\'\', \'User "\', USER(), \'" logged in to database "\', DATABASE(), \'"\')';
+    const CosmosDBDefaultQuery = 'SELECT GetCurrentDateTime() AS currentUtcDateTime';
+    
+    if (sqlQuery == '' || sqlQuery == SqlServerDefaultQuery || sqlQuery == PostgreSqlDefaultQuery || sqlQuery == MySqlDefaultQuery || sqlQuery == CosmosDBDefaultQuery) {
+        if (databaseType == '@SqlConnectionDatabaseType.SqlServer') {
             document.getElementById('sqlQuery').value = SqlServerDefaultQuery;
-        } else if (databaseType == '@SqlConnectionGadget.PostgreSqlDatabaseType') {
+        } else if (databaseType == '@SqlConnectionDatabaseType.PostgreSql') {
             document.getElementById('sqlQuery').value = PostgreSqlDefaultQuery;
-        } else if (databaseType == '@SqlConnectionGadget.MySqlDatabaseType') {
+        } else if (databaseType == '@SqlConnectionDatabaseType.MySql') {
             document.getElementById('sqlQuery').value = MySqlDefaultQuery;
+        } else if (databaseType == '@SqlConnectionDatabaseType.CosmosDB') {
+            document.getElementById('sqlQuery').value = CosmosDBDefaultQuery;
         }
     }
 }

@@ -1,5 +1,6 @@
 using System;
 using System.Data.Common;
+using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Azure.Core;
@@ -7,6 +8,7 @@ using Azure.Identity;
 using InspectorGadget.WebApp.Controllers;
 using InspectorGadget.WebApp.Infrastructure;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Azure.Cosmos;
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Logging;
 using MySqlConnector;
@@ -16,16 +18,9 @@ namespace InspectorGadget.WebApp.Gadgets
 {
     public class SqlConnectionGadget : GadgetBase<SqlConnectionGadget.Request, SqlConnectionGadget.Result>
     {
-        public const string SqlServerDatabaseType = "sqlserver";
-        public const string SqlServerDefaultQuery = "SELECT 'User \"' + USER_NAME() + '\" logged in from IP address \"' + CAST(CONNECTIONPROPERTY('client_net_address') AS NVARCHAR) + '\" to database \"' + DB_NAME() + '\" on server \"' + @@SERVERNAME + '\"'";
-        public const string PostgreSqlDatabaseType = "postgresql";
-        public const string PostgreSqlDefaultQuery = "SELECT CONCAT('User \"', CURRENT_USER, '\" logged in from IP address \"', INET_CLIENT_ADDR(), '\" to database \"', CURRENT_DATABASE(), '\"')";
-        public const string MySqlDatabaseType = "mysql";
-        public const string MySqlDefaultQuery = "SELECT CONCAT_WS('', 'User \"', USER(), '\" logged in to database \"', DATABASE(), '\"')";
-
         public class Request : GadgetRequest
         {
-            public string DatabaseType { get; set; }
+            public SqlConnectionDatabaseType DatabaseType { get; set; }
             public string SqlConnectionString { get; set; }
             public string SqlQuery { get; set; }
             public bool UseAzureManagedIdentity { get; set; }
@@ -44,28 +39,32 @@ namespace InspectorGadget.WebApp.Gadgets
 
         protected override async Task<Result> ExecuteCoreAsync(Request request)
         {
-            this.Logger.LogInformation("Executing SQL Connection with SqlQuery {SqlQuery}", request.SqlQuery);
-            using (var connection = await GetConnectionAsync(request))
-            using (var command = connection.CreateCommand())
+            this.Logger.LogInformation("Executing SQL Connection for DatabaseType {DatabaseType} with SqlQuery {SqlQuery}", request.DatabaseType.ToString(), request.SqlQuery);
+
+            if (request.DatabaseType == SqlConnectionDatabaseType.CosmosDB)
             {
-                await connection.OpenAsync();
-                command.CommandText = request.SqlQuery;
-                var result = await command.ExecuteScalarAsync();
-                return new Result { Output = result?.ToString() };
+                using (var iterator = GetFeedIterator<object>(request))
+                {
+                    var resultSet = await iterator.ReadNextAsync();
+                    return new Result { Output = resultSet.FirstOrDefault()?.ToString() };
+                }
+            }
+            else
+            {
+                using (var connection = await GetDbConnectionAsync(request))
+                using (var command = connection.CreateCommand())
+                {
+                    await connection.OpenAsync();
+                    command.CommandText = request.SqlQuery;
+                    var result = await command.ExecuteScalarAsync();
+                    return new Result { Output = result?.ToString() };
+                }
             }
         }
 
-        private async Task<DbConnection> GetConnectionAsync(Request request)
+        private async Task<DbConnection> GetDbConnectionAsync(Request request)
         {
-            if (string.Equals(request.DatabaseType, PostgreSqlDatabaseType, StringComparison.InvariantCultureIgnoreCase))
-            {
-                return new NpgsqlConnection(request.SqlConnectionString);
-            }
-            else if (string.Equals(request.DatabaseType, MySqlDatabaseType, StringComparison.InvariantCultureIgnoreCase))
-            {
-                return new MySqlConnection(request.SqlConnectionString);
-            }
-            else
+            if (request.DatabaseType == SqlConnectionDatabaseType.SqlServer)
             {
                 var connection = new SqlConnection(request.SqlConnectionString);
                 if (request.UseAzureManagedIdentity)
@@ -79,6 +78,37 @@ namespace InspectorGadget.WebApp.Gadgets
                 }
                 return connection;
             }
+            else if (request.DatabaseType == SqlConnectionDatabaseType.PostgreSql)
+            {
+                return new NpgsqlConnection(request.SqlConnectionString);
+            }
+            else if (request.DatabaseType == SqlConnectionDatabaseType.MySql)
+            {
+                return new MySqlConnection(request.SqlConnectionString);
+            }
+            else
+            {
+                throw new NotSupportedException($"\"{request.DatabaseType.ToString()}\" is not a supported ADO.NET database type");
+            }
+        }
+
+        private static FeedIterator<T> GetFeedIterator<T>(Request request)
+        {
+            var client = new CosmosClient(request.SqlConnectionString);
+            // See if a Database and Container were specified in the connection string.
+            var connectionString = new DbConnectionStringBuilder { ConnectionString = request.SqlConnectionString };
+            if (!connectionString.TryGetValue("Database", out object databaseName))
+            {
+                // No Database specified, return a query iterator for the Account.
+                return client.GetDatabaseQueryIterator<T>(request.SqlQuery);
+            }
+            if (!connectionString.TryGetValue("Container", out object containerName))
+            {
+                // No Container specified, return a query iterator for the Database.
+                return client.GetDatabase((string)databaseName).GetContainerQueryIterator<T>(request.SqlQuery);
+            }
+            // A Database and Container were specified, return a query iterator for the Container.
+            return client.GetDatabase((string)databaseName).GetContainer((string)containerName).GetItemQueryIterator<T>(request.SqlQuery);
         }
     }
 }

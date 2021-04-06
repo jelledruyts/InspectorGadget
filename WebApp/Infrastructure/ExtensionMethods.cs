@@ -47,7 +47,7 @@ namespace InspectorGadget.WebApp.Infrastructure
 
         public static TEnum GetValueOrDefault<TEnum>(this IConfiguration value, string key, TEnum defaultValue) where TEnum : struct
         {
-            return Enum.TryParse<TEnum>(value.GetValue<string>(key), out TEnum configValue) ? configValue : defaultValue;
+            return Enum.TryParse<TEnum>(value.GetValue<string>(key), true, out TEnum configValue) ? configValue : defaultValue;
         }
 
         public static string GetRelativeApiUrl(this IUrlHelper url, string apiActionName)
