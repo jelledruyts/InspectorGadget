@@ -29,19 +29,19 @@ The following gadgets are available:
 
 Each gadget can also be accessed through a REST API:
 
-| Method | Path                              | Parameters                                                                                                                                |
-| ------ | --------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
-| POST   | `/api/dnslookup`                  | `host`                                                                                                                                    |
-| POST   | `/api/httprequest`                | `requestUrl`, `requestHostName`                                                                                                           |
-| POST   | `/api/sqlconnection`              | `databaseType` (can be `sqlserver`, `postgresql`, `mysql`, `cosmosdb`), `sqlConnectionString`, `sqlQuery`, `azureManagedIdentityClientId` |
-| POST   | `/api/azuremanagedidentity`       | `scopes`, `azureManagedIdentityClientId`                                                                                                  |
-| POST   | `/api/socketconnection`           | `requestHostName`, `requestPort`, `requestBody`, `readResponse`                                                                           |
-| POST   | `/api/processrun`                 | `fileName`, `arguments`, `timeoutSeconds`                                                                                                 |
-| POST   | `/api/healthcheck`                | `healthCheckMode` (can be `AlwaysSucceed`, `AlwaysFail`, `FailNextNumberOfTimes`), `failNextNumberOfTimes`                                |
-| GET    | `/api/introspector`               |                                                                                                                                           |
-| GET    | `/api/introspector/<group>`       |                                                                                                                                           |
-| GET    | `/api/introspector/<group>/<key>` |                                                                                                                                           |
-| POST   | `/api/introspector`               | `group`, `key`                                                                                                                            |
+| Method | Path                              | Parameters                                                                                                                                                             |
+| ------ | --------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| POST   | `/api/dnslookup`                  | `host`                                                                                                                                                                 |
+| POST   | `/api/httprequest`                | `requestUrl`, `requestHostName`                                                                                                                                        |
+| POST   | `/api/sqlconnection`              | `databaseType` (can be `sqlserver`, `postgresql`, `mysql`, `cosmosdb`), `sqlConnectionString`, `sqlConnectionStringSuffix`, `sqlQuery`, `azureManagedIdentityClientId` |
+| POST   | `/api/azuremanagedidentity`       | `scopes`, `azureManagedIdentityClientId`                                                                                                                               |
+| POST   | `/api/socketconnection`           | `requestHostName`, `requestPort`, `requestBody`, `readResponse`                                                                                                        |
+| POST   | `/api/processrun`                 | `fileName`, `arguments`, `timeoutSeconds`                                                                                                                              |
+| POST   | `/api/healthcheck`                | `healthCheckMode` (can be `AlwaysSucceed`, `AlwaysFail`, `FailNextNumberOfTimes`), `failNextNumberOfTimes`                                                             |
+| GET    | `/api/introspector`               |                                                                                                                                                                        |
+| GET    | `/api/introspector/<group>`       |                                                                                                                                                                        |
+| GET    | `/api/introspector/<group>/<key>` |                                                                                                                                                                        |
+| POST   | `/api/introspector`               | `group`, `key`                                                                                                                                                         |
 
 ## Call Chaining
 
