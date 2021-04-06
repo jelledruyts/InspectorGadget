@@ -22,9 +22,12 @@ namespace InspectorGadget.WebApp.Gadgets
         {
             public SqlConnectionDatabaseType DatabaseType { get; set; }
             public string SqlConnectionString { get; set; }
+            public string SqlConnectionStringSuffix { get; set; }
             public string SqlQuery { get; set; }
             public bool UseAzureManagedIdentity { get; set; }
             public string AzureManagedIdentityClientId { get; set; }
+
+            public string SqlConnectionStringValue => this.SqlConnectionString + this.SqlConnectionStringSuffix;
         }
 
         public class Result
@@ -66,7 +69,7 @@ namespace InspectorGadget.WebApp.Gadgets
         {
             if (request.DatabaseType == SqlConnectionDatabaseType.SqlServer)
             {
-                var connection = new SqlConnection(request.SqlConnectionString);
+                var connection = new SqlConnection(request.SqlConnectionStringValue);
                 if (request.UseAzureManagedIdentity)
                 {
                     // Request an access token for Azure SQL Database using the current Azure Managed Identity.
@@ -80,11 +83,11 @@ namespace InspectorGadget.WebApp.Gadgets
             }
             else if (request.DatabaseType == SqlConnectionDatabaseType.PostgreSql)
             {
-                return new NpgsqlConnection(request.SqlConnectionString);
+                return new NpgsqlConnection(request.SqlConnectionStringValue);
             }
             else if (request.DatabaseType == SqlConnectionDatabaseType.MySql)
             {
-                return new MySqlConnection(request.SqlConnectionString);
+                return new MySqlConnection(request.SqlConnectionStringValue);
             }
             else
             {
@@ -94,9 +97,9 @@ namespace InspectorGadget.WebApp.Gadgets
 
         private static FeedIterator<T> GetFeedIterator<T>(Request request)
         {
-            var client = new CosmosClient(request.SqlConnectionString);
+            var client = new CosmosClient(request.SqlConnectionStringValue);
             // See if a Database and Container were specified in the connection string.
-            var connectionString = new DbConnectionStringBuilder { ConnectionString = request.SqlConnectionString };
+            var connectionString = new DbConnectionStringBuilder { ConnectionString = request.SqlConnectionStringValue };
             if (!connectionString.TryGetValue("Database", out object databaseName))
             {
                 // No Database specified, return a query iterator for the Account.

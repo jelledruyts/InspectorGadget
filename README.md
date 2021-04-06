@@ -70,6 +70,7 @@ The app can be configured with the configuration settings below (using environme
 | `DisableSqlConnection`                             | SQL Connection         | Allows you to disable the **SQL Connection** gadget                                                                             |
 | `DefaultSqlConnectionDatabaseType`                 | SQL Connection         | The default value for the database type (can be `sqlserver`, `postgresql`, `mysql`, `cosmosdb`)                                 |
 | `DefaultSqlConnectionSqlConnectionString`          | SQL Connection         | The default value for the SQL connection string                                                                                 |
+| `DefaultSqlConnectionSqlConnectionStringSuffix`    | SQL Connection         | The default value for the SQL connection string suffix                                                                          |
 | `DefaultSqlConnectionSqlQuery`                     | SQL Connection         | The default value for the SQL query                                                                                             |
 | `DefaultSqlConnectionUseAzureManagedIdentity`      | SQL Connection         | The default value for the setting to use the Azure Managed Identity of the app                                                  |
 | `DefaultSqlConnectionAzureManagedIdentityClientId` | SQL Connection         | The default value for the Client ID when using a User-Assigned Managed Identity                                                 |

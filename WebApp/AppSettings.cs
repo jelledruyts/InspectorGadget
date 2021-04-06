@@ -42,6 +42,7 @@ namespace InspectorGadget.WebApp
         public bool DisableSqlConnection => configuration.GetValueOrDefault("DisableSqlConnection", false);
         public SqlConnectionDatabaseType DefaultSqlConnectionDatabaseType => configuration.GetValueOrDefault<SqlConnectionDatabaseType>("DefaultSqlConnectionDatabaseType", SqlConnectionDatabaseType.SqlServer);
         public string DefaultSqlConnectionSqlConnectionString => configuration.GetValueOrDefault("DefaultSqlConnectionSqlConnectionString", default(string));
+        public string DefaultSqlConnectionSqlConnectionStringSuffix => configuration.GetValueOrDefault("DefaultSqlConnectionSqlConnectionStringSuffix", default(string));
         public string DefaultSqlConnectionSqlQuery => configuration.GetValueOrDefault("DefaultSqlConnectionSqlQuery", default(string));
         public bool DefaultSqlConnectionUseAzureManagedIdentity => configuration.GetValueOrDefault("DefaultSqlConnectionUseAzureManagedIdentity", false);
         public string DefaultSqlConnectionAzureManagedIdentityClientId => configuration.GetValueOrDefault("DefaultSqlConnectionAzureManagedIdentityClientId", default(string));
