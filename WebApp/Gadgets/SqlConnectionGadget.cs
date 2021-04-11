@@ -32,6 +32,7 @@ namespace InspectorGadget.WebApp.Gadgets
 
         public class Result
         {
+            public string AccessToken { get; set; }
             public string Output { get; set; }
         }
 
@@ -54,18 +55,19 @@ namespace InspectorGadget.WebApp.Gadgets
             }
             else
             {
-                using (var connection = await GetDbConnectionAsync(request))
+                var result = new Result();
+                using (var connection = await GetDbConnectionAsync(request, result))
                 using (var command = connection.CreateCommand())
                 {
                     await connection.OpenAsync();
                     command.CommandText = request.SqlQuery;
-                    var result = await command.ExecuteScalarAsync();
-                    return new Result { Output = result?.ToString() };
+                    var output = await command.ExecuteScalarAsync();
+                    return new Result { Output = output?.ToString() };
                 }
             }
         }
 
-        private async Task<DbConnection> GetDbConnectionAsync(Request request)
+        private async Task<DbConnection> GetDbConnectionAsync(Request request, Result result)
         {
             if (request.DatabaseType == SqlConnectionDatabaseType.SqlServer)
             {
@@ -77,7 +79,9 @@ namespace InspectorGadget.WebApp.Gadgets
                     // If AzureManagedIdentityClientId is requested, that indicates the User-Assigned Managed Identity to use; if omitted the System-Assigned Managed Identity will be used.
                     var credential = new DefaultAzureCredential(new DefaultAzureCredentialOptions { ManagedIdentityClientId = request.AzureManagedIdentityClientId });
                     var authenticationResult = await credential.GetTokenAsync(new TokenRequestContext(new[] { "https://database.windows.net/.default" }));
-                    connection.AccessToken = authenticationResult.Token;
+                    var accessToken = authenticationResult.Token;
+                    connection.AccessToken = accessToken;
+                    result.AccessToken = accessToken;
                 }
                 return connection;
             }

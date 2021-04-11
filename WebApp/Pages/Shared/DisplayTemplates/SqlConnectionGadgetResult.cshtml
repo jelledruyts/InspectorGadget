@@ -1,2 +1,10 @@
 @model SqlConnectionGadget.Result
-<pre>@Model.Output</pre>
+<dl>
+    @if (!string.IsNullOrWhiteSpace(Model.AccessToken))
+    {
+    <dt>Access Token (<a href="https://jwt.ms/#access_token=@(Model.AccessToken)" target="_blank" title="Decode this access token">decode</a>)</dt>
+    <dd><pre>@Model.AccessToken</pre></dd>
+    }
+    <dt>Output</dt>
+    <dd><pre>@Model.Output</pre></dd>
+</dl>

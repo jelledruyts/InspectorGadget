@@ -2,9 +2,9 @@
 <dl>
     <dt>Expires On</dt>
     <dd><code>@Model.ExpiresOn.ToDisplayString()</code></dd>
-    @if(!string.IsNullOrWhiteSpace(Model.AccessToken))
+    @if (!string.IsNullOrWhiteSpace(Model.AccessToken))
     {
-    <dt>Access Token</dt>
+    <dt>Access Token (<a href="https://jwt.ms/#access_token=@(Model.AccessToken)" target="_blank" title="Decode this access token">decode</a>)</dt>
     <dd><pre>@Model.AccessToken</pre></dd>
     }
 </dl>

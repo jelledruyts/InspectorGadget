@@ -18,7 +18,7 @@
     </div>
     <div class="form-group">
         <label for="sqlConnectionString">SQL Connection String</label>
-        <input type="password" name="sqlConnectionString" id="sqlConnectionString" value="@Model.GadgetRequest.SqlConnectionString" class="form-control val-required" autocomplete="off" placeholder="The (masked) connection string with which to connect to the SQL database" title="You can set the default value as a 'DefaultSqlConnectionSqlConnectionString' configuration setting" />
+        <input type="password" name="sqlConnectionString" id="sqlConnectionString" value="@Model.GadgetRequest.SqlConnectionString" class="form-control val-required" autocomplete="off" placeholder="The (masked) connection string with which to connect to the database" title="You can set the default value as a 'DefaultSqlConnectionSqlConnectionString' configuration setting" />
         <input type="text" name="sqlConnectionStringSuffix" id="sqlConnectionStringSuffix" value="@Model.GadgetRequest.SqlConnectionStringSuffix" class="form-control val-optional" placeholder="An optional (unmasked) connection string suffix which is appended to the connection string" title="You can set the default value as a 'DefaultSqlConnectionSqlConnectionStringSuffix' configuration setting" />
         <small id="cosmosDBConnectionStringInfoPanel" class="form-text text-muted">
             Optionally, add a <code>Database</code> and <code>Container</code> connection string property to go deeper than the account level, e.g. <code>&quot;AccountEndpoint=...;AccountKey=...;Database=SampleDB;Container=Persons;&quot;</code>.
@@ -31,7 +31,7 @@
     <div id="azureManagedIdentityPanel">
         <div class="form-group form-check">
             <input type="checkbox" name="useAzureManagedIdentity" id="useAzureManagedIdentity" value="true" checked="@Model.GadgetRequest.UseAzureManagedIdentity" class="form-check-input" title="You can set the default value as a 'DefaultSqlConnectionUseAzureManagedIdentity' configuration setting" />
-            <label class="form-check-label" for="useAzureManagedIdentity">Use Azure Managed Identity to connect to Azure SQL Database</label>
+            <label class="form-check-label" for="useAzureManagedIdentity">Use Azure Managed Identity to connect to the database</label>
         </div>
         <div class="form-group">
             <label for="azureManagedIdentityClientId">User-Assigned Managed Identity Client ID</label>
