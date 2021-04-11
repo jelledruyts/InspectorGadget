@@ -62,7 +62,8 @@ namespace InspectorGadget.WebApp.Gadgets
                     await connection.OpenAsync();
                     command.CommandText = request.SqlQuery;
                     var output = await command.ExecuteScalarAsync();
-                    return new Result { Output = output?.ToString() };
+                    result.Output = output?.ToString();
+                    return result;
                 }
             }
         }
