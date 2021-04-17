@@ -102,9 +102,25 @@ namespace InspectorGadget.WebApp.Gadgets
 
         private static FeedIterator<T> GetFeedIterator<T>(Request request)
         {
-            var client = new CosmosClient(request.SqlConnectionStringValue);
-            // See if a Database and Container were specified in the connection string.
             var connectionString = new DbConnectionStringBuilder { ConnectionString = request.SqlConnectionStringValue };
+            var client = default(CosmosClient);
+            if (request.UseAzureManagedIdentity)
+            {
+                // If AzureManagedIdentityClientId is requested, that indicates the User-Assigned Managed Identity to use; if omitted the System-Assigned Managed Identity will be used.
+                var credential = new DefaultAzureCredential(new DefaultAzureCredentialOptions { ManagedIdentityClientId = request.AzureManagedIdentityClientId });
+                // Grab the account endpoint from the connection string.
+                if (!connectionString.TryGetValue("AccountEndpoint", out object accountEndpoint))
+                {
+                    throw new ArgumentException("The specified connection string does not contain the required 'AccountEndpoint' value.");
+                }
+                client = new CosmosClient((string)accountEndpoint, credential);
+            }
+            else
+            {
+                client = new CosmosClient(request.SqlConnectionStringValue);
+            }
+
+            // See if a Database and Container were specified in the connection string.
             if (!connectionString.TryGetValue("Database", out object databaseName))
             {
                 // No Database specified, return a query iterator for the Account.

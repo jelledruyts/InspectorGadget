@@ -55,7 +55,7 @@ function updateUI() {
     var sqlQuery = document.getElementById('sqlQuery').value;
 
     // Show the Azure Managed Identity panel if supported.
-    if (databaseType == '@SqlConnectionDatabaseType.SqlServer') {
+    if (databaseType == '@SqlConnectionDatabaseType.SqlServer' || databaseType == '@SqlConnectionDatabaseType.CosmosDB') {
         document.getElementById('azureManagedIdentityPanel').style.display = 'block';
     } else {
         document.getElementById('azureManagedIdentityPanel').style.display = 'none';
