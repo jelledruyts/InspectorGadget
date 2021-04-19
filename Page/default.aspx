@@ -370,14 +370,15 @@
                 var requestUrl = default(string);
                 var headerName = default(string);
                 var headerValue = default(string);
-                var msiEndpoint = Environment.GetEnvironmentVariable("MSI_ENDPOINT");
-                var msiSecret = Environment.GetEnvironmentVariable("MSI_SECRET");
-                if (!string.IsNullOrWhiteSpace(msiEndpoint) && !string.IsNullOrWhiteSpace(msiSecret))
+                var identityEndpoint = Environment.GetEnvironmentVariable("IDENTITY_ENDPOINT");
+                var identityHeader = Environment.GetEnvironmentVariable("IDENTITY_HEADER");
+                if (!string.IsNullOrWhiteSpace(identityEndpoint) && !string.IsNullOrWhiteSpace(identityHeader))
                 {
                     // Running on App Service, use the corresponding endpoint and header.
-                    requestUrl = msiEndpoint + "?api-version=2017-09-01&resource=" + HttpUtility.UrlEncode(resource);
-                    headerName = "Secret";
-                    headerValue = msiSecret;
+                    // See https://docs.microsoft.com/en-us/azure/app-service/overview-managed-identity?tabs=dotnet#using-the-rest-protocol.
+                    requestUrl = identityEndpoint + "?api-version=2019-08-01&resource=" + HttpUtility.UrlEncode(resource);
+                    headerName = "X-IDENTITY-HEADER";
+                    headerValue = identityHeader;
                 }
                 else
                 {
