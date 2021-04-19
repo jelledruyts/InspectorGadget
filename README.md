@@ -2,16 +2,16 @@
 
 Inspector Gadget is a simple web app that you can use to get a lot of info on the web server where it's running (the *inspector*) and perform additional tasks (the *gadgets*) from there.
 
-There are two versions that you can choose from:
+## Deploy
 
-- The full-featured .NET Core based [web app](WebApp) that can run on Linux or Windows.
-  - You can compile the source code and publish the app to your host of choice directly, or build and run it as a container.
-  - You can also find the latest published version of the Docker container publicly on **Docker Hub** at **[jelledruyts/inspectorgadget](https://hub.docker.com/r/jelledruyts/inspectorgadget)**.
-    - For **Linux**: specify the image name and tag as `jelledruyts/inspectorgadget:latest` or simply `jelledruyts/inspectorgadget`.
-    - For **Windows**: specify the image name and tag as `jelledruyts/inspectorgadget:latest-windows`.
-- Alternatively, there's also a single [default.aspx](Page/default.aspx) page that you can simply drop in any Windows and ASP.NET Framework based host (like IIS or Azure App Service).
-  - You can just copy this file into e.g. the `wwwroot` directory of your site (optionally rename it) and navigate to it directly without any compilation required.
-  - This version does not have all the bells and whistles of the full web app (so not all features and configuration settings mentioned below will apply, e.g. it does not have all gadgets and no support for API and Call Chaining), but it can still be a useful drop-in page for basic tasks.
+The full-featured .NET Core based [web app](WebApp) can run on Linux or Windows. You can compile the source code and publish the app to your host of choice directly, or build and run it as a container. Or even more easily, you can also find the latest published version of the Docker container publicly on **Docker Hub** at **[jelledruyts/inspectorgadget](https://hub.docker.com/r/jelledruyts/inspectorgadget)**. The following images are available:
+
+| OS      | Image Name and Tag                                                           | Deploy                                                                                                                                                                                                                               |
+| ------- | ---------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| Linux   | `jelledruyts/inspectorgadget:latest` or simply `jelledruyts/inspectorgadget` | [![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fjelledruyts%2FInspectorGadget%2Fmaster%2Fazuredeploy-webapp-linux.json)   |
+| Windows | `jelledruyts/inspectorgadget:latest-windows`                                 | [![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fjelledruyts%2FInspectorGadget%2Fmaster%2Fazuredeploy-webapp-windows.json) |
+
+Alternatively, there's also a single [default.aspx](Page/default.aspx) page that you can simply drop in any Windows and ASP.NET Framework based host (like IIS or Azure App Service). You can just copy this file into e.g. the `wwwroot` directory of your site (optionally rename it) and navigate to it directly without any compilation required. This version does not have all the bells and whistles of the full web app (so not all features and configuration settings mentioned below will apply, e.g. it does not have all gadgets and no support for API and Call Chaining), but it can still be a useful drop-in page for basic tasks.
 
 ## Gadgets
 
