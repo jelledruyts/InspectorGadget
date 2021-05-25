@@ -7,13 +7,13 @@
 <ol class="list-inline">
     @foreach (var group in InspectorGroup.AllGroups)
     {
-        <li class="list-inline-item">&raquo; <a href="#@group.Key">@group.DisplayName</a></li>
+        <li class="list-inline-item">&raquo; <a href="#@(group.Key.ToLowerInvariant())">@group.DisplayName</a></li>
     }
 </ol>
 
 @foreach (var group in InspectorGroup.AllGroups)
 {
-    <a name="@group.Key" class="anchor"></a>
+    <a name="@group.Key.ToLowerInvariant()" class="anchor"></a>
     <h3>@group.DisplayName</h3>
     @if (group.Key == nameof(InspectorInfo.Configuration))
     {

@@ -63,6 +63,10 @@
             {
                 <div class="alert alert-primary">@(AppSettings.InfoMessage)</div>
             }
+            @if (!string.IsNullOrWhiteSpace(AppSettings.ErrorMessage))
+            {
+                <div class="alert alert-danger">@(AppSettings.ErrorMessage)</div>
+            }
             @RenderBody()
         </main>
     </div>

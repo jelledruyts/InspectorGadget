@@ -59,6 +59,7 @@ The app can be configured with the configuration settings below (using environme
 
 | Setting                                            | Gadget                 | Purpose                                                                                                                         |
 | -------------------------------------------------- | ---------------------- | ------------------------------------------------------------------------------------------------------------------------------- |
+| `PathBase`                                         |                        | The path under which the application is hosted externally (e.g. via a proxy which modifies the URL path); must start with '/'   |
 | `BackgroundColor`                                  |                        | An HTML/CSS color value to set as the background color for all pages, e.g. to easily distinguish multiple instances of this app |
 | `InfoMessage`                                      |                        | An informational message to put at the top of all pages, e.g. to easily distinguish multiple instances of this app              |
 | `DefaultCallChainUrls`                             | (All)                  | The default value for the Call Chain URL's                                                                                      |

@@ -1,3 +1,4 @@
+using System;
 using System.Text.Json.Serialization;
 using InspectorGadget.WebApp.Infrastructure;
 using Microsoft.AspNetCore.Builder;
@@ -47,6 +48,15 @@ namespace InspectorGadget.WebApp
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, AppSettings appSettings)
         {
+            try
+            {
+                app.UsePathBase(appSettings.PathBase);
+            }
+            catch (Exception exc)
+            {
+                appSettings.ErrorMessage = $"Cannot apply \"PathBase\" configuration setting: {exc.Message}";
+            }
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
