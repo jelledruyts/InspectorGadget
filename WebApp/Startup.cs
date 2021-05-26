@@ -3,6 +3,7 @@ using System.Text.Json.Serialization;
 using InspectorGadget.WebApp.Infrastructure;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -48,13 +49,31 @@ namespace InspectorGadget.WebApp
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, AppSettings appSettings)
         {
-            try
+            if (!string.IsNullOrWhiteSpace(appSettings.PathBase))
             {
-                app.UsePathBase(appSettings.PathBase);
-            }
-            catch (Exception exc)
-            {
-                appSettings.ErrorMessage = $"Cannot apply \"PathBase\" configuration setting: {exc.Message}";
+                try
+                {
+                    app.UsePathBase(appSettings.PathBase);
+                    // Note: using the path base middleware as above doesn't work if a proxy actually strips the incoming path:
+                    // the middleware only sets the request path base if the incoming request does in fact start with it.
+                    // E.g. when a proxy forwards "/app/foo" to "/foo" and the middleware is configured with "/app" as the
+                    // path base, then it will not set the request path base to "/app" because the incoming request is seen as
+                    // "/foo" and does not start with "/app". This will result in incorrect relative URL's etc.
+                    // To cover for this scenario as well, we also explicitly set the configured path base on each request directly,
+                    // regardless of whether or not the incoming request had it.
+                    // See https://docs.microsoft.com/en-us/aspnet/core/host-and-deploy/proxy-load-balancer?view=aspnetcore-3.1#deal-with-path-base-and-proxies-that-change-the-request-path
+                    // and https://github.com/dotnet/aspnetcore/blob/2b7e994b8a304700a09617ffc5052f0d943bbcba/src/Http/Http.Abstractions/src/Extensions/UsePathBaseMiddleware.cs#L54.
+                    var pathBase = new PathString(appSettings.PathBase);
+                    app.Use((context, next) =>
+                    {
+                        context.Request.PathBase = pathBase;
+                        return next.Invoke();
+                    });
+                }
+                catch (Exception exc)
+                {
+                    appSettings.ErrorMessage = $"Cannot apply \"PathBase\" configuration setting: {exc.Message}";
+                }
             }
 
             if (env.IsDevelopment())
