@@ -24,7 +24,9 @@ jobs:
     - name: Push Docker Image to Docker Hub
       run: docker push jelledruyts/inspectorgadget:latest
     - name: Push Docker Image to GitHub Package
-      run: docker push ghcr.io/jelledruyts/inspectorgadget:latest
+      run: |
+        docker tag jelledruyts/inspectorgadget:latest ghcr.io/jelledruyts/inspectorgadget:latest
+        docker push ghcr.io/jelledruyts/inspectorgadget:latest
   build-deploy-windows:
     runs-on: windows-latest
     steps:
@@ -40,4 +42,6 @@ jobs:
     - name: Push Docker Image to Docker Hub
       run: docker push jelledruyts/inspectorgadget:latest-windows
     - name: Push Docker Image to GitHub Package
-      run: docker push ghcr.io/jelledruyts/inspectorgadget:latest-windows
+      run: |
+        docker tag jelledruyts/inspectorgadget:latest-windows ghcr.io/jelledruyts/inspectorgadget:latest-windows
+        docker push ghcr.io/jelledruyts/inspectorgadget:latest-windows
