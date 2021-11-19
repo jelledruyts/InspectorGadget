@@ -25,6 +25,7 @@ jobs:
       run: docker push jelledruyts/inspectorgadget:latest
     - name: Push Docker Image to GitHub Package
       run: |
+        echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
         docker tag jelledruyts/inspectorgadget:latest ghcr.io/jelledruyts/inspectorgadget:latest
         docker push ghcr.io/jelledruyts/inspectorgadget:latest
   build-deploy-windows:
@@ -43,5 +44,6 @@ jobs:
       run: docker push jelledruyts/inspectorgadget:latest-windows
     - name: Push Docker Image to GitHub Package
       run: |
+        echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
         docker tag jelledruyts/inspectorgadget:latest-windows ghcr.io/jelledruyts/inspectorgadget:latest-windows
         docker push ghcr.io/jelledruyts/inspectorgadget:latest-windows
