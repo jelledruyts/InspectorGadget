@@ -18,6 +18,7 @@ Alternatively, there's also a single [default.aspx](Page/default.aspx) page that
 The following gadgets are available:
 
 - **DNS Lookup** allows you to perform a DNS lookup from the web server.
+- **HTTP Request** allows you to perform an HTTP request lookup from the web server.
 - **SQL Connection** allows you to perform a (scalar) query on a SQL Connection from the web server to a database (optionally using an Azure Managed Identity where supported).
 - **Azure Managed Identity** allows you to request an access token for the [managed identity representing your application](https://docs.microsoft.com/azure/active-directory/managed-identities-azure-resources/overview) (when running on a supported Azure service).
 - **Socket Connection** allows you to perform a raw TCP socket connection from the web server (optionally with a request body and reading back the response).
