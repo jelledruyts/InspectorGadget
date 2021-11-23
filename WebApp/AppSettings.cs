@@ -25,6 +25,7 @@ namespace InspectorGadget.WebApp
         public bool DisableHttpRequest => configuration.GetValueOrDefault("DisableHttpRequest", false);
         public string DefaultHttpRequestUrl => configuration.GetValueOrDefault("DefaultHttpRequestUrl", "http://ipinfo.io/ip");
         public string DefaultHttpRequestHostName => configuration.GetValueOrDefault("DefaultHttpRequestHostName", default(string));
+        public bool DefaultHttpRequestIgnoreServerCertificateErrors => configuration.GetValueOrDefault("DefaultHttpRequestIgnoreServerCertificateErrors", false);
 
         public bool DisableIntrospector => configuration.GetValueOrDefault("DisableIntrospector", false);
         public string DefaultIntrospectorGroup => configuration.GetValueOrDefault("DefaultIntrospectorGroup", default(string));

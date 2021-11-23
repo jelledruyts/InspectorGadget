@@ -15,6 +15,10 @@
         <label for="requestHostName">Override Host Name</label>
         <input type="text" name="requestHostName" id="requestHostName" value="@Model.GadgetRequest.RequestHostName" class="form-control val-optional" placeholder="Optionally override the host name header that gets sent as part of the HTTP request" title="You can set the default value as a 'DefaultHttpRequestHostName' configuration setting" />
     </div>
+    <div class="form-group form-check">
+        <input type="checkbox" name="ignoreServerCertificateErrors" id="ignoreServerCertificateErrors" value="true" checked="@Model.GadgetRequest.IgnoreServerCertificateErrors" class="form-check-input" title="You can set the default value as a 'DefaultHttpRequestIgnoreServerCertificateErrors' configuration setting" />
+        <label class="form-check-label" for="ignoreServerCertificateErrors">Ignore server certificate errors</label>
+    </div>
     <div class="form-group">
         <label for="callChainUrls"><a asp-page="/Api" asp-fragment="call-chaining">Call Chain</a></label>
         <input type="text" name="callChainUrls" id="callChainUrls" value="@Model.GadgetRequest.CallChainUrls" class="form-control val-optional" placeholder="Optionally chain calls across multiple hops (separate base URL's by spaces)" title="You can set the default value as a 'DefaultCallChainUrls' configuration setting" />

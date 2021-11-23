@@ -14,6 +14,7 @@ namespace InspectorGadget.WebApp.Gadgets
         {
             public string RequestUrl { get; set; }
             public string RequestHostName { get; set; }
+            public bool IgnoreServerCertificateErrors { get; set; }
         }
 
         public class Result
@@ -29,7 +30,7 @@ namespace InspectorGadget.WebApp.Gadgets
         protected override async Task<Result> ExecuteCoreAsync(Request request)
         {
             this.Logger.LogInformation("Executing HTTP Request for RequestUrl {RequestUrl} and RequestHostName {RequestHostName}", request.RequestUrl, request.RequestHostName);
-            var httpClient = this.HttpClientFactory.CreateClient();
+            var httpClient = request.IgnoreServerCertificateErrors ? this.HttpClientFactory.CreateClient(Startup.HttpClientNameAcceptAnyServerCertificate) : this.HttpClientFactory.CreateClient();
             if (!string.IsNullOrWhiteSpace(request.RequestHostName))
             {
                 httpClient.DefaultRequestHeaders.Add(HeaderNames.Host, request.RequestHostName);

@@ -1,4 +1,5 @@
 using System;
+using System.Net.Http;
 using System.Text.Json.Serialization;
 using InspectorGadget.WebApp.Infrastructure;
 using Microsoft.AspNetCore.Builder;
@@ -13,6 +14,8 @@ namespace InspectorGadget.WebApp
 {
     public class Startup
     {
+        public const string HttpClientNameAcceptAnyServerCertificate = nameof(HttpClientNameAcceptAnyServerCertificate);
+
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -42,6 +45,7 @@ namespace InspectorGadget.WebApp
                     options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
                 });
             services.AddHttpClient();
+            services.AddHttpClient(HttpClientNameAcceptAnyServerCertificate).ConfigurePrimaryHttpMessageHandler(x => new HttpClientHandler() { ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator });
             services.AddHealthChecks()
                 .AddCheck<ConfigurableHealthCheck>(nameof(ConfigurableHealthCheck));
         }

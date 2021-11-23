@@ -32,7 +32,7 @@ Each gadget can also be accessed through a REST API:
 | Method | Path                              | Parameters                                                                                                                                                             |
 | ------ | --------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | POST   | `/api/dnslookup`                  | `host`                                                                                                                                                                 |
-| POST   | `/api/httprequest`                | `requestUrl`, `requestHostName`                                                                                                                                        |
+| POST   | `/api/httprequest`                | `requestUrl`, `requestHostName`, `ignoreServerCertificateErrors`                                                                                                       |
 | POST   | `/api/sqlconnection`              | `databaseType` (can be `sqlserver`, `postgresql`, `mysql`, `cosmosdb`), `sqlConnectionString`, `sqlConnectionStringSuffix`, `sqlQuery`, `azureManagedIdentityClientId` |
 | POST   | `/api/azuremanagedidentity`       | `scopes`, `azureManagedIdentityClientId`                                                                                                                               |
 | POST   | `/api/socketconnection`           | `requestHostName`, `requestPort`, `requestBody`, `readResponse`                                                                                                        |
@@ -68,6 +68,7 @@ The app can be configured with the configuration settings below (using environme
 | `DisableHttpRequest`                               | HTTP Request           | Allows you to disable the **HTTP Request** gadget                                                                               |
 | `DefaultHttpRequestUrl`                            | HTTP Request           | The default value for the URL                                                                                                   |
 | `DefaultHttpRequestHostName`                       | HTTP Request           | The default value for the host name                                                                                             |
+| `DefaultHttpRequestIgnoreServerCertificateErrors`  | HTTP Request           | The default value for the setting to ignore server certificate errors                                                           |
 | `DisableSqlConnection`                             | SQL Connection         | Allows you to disable the **SQL Connection** gadget                                                                             |
 | `DefaultSqlConnectionDatabaseType`                 | SQL Connection         | The default value for the database type (can be `sqlserver`, `postgresql`, `mysql`, `cosmosdb`)                                 |
 | `DefaultSqlConnectionSqlConnectionString`          | SQL Connection         | The default value for the SQL connection string                                                                                 |

@@ -26,7 +26,8 @@ namespace InspectorGadget.WebApp.Pages
             {
                 CallChainUrls = this.appSettings.DefaultCallChainUrls,
                 RequestUrl = this.appSettings.DefaultHttpRequestUrl,
-                RequestHostName = this.appSettings.DefaultHttpRequestHostName
+                RequestHostName = this.appSettings.DefaultHttpRequestHostName,
+                IgnoreServerCertificateErrors = this.appSettings.DefaultHttpRequestIgnoreServerCertificateErrors
             };
         }
 
