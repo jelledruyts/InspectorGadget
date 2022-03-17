@@ -92,3 +92,9 @@ a.anchor {
 .val-optional {
   border-left: solid 5px #cccccc;
 }
+
+/* Inspector key/value table */
+td.inspector-value {
+  width: 100%;
+  word-break: break-all;
+}

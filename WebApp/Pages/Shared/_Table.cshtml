@@ -1,12 +1,12 @@
 @model IList<InspectorValue>
 @if (Model != null && Model.Any())
 {
-    <table class="table table-striped table-hover table-sm table-bordered table-responsive">
+    <table class="table table-striped table-hover table-sm table-bordered">
         @foreach (var item in Model)
         {
             <tr>
-                <td class="text-nowrap">@(item.DisplayName)</td>
-                <td style="width: 100%;">@(item.Value?.ToString() ?? string.Empty)</td>
+                <td class="inspector-key text-nowrap">@(item.DisplayName)</td>
+                <td class="inspector-value">@(item.Value?.ToString() ?? string.Empty)</td>
             </tr>
         }
     </table>
