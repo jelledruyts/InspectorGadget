@@ -29,7 +29,7 @@ jobs:
         docker tag jelledruyts/inspectorgadget:latest ghcr.io/jelledruyts/inspectorgadget:latest
         docker push ghcr.io/jelledruyts/inspectorgadget:latest
   build-deploy-windows:
-    runs-on: windows-latest
+    runs-on: windows-2019
     steps:
     - name: Check Out Repo
       uses: actions/checkout@v2
