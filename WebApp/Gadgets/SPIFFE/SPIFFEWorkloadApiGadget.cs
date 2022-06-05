@@ -81,6 +81,9 @@ namespace InspectorGadget.WebApp.Gadgets
                     // NO SVID was assigned
                     result.Message = "No SVID was assigned.  Grpc status code was PermissionDenied with detail: no identity issued";
                 }
+                else{
+                    result.Message = $"Grpc status code: {exc.StatusCode} - Detail: {exc.Status.Detail}";
+                }
             }
             return result;
         }
