@@ -54,6 +54,7 @@ namespace InspectorGadget.WebApp
         public ConfigurableHealthCheckMode DefaultHealthCheckMode => configuration.GetValueOrDefault("DefaultHealthCheckMode", ConfigurableHealthCheckMode.AlwaysSucceed);
         public int DefaultHealthCheckFailNumberOfTimes => configuration.GetValueOrDefault("DefaultHealthCheckFailNumberOfTimes", 10);
 
+        public bool DisableSPIFFE => configuration.GetValueOrDefault("DisableSPIFFE", false);
         public AppSettings(IConfiguration configuration)
         {
             this.configuration = configuration;

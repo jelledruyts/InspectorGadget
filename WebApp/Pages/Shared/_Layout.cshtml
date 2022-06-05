@@ -51,6 +51,10 @@
                         {
                         <li class="nav-item"><a class="nav-link text-dark" asp-page="/Introspector" title="Introspector">Introspector</a></li>
                         }
+                        @if(!AppSettings.DisableSPIFFE)
+                        {
+                        <li class="nav-item"><a class="nav-link text-dark" asp-page="/Spiffe" title="SPIFFE">SPIFFE </a></li>
+                        }
                         <li class="nav-item"><a class="nav-link text-dark" asp-page="/Api" title="API">API</a></li>
                     </ul>
                 </div>

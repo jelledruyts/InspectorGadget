@@ -1,4 +1,5 @@
 syntax = "proto3";
+option csharp_namespace = "InspectorGadget.WebApp.Gadgets.SPIFFE";
 
 import "google/protobuf/struct.proto";
 
