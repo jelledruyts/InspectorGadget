@@ -1,0 +1,18 @@
+@model SpiffeGadget.Result
+@if (Model.JwtSvids != null && Model.JwtSvids.Any())
+{
+    @foreach (var jwtSvid in Model.JwtSvids)
+    {
+    <dl class="mb-5">
+        <dt>SPIFFE ID</dt>
+        <dd><code>@jwtSvid.SpiffeId</code></dd>
+        <dt>JWT SVID (<a href="https://jwt.ms/#access_token=@(jwtSvid.Svid)" target="_blank" title="Decode this access token">decode</a>)</dt>
+        <dd><pre>@jwtSvid.Svid</pre></dd>
+        @if (!string.IsNullOrWhiteSpace(jwtSvid.Hint))
+        {
+        <dt>Hint</dt>
+        <dd>@jwtSvid.Hint</dd>
+        }
+    </dl>
+    }
+}

@@ -65,7 +65,7 @@ namespace InspectorGadget.WebApp
                     // "/foo" and does not start with "/app". This will result in incorrect relative URL's etc.
                     // To cover for this scenario as well, we also explicitly set the configured path base on each request directly,
                     // regardless of whether or not the incoming request had it.
-                    // See https://docs.microsoft.com/en-us/aspnet/core/host-and-deploy/proxy-load-balancer?view=aspnetcore-3.1#deal-with-path-base-and-proxies-that-change-the-request-path
+                    // See https://docs.microsoft.com/en-us/aspnet/core/host-and-deploy/proxy-load-balancer#work-with-path-base-and-proxies-that-change-the-request-path
                     // and https://github.com/dotnet/aspnetcore/blob/2b7e994b8a304700a09617ffc5052f0d943bbcba/src/Http/Http.Abstractions/src/Extensions/UsePathBaseMiddleware.cs#L54.
                     var pathBase = new PathString(appSettings.PathBase);
                     app.Use((context, next) =>
