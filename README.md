@@ -4,7 +4,7 @@ Inspector Gadget is a simple web app that you can use to get a lot of info on th
 
 ## Deploy
 
-The full-featured .NET Core based [web app](WebApp) can run on Linux or Windows. You can compile the source code and publish the app to your host of choice directly, or build and run it as a container. Or even more easily, you can also find the latest published version of the Docker container publicly on **Docker Hub** at **[jelledruyts/inspectorgadget](https://hub.docker.com/r/jelledruyts/inspectorgadget)**. The following images are available:
+The full-featured .NET Core based [web app](WebApp) can run on Linux or Windows. You can compile the source code and publish the app to your host of choice directly, or build and run it as a container. Or even more easily, you can also find the latest published version of the Docker container publicly on **Docker Hub** at **[jelledruyts/inspectorgadget](https://hub.docker.com/r/jelledruyts/inspectorgadget)** or on the **GitHub packages container registry** at **[ghcr.io/jelledruyts/inspectorgadget](https://ghcr.io/jelledruyts/inspectorgadget)**. The following images are available:
 
 | OS      | Image Name and Tag                                                           | Deploy                                                                                                                                                                                                                               |
 | ------- | ---------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
@@ -23,7 +23,7 @@ The following gadgets are available:
 - **Azure Managed Identity** allows you to request an access token for the [managed identity representing your application](https://docs.microsoft.com/azure/active-directory/managed-identities-azure-resources/overview) (when running on a supported Azure service).
 - **Socket Connection** allows you to perform a raw TCP socket connection from the web server (optionally with a request body and reading back the response).
 - **Process Run** allows you to run a process on the host and capture the output.
-- **SPIFFE** allows you to call the local [SPIFFE](https://spiffe.io/) Workload API.
+- **SPIFFE** allows you to call the local [SPIFFE](https://spiffe.io/) Workload API. Huge thanks to [xstof](https://github.com/xstof) for contributing this feature!
 - **Health Check** allows you to configure the health check endpoint, e.g. for testing load balancers or container orchestrators.
 - **Introspector** allows you to perform an inspector request from the web server, returning all information the inspector knows about or only a subset (group) or even single item (key).
 
