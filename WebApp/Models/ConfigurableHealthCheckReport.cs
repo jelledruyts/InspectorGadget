@@ -1,6 +1,6 @@
 using System;
 
-namespace InspectorGadget.WebApp.Infrastructure
+namespace InspectorGadget.WebApp.Models
 {
     public class ConfigurableHealthCheckReport
     {

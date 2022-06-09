@@ -1,4 +1,4 @@
 {
     "appService.preDeployTask": "publish-release",
-    "appService.deploySubpath": "WebApp/bin/Release/netcoreapp3.1/publish"
+    "appService.deploySubpath": "WebApp/bin/Release/net6.0/publish"
 }

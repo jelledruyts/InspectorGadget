@@ -1,27 +1,34 @@
 ﻿@page
-@model MyApp.Namespace.SpiffeModel
+@model SpiffeModel
 @{
     ViewData["Title"] = "SPIFFE";
 }
 <h1>@ViewData["Title"]</h1>
 
+@if (!OperatingSystem.IsLinux())
+{
+<div class="alert alert-warning">SPIFFE support requires this application to run on Linux.</div>
+}
+else
+{
 <form method="POST">
-    <p class="text-muted">Query the SPIFFE workload API if available.</p>
+    <p class="text-muted">Allows you to query the SPIFFE Workload API if available locally.</p>
     <div class="form-group">
-        <label for="unixdomainsocketep">Unix Domain Socket Endpoint to use to communicate to Agent</label>
-        <input type="text" name="unixdomainsocketendpoint" id="unixdomainsocketendpoint" value="@Model.GadgetRequest.UnixDomainSocketEndpoint" class="form-control val-required" placeholder="The unix domain socket endpoint to perform the GRPC SPIFFE request against (default is /tmp/spire-agent/public/api.sock)" title="" />
+        <label for="unixDomainSocketEndpoint">Unix Domain Socket Endpoint</label>
+        <input type="text" name="unixDomainSocketEndpoint" id="unixDomainSocketEndpoint" value="@Model.GadgetRequest.UnixDomainSocketEndpoint" class="form-control val-required" placeholder="The Unix domain socket endpoint of the agent to perform the gRPC SPIFFE request against" title="You can set the default value as a 'DefaultSpiffeUnixDomainSocketEndpoint' configuration setting" />
     </div>
     <div class="form-group">
         <label for="audience">Audience</label>
-        <input type="text" name="audience" id="audience" value="@Model.GadgetRequest.Audience" class="form-control val-required" placeholder="The audience requested within the SPIFFE JWT token" title="" />
+        <input type="text" name="audience" id="audience" value="@Model.GadgetRequest.Audience" class="form-control val-required" placeholder="The audience requested within the SPIFFE JWT token" title="You can set the default value as a 'DefaultSpiffeAudience' configuration setting" />
     </div>
-    @* <div class="form-group">
+    <div class="form-group">
         <label for="callChainUrls"><a asp-page="/Api" asp-fragment="call-chaining">Call Chain</a></label>
         <input type="text" name="callChainUrls" id="callChainUrls" value="@Model.GadgetRequest.CallChainUrls" class="form-control val-optional" placeholder="Optionally chain calls across multiple hops (separate base URL's by spaces)" title="You can set the default value as a 'DefaultCallChainUrls' configuration setting" />
-    </div> *@
+    </div>
     <div class="form-group">
         <input type="submit" value="Submit" class="btn btn-primary" />
     </div> 
 </form>
+}
 
 @Html.DisplayFor(m => m.GadgetResponse)

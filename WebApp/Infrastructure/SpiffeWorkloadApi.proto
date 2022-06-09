@@ -1,5 +1,6 @@
+// From: https://github.com/spiffe/spiffe/blob/main/standards/workloadapi.proto
 syntax = "proto3";
-option csharp_namespace = "InspectorGadget.WebApp.Gadgets.SPIFFE";
+option csharp_namespace = "InspectorGadget.WebApp.Gadgets.Spiffe";
 
 import "google/protobuf/struct.proto";
 

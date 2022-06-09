@@ -3,6 +3,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using InspectorGadget.WebApp.Controllers;
 using InspectorGadget.WebApp.Infrastructure;
+using InspectorGadget.WebApp.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 

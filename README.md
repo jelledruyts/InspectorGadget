@@ -23,6 +23,7 @@ The following gadgets are available:
 - **Azure Managed Identity** allows you to request an access token for the [managed identity representing your application](https://docs.microsoft.com/azure/active-directory/managed-identities-azure-resources/overview) (when running on a supported Azure service).
 - **Socket Connection** allows you to perform a raw TCP socket connection from the web server (optionally with a request body and reading back the response).
 - **Process Run** allows you to run a process on the host and capture the output.
+- **SPIFFE** allows you to call the local [SPIFFE](https://spiffe.io/) Workload API.
 - **Health Check** allows you to configure the health check endpoint, e.g. for testing load balancers or container orchestrators.
 - **Introspector** allows you to perform an inspector request from the web server, returning all information the inspector knows about or only a subset (group) or even single item (key).
 
@@ -38,6 +39,7 @@ Each gadget can also be accessed through a REST API:
 | POST   | `/api/azuremanagedidentity`       | `scopes`, `azureManagedIdentityClientId`                                                                                                                               |
 | POST   | `/api/socketconnection`           | `requestHostName`, `requestPort`, `requestBody`, `readResponse`                                                                                                        |
 | POST   | `/api/processrun`                 | `fileName`, `arguments`, `timeoutSeconds`                                                                                                                              |
+| POST   | `/api/spiffe`                     | `unixDomainSocketEndpoint`, `audience`                                                                                                                                 |
 | POST   | `/api/healthcheck`                | `healthCheckMode` (can be `AlwaysSucceed`, `AlwaysFail`, `FailNextNumberOfTimes`), `failNextNumberOfTimes`                                                             |
 | GET    | `/api/introspector`               |                                                                                                                                                                        |
 | GET    | `/api/introspector/<group>`       |                                                                                                                                                                        |
@@ -89,6 +91,9 @@ The app can be configured with the configuration settings below (using environme
 | `DefaultProcessRunFileName`                        | Process Run            | The default value for the file name                                                                                             |
 | `DefaultProcessRunArguments`                       | Process Run            | The default value for the arguments                                                                                             |
 | `DefaultProcessRunTimeoutSeconds`                  | Process Run            | The default value for the timeout (in seconds)                                                                                  |
+| `DisableSpiffe`                                    | SPIFFE                 | Allows you to disable the **SPIFFE** gadget                                                                                     |
+| `DefaultSpiffeUnixDomainSocketEndpoint`            | SPIFFE                 | The default value for the Unix domain socket endpoint                                                                           |
+| `DefaultSpiffeAudience`                            | SPIFFE                 | The default value for the audience                                                                                              |
 | `DisableHealthCheck`                               | Health Check           | Allows you to disable the **Health Check** gadget                                                                               |
 | `DefaultHealthCheckMode`                           | Health Check           | The default value for the health check mode (can be `AlwaysSucceed`, `AlwaysFail`, `FailNextNumberOfTimes`)                     |
 | `DefaultHealthCheckFailNumberOfTimes`              | Health Check           | The default value for the next number of times to fail the health check                                                         |

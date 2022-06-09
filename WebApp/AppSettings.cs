@@ -54,7 +54,10 @@ namespace InspectorGadget.WebApp
         public ConfigurableHealthCheckMode DefaultHealthCheckMode => configuration.GetValueOrDefault("DefaultHealthCheckMode", ConfigurableHealthCheckMode.AlwaysSucceed);
         public int DefaultHealthCheckFailNumberOfTimes => configuration.GetValueOrDefault("DefaultHealthCheckFailNumberOfTimes", 10);
 
-        public bool DisableSPIFFE => configuration.GetValueOrDefault("DisableSPIFFE", false);
+        public bool DisableSpiffe => configuration.GetValueOrDefault("DisableSpiffe", false);
+        public string DefaultSpiffeUnixDomainSocketEndpoint => configuration.GetValueOrDefault("DefaultSpiffeUnixDomainSocketEndpoint", "/tmp/spire-agent/public/api.sock");
+        public string DefaultSpiffeAudience => configuration.GetValueOrDefault("DefaultSpiffeAudience", "inspectorgadget");
+
         public AppSettings(IConfiguration configuration)
         {
             this.configuration = configuration;

@@ -43,6 +43,10 @@
                         {
                         <li class="nav-item"><a class="nav-link text-dark" asp-page="/ProcessRun" title="Process Run">Process</a></li>
                         }
+                        @if (!AppSettings.DisableSpiffe)
+                        {
+                        <li class="nav-item"><a class="nav-link text-dark" asp-page="/Spiffe" title="SPIFFE">SPIFFE</a></li>
+                        }
                         @if (!AppSettings.DisableHealthCheck)
                         {
                         <li class="nav-item"><a class="nav-link text-dark" asp-page="/HealthCheck" title="Health Check">Health</a></li>
@@ -50,10 +54,6 @@
                         @if (!AppSettings.DisableIntrospector)
                         {
                         <li class="nav-item"><a class="nav-link text-dark" asp-page="/Introspector" title="Introspector">Introspector</a></li>
-                        }
-                        @if(!AppSettings.DisableSPIFFE)
-                        {
-                        <li class="nav-item"><a class="nav-link text-dark" asp-page="/Spiffe" title="SPIFFE">SPIFFE </a></li>
                         }
                         <li class="nav-item"><a class="nav-link text-dark" asp-page="/Api" title="API">API</a></li>
                     </ul>

@@ -95,6 +95,14 @@ namespace InspectorGadget.WebApp.Controllers
         }
 
         [HttpPost]
+        public async Task<GadgetResponse<SpiffeGadget.Result>> Spiffe([FromBody] SpiffeGadget.Request request)
+        {
+            this.logger.LogInformation("Executing SPIFFE");
+            var gadget = new SpiffeGadget(this.logger, this.httpClientFactory, Url, this.appSettings);
+            return await gadget.ExecuteAsync(request);
+        }
+
+        [HttpPost]
         public async Task<GadgetResponse<HealthCheckGadget.Result>> HealthCheck([FromBody] HealthCheckGadget.Request request)
         {
             this.logger.LogInformation("Executing Health Check API");
