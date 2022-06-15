@@ -55,6 +55,7 @@ namespace InspectorGadget.WebApp
         public int DefaultHealthCheckFailNumberOfTimes => configuration.GetValueOrDefault("DefaultHealthCheckFailNumberOfTimes", 10);
 
         public bool DisableSpiffe => configuration.GetValueOrDefault("DisableSpiffe", false);
+        public string DefaultSpiffeWorkloadApiAddress => configuration.GetValueOrDefault("DefaultSpiffeWorkloadApiAddress", "http://localhost");
         public string DefaultSpiffeUnixDomainSocketEndpoint => configuration.GetValueOrDefault("DefaultSpiffeUnixDomainSocketEndpoint", "/tmp/spire-agent/public/api.sock");
         public string DefaultSpiffeAudience => configuration.GetValueOrDefault("DefaultSpiffeAudience", "inspectorgadget");
 

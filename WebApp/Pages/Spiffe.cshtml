@@ -12,7 +12,11 @@
 else
 {
 <form method="POST">
-    <p class="text-muted">Allows you to query the SPIFFE Workload API if available locally.</p>
+    <p class="text-muted">Allows you to query a SPIFFE Workload API.</p>
+    <div class="form-group">
+        <label for="workloadApiAddress">Workload API Address</label>
+        <input type="text" name="workloadApiAddress" id="workloadApiAddress" value="@Model.GadgetRequest.WorkloadApiAddress" class="form-control val-required" placeholder="The address of the agent to perform the gRPC SPIFFE request against" title="You can set the default value as a 'DefaultSpiffeWorkloadApiAddress' configuration setting" />
+    </div>
     <div class="form-group">
         <label for="unixDomainSocketEndpoint">Unix Domain Socket Endpoint</label>
         <input type="text" name="unixDomainSocketEndpoint" id="unixDomainSocketEndpoint" value="@Model.GadgetRequest.UnixDomainSocketEndpoint" class="form-control val-required" placeholder="The Unix domain socket endpoint of the agent to perform the gRPC SPIFFE request against" title="You can set the default value as a 'DefaultSpiffeUnixDomainSocketEndpoint' configuration setting" />

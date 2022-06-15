@@ -25,6 +25,7 @@ namespace InspectorGadget.WebApp.Pages
             this.appSettings = appSettings;
             this.GadgetRequest = new()
             {
+                WorkloadApiAddress = this.appSettings.DefaultSpiffeWorkloadApiAddress,
                 UnixDomainSocketEndpoint = this.appSettings.DefaultSpiffeUnixDomainSocketEndpoint,
                 Audience = this.appSettings.DefaultSpiffeAudience
             };

@@ -20,6 +20,7 @@ namespace InspectorGadget.WebApp.Gadgets
     {
         public class Request : GadgetRequest
         {
+            public string WorkloadApiAddress { get; set; }
             public string UnixDomainSocketEndpoint { get; set; }
             public string Audience { get; set; }
 
@@ -35,7 +36,7 @@ namespace InspectorGadget.WebApp.Gadgets
         {
         }
 
-        private async Task<Result> FetchJwtSvid(string unixDomainSocketEndpoint, string audience)
+        private async Task<Result> FetchJwtSvid(string workloadApiAddress, string unixDomainSocketEndpoint, string audience)
         {
             // Prepare Channel.
             var udsEndPoint = new UnixDomainSocketEndPoint(unixDomainSocketEndpoint); // default is "/tmp/spire-agent/public/api.sock"
@@ -45,7 +46,7 @@ namespace InspectorGadget.WebApp.Gadgets
                 ConnectCallback = connectionFactory.ConnectAsync
             };
 
-            using var channel = GrpcChannel.ForAddress("http://localhost", new GrpcChannelOptions
+            using var channel = GrpcChannel.ForAddress(workloadApiAddress, new GrpcChannelOptions
             {
                 HttpHandler = socketsHttpHandler
             });
@@ -74,7 +75,7 @@ namespace InspectorGadget.WebApp.Gadgets
 
         protected override async Task<Result> ExecuteCoreAsync(Request request)
         {
-            return await FetchJwtSvid(request.UnixDomainSocketEndpoint, request.Audience);
+            return await FetchJwtSvid(request.WorkloadApiAddress, request.UnixDomainSocketEndpoint, request.Audience);
         }
 
         private class UnixDomainSocketConnectionFactory
