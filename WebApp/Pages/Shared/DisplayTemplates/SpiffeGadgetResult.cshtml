@@ -3,16 +3,79 @@
 {
     @foreach (var jwtSvid in Model.JwtSvids)
     {
-    <dl class="mb-5">
-        <dt>SPIFFE ID</dt>
-        <dd><code>@jwtSvid.SpiffeId</code></dd>
-        <dt>JWT SVID (<a href="https://jwt.ms/#access_token=@(jwtSvid.Svid)" target="_blank" title="Decode this access token">decode</a>)</dt>
-        <dd><pre>@jwtSvid.Svid</pre></dd>
-        @if (!string.IsNullOrWhiteSpace(jwtSvid.Hint))
-        {
-        <dt>Hint</dt>
-        <dd>@jwtSvid.Hint</dd>
-        }
-    </dl>
+    <div class="card mb-3">
+        <div class="card-header">JWT-SVID</div>
+        <div class="card-body">
+            <dl>
+                <dt>SPIFFE ID</dt>
+                <dd><code>@jwtSvid.SpiffeId</code></dd>
+                <dt>JWT-SVID (<a href="https://jwt.ms/#access_token=@(jwtSvid.Jwt)" target="_blank" title="Decode this access token">decode</a>)</dt>
+                <dd><code>@jwtSvid.Jwt</code></dd>
+                @if (!string.IsNullOrWhiteSpace(jwtSvid.Hint))
+                {
+                <dt>Hint</dt>
+                <dd>@jwtSvid.Hint</dd>
+                }
+            </dl>
+        </div>
+    </div>
+    }
+    @foreach (var x509Svid in Model.X509Svids)
+    {
+    <div class="card mb-3">
+        <div class="card-header">X509-SVID</div>
+        <div class="card-body">
+            <dl>
+                <dt>SPIFFE ID</dt>
+                <dd><code>@x509Svid.SpiffeId</code></dd>
+                <dt>X509-SVID Certificate <small class="text-muted">(Base64 encoded)</small></dt>
+                <dd><code>@x509Svid.Base64Certificate</code></dd>
+                <dt>X509 Private Key <small class="text-muted">(Base64 encoded)</small></dt>
+                <dd><code>@x509Svid.Base64PrivateKey</code></dd>
+                <dt>X509 Bundle <small class="text-muted">(Base64 encoded)</small></dt>
+                <dd><code>@x509Svid.Base64Bundle</code></dd>
+                @if (!string.IsNullOrWhiteSpace(x509Svid.Hint))
+                {
+                <dt>Hint</dt>
+                <dd>@x509Svid.Hint</dd>
+                }
+                @if (!string.IsNullOrWhiteSpace(x509Svid.CertificateIssuer))
+                {
+                <dt>Issuer</dt>
+                <dd><code>@x509Svid.CertificateIssuer</code></dd>
+                }
+                @if (!string.IsNullOrWhiteSpace(x509Svid.CertificateSubject))
+                {
+                <dt>Subject</dt>
+                <dd><code>@x509Svid.CertificateSubject</code></dd>
+                }
+                @if (!string.IsNullOrWhiteSpace(x509Svid.CertificateSubjectAlternativeName))
+                {
+                <dt>Subject Alternative Name</dt>
+                <dd><code>@x509Svid.CertificateSubjectAlternativeName</code></dd>
+                }
+                @if (!string.IsNullOrWhiteSpace(x509Svid.CertificateThumbprint))
+                {
+                <dt>Thumbprint</dt>
+                <dd><code>@x509Svid.CertificateThumbprint</code></dd>
+                }
+                @if (!string.IsNullOrWhiteSpace(x509Svid.CertificateSerialNumber))
+                {
+                <dt>Serial Number</dt>
+                <dd><code>@x509Svid.CertificateSerialNumber</code></dd>
+                }
+                @if (x509Svid.CertificateNotBeforeUtc != null)
+                {
+                <dt>Not Before</dt>
+                <dd><code>@x509Svid.CertificateNotBeforeUtc.Value.ToString("r")</code></dd>
+                }
+                @if (x509Svid.CertificateNotAfterUtc != null)
+                {
+                <dt>Not After</dt>
+                <dd><code>@x509Svid.CertificateNotAfterUtc.Value.ToString("r")</code></dd>
+                }
+            </dl>
+        </div>
+    </div>
     }
 }

@@ -98,3 +98,7 @@ td.inspector-value {
   width: 100%;
   word-break: break-all;
 }
+
+pre, code {
+  white-space: pre-wrap;
+}

@@ -1,7 +1,7 @@
 @model SocketConnectionGadget.Result
 <dl>
     <dt>Status</dt>
-    <dd><pre>@Model.Status</pre></dd>
+    <dd><code>@Model.Status</code></dd>
     @if(!string.IsNullOrWhiteSpace(Model.ResponseBody))
     {
     <dt>Response</dt>

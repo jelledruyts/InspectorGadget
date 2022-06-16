@@ -3,17 +3,17 @@ namespace InspectorGadget.WebApp.Infrastructure
     public class SpiffeJwtSvid
     {
         public string SpiffeId { get; set; }
-        public string Svid { get; set; }
+        public string Jwt { get; set; }
         public string Hint { get; set; }
 
         public SpiffeJwtSvid()
         {
         }
 
-        public SpiffeJwtSvid(string spiffeId, string svid, string hint)
+        public SpiffeJwtSvid(string spiffeId, string jwt, string hint)
         {
             this.SpiffeId = spiffeId;
-            this.Svid = svid;
+            this.Jwt = jwt;
             this.Hint = hint;
         }
     }

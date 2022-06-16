@@ -1,13 +1,13 @@
 @model DnsLookupGadget.Result
 <h6 class="card-subtitle mb-2 text-muted">Host Name</h6>
-<div>@Model.HostName</div>
+<div><code>@Model.HostName</code></div>
 @if (Model.Addresses != null && Model.Addresses.Any())
 {
     <h6 class="card-subtitle mb-2 text-muted mt-3">IP Addresses</h6>
     <ul>
         @foreach (var address in Model.Addresses)
         {
-            <li>@address</li>
+            <li><code>@address</code></li>
         }
     </ul>
 }
@@ -17,7 +17,7 @@
     <ul>
         @foreach (var alias in Model.Aliases)
         {
-            <li>@alias</li>
+            <li><code>@alias</code></li>
         }
     </ul>
 }

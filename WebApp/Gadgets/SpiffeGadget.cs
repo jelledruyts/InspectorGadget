@@ -29,6 +29,7 @@ namespace InspectorGadget.WebApp.Gadgets
         public class Result
         {
             public IList<SpiffeJwtSvid> JwtSvids { get; set; }
+            public IList<SpiffeX509Svid> X509Svids { get; set; }
         }
 
         public SpiffeGadget(ILogger logger, IHttpClientFactory httpClientFactory, IUrlHelper url, AppSettings appSettings)
@@ -36,17 +37,17 @@ namespace InspectorGadget.WebApp.Gadgets
         {
         }
 
-        private async Task<Result> FetchJwtSvid(string workloadApiAddress, string unixDomainSocketEndpoint, string audience)
+        protected override async Task<Result> ExecuteCoreAsync(Request request)
         {
             // Prepare Channel.
-            var udsEndPoint = new UnixDomainSocketEndPoint(unixDomainSocketEndpoint); // default is "/tmp/spire-agent/public/api.sock"
+            var udsEndPoint = new UnixDomainSocketEndPoint(request.UnixDomainSocketEndpoint); // default is "/tmp/spire-agent/public/api.sock"
             var connectionFactory = new UnixDomainSocketConnectionFactory(udsEndPoint);
             var socketsHttpHandler = new SocketsHttpHandler
             {
                 ConnectCallback = connectionFactory.ConnectAsync
             };
 
-            using var channel = GrpcChannel.ForAddress(workloadApiAddress, new GrpcChannelOptions
+            using var channel = GrpcChannel.ForAddress(request.WorkloadApiAddress, new GrpcChannelOptions
             {
                 HttpHandler = socketsHttpHandler
             });
@@ -54,28 +55,31 @@ namespace InspectorGadget.WebApp.Gadgets
             // Prepare client.
             var client = new SpiffeWorkloadAPI.SpiffeWorkloadAPIClient(channel);
 
-            // SPIFFE request.
-            var request = new JWTSVIDRequest()
-            {
-                // SpiffeId = SpiffeId => only needed when a specific SPIFFE ID is requested
-            };
-            request.Audience.Add(audience);
-
             // SPIFFE metadata.
             var headers = new Metadata();
             headers.Add("workload.spiffe.io", "true");
 
-            // Call SPIFFE workload endpoint.
-            using var call = client.FetchJWTSVIDAsync(request, headers);
-            var response = await call.ResponseAsync;
             var result = new Result();
-            result.JwtSvids = response.Svids.Select(s => new SpiffeJwtSvid(s.SpiffeId, s.Svid, s.Hint)).ToArray();
-            return result;
-        }
 
-        protected override async Task<Result> ExecuteCoreAsync(Request request)
-        {
-            return await FetchJwtSvid(request.WorkloadApiAddress, request.UnixDomainSocketEndpoint, request.Audience);
+            // Call SPIFFE workload endpoint for JWT-SVID request.
+            var jwtSvidRequest = new JWTSVIDRequest
+            {
+                // SpiffeId = SpiffeId => only needed when a specific SPIFFE ID is requested
+            };
+            jwtSvidRequest.Audience.Add(request.Audience);
+            using var jwtCall = client.FetchJWTSVIDAsync(jwtSvidRequest, headers);
+            var jwtResponse = await jwtCall.ResponseAsync;
+            result.JwtSvids = jwtResponse.Svids.Select(s => new SpiffeJwtSvid(s.SpiffeId, s.Svid, s.Hint)).ToArray();
+
+            // Call SPIFFE workload endpoint for X509-SVID request.
+            var x509SvidRequest = new X509SVIDRequest();
+            using var x509Call = client.FetchX509SVID(x509SvidRequest, headers);
+            if (await x509Call.ResponseStream.MoveNext())
+            {
+                result.X509Svids = x509Call.ResponseStream.Current.Svids.Select(s => new SpiffeX509Svid(s)).ToArray();
+            }
+
+            return result;
         }
 
         private class UnixDomainSocketConnectionFactory
