@@ -1,6 +1,6 @@
 # See here for image contents: https://github.com/microsoft/vscode-dev-containers/tree/v0.183.0/containers/dotnet/.devcontainer/base.Dockerfile
 
-ARG VARIANT="6.0"
+ARG VARIANT="8.0"
 FROM mcr.microsoft.com/vscode/devcontainers/dotnet:0-${VARIANT}
 
 # [Option] Install Node.js
