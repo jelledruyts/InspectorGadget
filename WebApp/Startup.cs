@@ -29,6 +29,7 @@ namespace InspectorGadget.WebApp
             // Enforce use of TLS 1.2.
             System.Net.ServicePointManager.SecurityProtocol = System.Net.SecurityProtocolType.Tls12;
 
+            services.AddApplicationInsightsTelemetry();
             services.AddSingleton<AppSettings>();
             services.AddRouting(options =>
             {
